@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
 using ApiQuizGenerator.Models;
-using System.Linq;
 
 namespace SimpleCMS.Controllers
 {
@@ -40,7 +39,7 @@ namespace SimpleCMS.Controllers
             return quiz;
         }
 
-        // POST api/quizes/post
+        // POST api/quizes/
         [HttpPost]        
         public async Task Post([FromBody]Quiz quizModel)
         {
@@ -50,14 +49,14 @@ namespace SimpleCMS.Controllers
                 return;
             }
 
-            var saveStatus = await this._DataService.Quizes.Save(quizModel);    
+            bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
             }
         }
 
-        // PUT api/quizes/put/{id}
+        // PUT api/quizes/{id}
         [HttpPut("{id}")]
         public async Task Put(Guid id, [FromBody]Quiz quizModel)
         {
@@ -67,12 +66,13 @@ namespace SimpleCMS.Controllers
                 return;
             }
 
-            var allQuizes = await this._DataService.Quizes.All();
-            if (allQuizes.Any(q => q.Id == id))
+            // make sure object exists before trying to update it
+            Quiz quizSearch = await this._DataService.Quizes.Get(id);
+            if (quizSearch != null)
             {
                 quizModel.Id = id;
-                
-                var saveStatus = await this._DataService.Quizes.Save(quizModel);    
+
+                bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
                 if (!saveStatus) 
                 {
                     Response.StatusCode = 500; // internal server error

@@ -15,6 +15,6 @@ namespace ApiQuizGenerator.Models
         public Guid QuizId { get; set; }
         
         // used for SQL Commands
-        internal string Definition { get { return "Questions"; } }
+        internal static string Definition { get { return "Questions"; } }
     }
 }

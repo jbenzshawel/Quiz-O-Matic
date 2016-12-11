@@ -9,6 +9,8 @@ namespace ApiQuizGenerator
 {
     public class Startup
     {
+        public static string ConnectionString { get; private set; }
+
         public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -17,6 +19,9 @@ namespace ApiQuizGenerator
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            // set connection string
+            ConnectionString = ConfigurationExtensions.GetConnectionString(Configuration, "ConnectionStrings:DefaultConnection");
+           
         }
 
         public IConfigurationRoot Configuration { get; }

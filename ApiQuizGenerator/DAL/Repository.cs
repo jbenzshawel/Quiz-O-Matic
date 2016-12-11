@@ -24,13 +24,30 @@ namespace ApiQuizGenerator.DAL
 
         public Repository()
         {
-            this._DataHelper = new DataHelper();
+            _DataHelper = new DataHelper();
         }
 
-        public Repository(DataHelper dataHelper)
+        public Repository(DataHelper _dataHelper)
         {
-            this._DataHelper = dataHelper;
+            _DataHelper = _dataHelper;
+        }
 
+        public async Task<T> Get(int id)
+        {
+            T obj = null;
+            var pgFunction = string.Empty;
+            NpgsqlParameter sqlParam = null;
+
+            if (typeof (T) == typeof (Question)) 
+            {
+                pgFunction = this._DataHelper.GetObjects.GetValOr(Question.Definition);
+                sqlParam = new NpgsqlParameter("p_question_id", NpgsqlTypes.NpgsqlDbType.Integer);
+                sqlParam.Value = id;   
+            }
+
+            obj = await _DataHelper.GetObject<T>(pgFunction, sqlParam);
+
+            return obj;
         }
 
         public async Task<T> Get(Guid id) 
@@ -39,21 +56,14 @@ namespace ApiQuizGenerator.DAL
             var pgFunction = string.Empty;
             NpgsqlParameter sqlParam = null;
 
-            // handle Quiz case
-            if (typeof(T) == typeof(Quiz)) 
+            if (typeof (T) == typeof( Quiz)) 
             {
-                pgFunction = this._DataHelper.GetObjects.GetValOr(Quiz.Definition);
+                pgFunction = _DataHelper.GetObjects.GetValOr(Quiz.Definition);
                 sqlParam = new NpgsqlParameter("p_quiz_id", NpgsqlTypes.NpgsqlDbType.Uuid);
                 sqlParam.Value = id;
             }
 
-            var paramz = new List<NpgsqlParameter>();
-            if (sqlParam != null)
-            {
-                paramz.Add(sqlParam);
-                
-                obj = await this._DataHelper.GetDataRow<T>(pgFunction, paramz);
-            }
+            obj = await _DataHelper.GetObject<T>(pgFunction, sqlParam);
 
             return obj;
         }
@@ -64,10 +74,10 @@ namespace ApiQuizGenerator.DAL
 
             if (typeof(T) == typeof(Quiz))
             {
-                pgFunction = this._DataHelper.ListObjects.GetValOr(Quiz.Definition);
+                pgFunction = _DataHelper.ListObjects.GetValOr(Quiz.Definition);
             }
 
-            return await this._DataHelper.GetDataList<T>(pgFunction);
+            return await _DataHelper.GetDataList<T>(pgFunction);
         }
 
         public async Task<bool> Save(T obj)
@@ -78,17 +88,17 @@ namespace ApiQuizGenerator.DAL
             if (typeof (T) == typeof (Quiz) && obj != null) 
             {
                 var quiz = obj as Quiz;
-                pgFunction = this._DataHelper.SaveObjects.GetValOr(Quiz.Definition);
+                pgFunction = _DataHelper.SaveObjects.GetValOr(Quiz.Definition);
                 paramz = new List<NpgsqlParameter> 
                 {
-                    this._DataHelper.NpgParam(NpgsqlDbType.Text, "p_name", quiz.Name),
-                    this._DataHelper.NpgParam(NpgsqlDbType.Text, "p_description", quiz.Description),
-                    this._DataHelper.NpgParam(NpgsqlDbType.Integer, "p_type_id", quiz.TypeId),
-                    this._DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id)
+                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_name", quiz.Name),
+                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_description", quiz.Description),
+                    _DataHelper.NpgParam(NpgsqlDbType.Integer, "p_type_id", quiz.TypeId),
+                    _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id)
                 };
             }
 
-            return await this._DataHelper.ExecuteNonQuey(pgFunction, paramz);
+            return await _DataHelper.ExecuteNonQuey(pgFunction, paramz);
         }
 
     }
