@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using Npgsql; 
 using ApiQuizGenerator.Models;
+using System.Data.Common;
 
-namespace ApiQuizGenerator.AppClasses 
+namespace ApiQuizGenerator.AppClasses
 {
     public static class Extensions 
     {
@@ -13,7 +12,7 @@ namespace ApiQuizGenerator.AppClasses
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
 
-        public static T ToObject<T>(this NpgsqlDataReader @this) where T : class
+        public static T ToObject<T>(this DbDataReader @this) where T : class
         {
             T objectCast = null;
 
@@ -32,6 +31,8 @@ namespace ApiQuizGenerator.AppClasses
                     Description = @this["description"].ToString(),
                     Type = @this["type"] != DBNull.Value ? @this["type"].ToString() : null,
                     TypeId = @this["type_id"] != DBNull.Value ? Int32.Parse(@this["type_id"].ToString()) : 0,
+                    Created = @this["created"] != DBNull.Value ? DateTime.Parse(@this["created"].ToString()) : DateTime.MinValue,
+                    Updated = @this["updated"] != DBNull.Value ? (DateTime?)DateTime.Parse(@this["updated"].ToString()) : null              
                 };
 
                 objectCast = quiz as T;

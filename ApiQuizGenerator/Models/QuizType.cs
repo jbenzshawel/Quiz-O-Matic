@@ -1,7 +1,4 @@
-using System;
-using Microsoft.EntityFrameworkCore;
-
-namespace ApiQuizGenerator.Models 
+namespace ApiQuizGenerator.Models
 {
     public class QuizType
     {   

@@ -1,34 +1,36 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
 using ApiQuizGenerator.Models;
+using System.Linq;
 
 namespace SimpleCMS.Controllers
 {
     [Route("api/[controller]/")]
     public class QuizesController : Controller
     {
-        private Repository<Quiz> _Repository { get; set; }
+        private IDataService _DataService { get; set; }
 
-        public QuizesController() 
+        public QuizesController(IDataService _dataService) 
         {
-            this._Repository = new Repository<Quiz>();
+            this._DataService = _dataService;
         }
 
         // GET api/quizes/list
         [HttpGet]
         [Route("[action]")]
-        public List<Quiz> List() 
+        public async Task<List<Quiz>> List() 
         {
-            return this._Repository.All(); 
+            return await this._DataService.Quizes.All(); 
         }
 
-        // GET api/v
-        [HttpGet("[action]/{id}")]
-        public Quiz Get(Guid id)
+        // GET api/quizes/{id}
+        [HttpGet("{id}")]
+        public async Task<Quiz> Get(Guid id)
         {
-            Quiz quiz = this._Repository.Get(id);
+            Quiz quiz = await this._DataService.Quizes.Get(id);
 
             if (quiz == null) 
             {
@@ -38,16 +40,48 @@ namespace SimpleCMS.Controllers
             return quiz;
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        // POST api/quizes/post
+        [HttpPost]        
+        public async Task Post([FromBody]Quiz quizModel)
         {
+            if (!ModelState.IsValid)
+            {   
+                Response.StatusCode = 400; // bad request 
+                return;
+            }
+
+            var saveStatus = await this._DataService.Quizes.Save(quizModel);    
+            if (!saveStatus) 
+            {
+                Response.StatusCode = 500; // internal server error
+            }
         }
 
-        // PUT api/values/5
+        // PUT api/quizes/put/{id}
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task Put(Guid id, [FromBody]Quiz quizModel)
         {
+            if (!ModelState.IsValid)
+            {   
+                Response.StatusCode = 400; // bad request 
+                return;
+            }
+
+            var allQuizes = await this._DataService.Quizes.All();
+            if (allQuizes.Any(q => q.Id == id))
+            {
+                quizModel.Id = id;
+                
+                var saveStatus = await this._DataService.Quizes.Save(quizModel);    
+                if (!saveStatus) 
+                {
+                    Response.StatusCode = 500; // internal server error
+                }         
+            }
+            else 
+            {
+                Response.StatusCode = 404; // not found
+            }
         }
 
         // DELETE api/values/5
