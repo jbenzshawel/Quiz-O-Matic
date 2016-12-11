@@ -1,0 +1,81 @@
+{
+  "ConnectionStrings" :{
+    "DefaultConnection" :  "User ID=QuizGeneratorAdmin;Password=QuizGenerator;Host=localhost;Port=5432;Database=SimpleCms;Pooling=true;"
+  },
+  "dependencies": {
+       "System.Reflection": "4.3.0",
+        "Microsoft.AspNetCore.Routing": "1.1.0",
+        "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
+        "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+        "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
+        "Microsoft.AspNetCore.Diagnostics": "1.1.0",
+        "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0",
+        "Microsoft.AspNetCore.Mvc": "1.1.0",
+        "Microsoft.AspNetCore.StaticFiles": "1.1.0",
+        "Microsoft.EntityFrameworkCore": "1.1.0",
+        "Microsoft.EntityFrameworkCore.Tools": "1.1.0-preview4-final",
+        "Microsoft.EntityFrameworkCore.Design": {
+          "version": "1.1.0",
+          "type": "build"
+        },
+        "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
+        "Microsoft.Extensions.Configuration.Json": "1.1.0",
+        "Microsoft.Extensions.Logging": "1.1.0",
+        "Microsoft.Extensions.Logging.Console": "1.1.0",
+        "Microsoft.Extensions.Logging.Debug": "1.1.0",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
+        "Microsoft.NETCore.App": {
+            "version": "1.1.0",
+            "type": "platform"
+        },
+      "Npgsql" : "3.1.8"
+      
+  },
+
+  "tools": {
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
+  },
+
+   "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "type": "platform",
+          "version": "1.1.0"
+        }
+       }
+        // "frameworkAssemblies": {
+        //   "System.Data": { "version": "4.0.0.0", "type": "build" }
+        // }
+    }
+  },
+
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "debugType": "portable",    
+    "preserveCompilationContext": true
+  },
+
+  "runtimeOptions": {
+    "configProperties": {
+      "System.GC.Server": true
+    }
+  },
+
+  "publishOptions": {
+    "include": [
+      "wwwroot",
+      "**/*.cshtml",
+      "appsettings.json",
+      "web.config"
+    ]
+  },
+
+  "scripts": {
+    "postpublish": [ "dotnet publish-iis --publish-folder %publish:OutputPath% --framework %publish:FullTargetFramework%" ]
+  },
+
+  "tooling": {
+    "defaultNamespace": "SimpleCMS"
+  }
+}
