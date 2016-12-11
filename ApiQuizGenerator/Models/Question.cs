@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ApiQuizGenerator.Models 
 {
     public class Question
-    {    
-        public const string Definition = "Questions"; 
-
+    {   
         public int Id { get; set; }
 
         public string Title { get; set; }
@@ -16,5 +14,7 @@ namespace ApiQuizGenerator.Models
 
         public Guid QuizId { get; set; }
         
+        // used for SQL Commands
+        internal string Definition { get { return "Questions"; } }
     }
 }

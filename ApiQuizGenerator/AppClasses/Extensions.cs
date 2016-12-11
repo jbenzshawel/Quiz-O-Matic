@@ -8,6 +8,11 @@ namespace ApiQuizGenerator.AppClasses
 {
     public static class Extensions 
     {
+        public static string GetValOr(this Dictionary<string, string> @this, string key, string orVal = null)
+        {
+            return @this.ContainsKey(key) ? @this[key] : orVal;
+        }
+
         public static T ToObject<T>(this NpgsqlDataReader @this) where T : class
         {
             T objectCast = null;

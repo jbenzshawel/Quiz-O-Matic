@@ -5,8 +5,6 @@ namespace ApiQuizGenerator.Models
 {
     public class Quiz 
     {    
-        public string Definition { get { return "Quizes"; } }
-        
         public Guid Id { get; set; }
 
         public string Name { get; set; }
@@ -16,6 +14,10 @@ namespace ApiQuizGenerator.Models
         public int TypeId { get; set; }
 
         public string Type { get; set; }
+
+        // used for SQL Commands
+        internal string Definition { get { return "Quizes"; } }
+    
     }
 
 

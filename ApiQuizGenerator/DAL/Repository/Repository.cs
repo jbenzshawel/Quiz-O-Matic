@@ -1,89 +1,77 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Reflection;
-using Npgsql; 
-using ApiQuizGenerator.AppClasses; 
 using ApiQuizGenerator.Models;
+using Npgsql;
+using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.DAL
 {
-    public class DbContext 
+    public interface IRepository<T> 
     {
-        public Quiz Quizes { get; set; }
+        List<T> All();
 
-        public QuizType QuizTypes { get; set; }
+        T Get(Guid Id);
 
-        public Question Questions { get; set; }
-
-        public Answer Answers { get; set; }
     }
 
-    public class Repository<T> where T: class
+    public class Repository<T> : IRepository<T> where T : class
     {
-        private string _connection 
-        {
-            get 
-            {
-                return "Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw";
-            }
-        } 
+        private DataHelper _DataHelper { get; set; }
 
-        private Dictionary<string, string> _ListObjects { get; set; }
-
-        public Repository() 
+        public Repository()
         {
-            this._ListObjects = new Dictionary<string, string> 
-            {
-                { "Quizes", "list_quizes" }
-            };
+            this._DataHelper = new DataHelper();
         }
 
-        public List<T> All() 
+        public Repository(DataHelper dataHelper)
         {
+            this._DataHelper = dataHelper;
+
+        }
+
+        public T Get(Guid id) 
+        {
+            T obj = null;
             var pgFunction = string.Empty;
-            
+            NpgsqlParameter sqlParam = null;
+
+            // handle Quiz case
             if (typeof(T) == typeof(Quiz)) 
             {
-                var quiz = new Quiz(); 
-                pgFunction = this._ListObjects[quiz.Definition];
+                var quiz = new Quiz();
+                pgFunction = this._DataHelper.GetObjects.GetValOr(quiz.Definition);
+                sqlParam = new NpgsqlParameter("p_quiz_id", NpgsqlTypes.NpgsqlDbType.Uuid);
+                sqlParam.Value = id;
             }
 
-            if (string.IsNullOrEmpty(pgFunction)) 
+            var paramz = new List<NpgsqlParameter>();
+            if (sqlParam != null)
             {
-                throw new System.InvalidOperationException("Could not find pg function in _ListObjects. Model class not supported");
+                paramz.Add(sqlParam);
+                
+                obj = this._DataHelper.GetDataRow<T>(pgFunction, paramz);
             }
 
-            return GetDataList(pgFunction);;
+            return obj;
         }
 
-        private List<T> GetDataList(string command, List<NpgsqlParameter> paramz = null) 
+        public List<T> All()
         {
-            List<T> allObjects = new List<T>(); 
-            
-            using (var pgCon = new NpgsqlConnection(this._connection)) 
-            {
-                pgCon.Open();
-                using (var cmd = new NpgsqlCommand())
-                {
-                    cmd.Connection = pgCon;
-                    // Insert some data
-                    cmd.CommandText = command;
-                    cmd.CommandType = System.Data.CommandType.StoredProcedure;
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            T listObj = reader.ToObject<T>();
-                            if (listObj != null)
-                                allObjects.Add(listObj);
-                        }
-                    } // end using SqlDataReader 
-                } // end using NpgsqlCommand 
-            } // end using NpgsqlConnection 
+            var pgFunction = string.Empty;
 
-            return allObjects;
+            if (typeof(T) == typeof(Quiz))
+            {
+                var quiz = new Quiz();
+                pgFunction = this._DataHelper.ListObjects.GetValOr(quiz.Definition);
+            }
+
+            if (string.IsNullOrEmpty(pgFunction))
+            {
+                throw new System.InvalidOperationException("Could not find pg function in ListObjects. Model class not supported");
+            }
+
+            return this._DataHelper.GetDataList<T>(pgFunction);
         }
+
     }
 }

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
 using ApiQuizGenerator.Models;
@@ -26,18 +24,18 @@ namespace SimpleCMS.Controllers
             return this._Repository.All(); 
         }
 
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        // GET api/v
+        [HttpGet("[action]/{id}")]
+        public Quiz Get(Guid id)
         {
-            return new string[] { "value1", "value2" };
-        }
+            Quiz quiz = this._Repository.Get(id);
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
+            if (quiz == null) 
+            {
+                Response.StatusCode = 404; // not found
+            }
+
+            return quiz;
         }
 
         // POST api/values
