@@ -12,7 +12,7 @@ namespace ApiQuizGenerator.DAL
     {
         Task<List<T>> All(string id = null);
 
-        Task<T> Get(Guid Id);
+        Task<T> Get(string id);
 
         Task<bool> Save(T obj);
 
@@ -35,40 +35,13 @@ namespace ApiQuizGenerator.DAL
             _DataHelper = _dataHelper;
         }
 
-        public async Task<T> Get(int id)
-        {
-            T obj = null;
-            var pgFunction = string.Empty;
-            NpgsqlParameter sqlParam = null;
-
-            if (typeof (T) == typeof (Question)) 
-            {
-                pgFunction = _DataHelper.GetObjects.GetValOr(Question.Definition);
-                sqlParam = _DataHelper.NpgParam(NpgsqlDbType.Integer, "p_question_id", id);
-            }
-
-            obj = await _DataHelper.GetObject<T>(pgFunction, sqlParam);
-
-            return obj;
-        }
-
-        public async Task<T> Get(Guid id) 
-        {
-            T obj = null;
-            var pgFunction = string.Empty;
-            NpgsqlParameter sqlParam = null;
-
-            if (typeof (T) == typeof( Quiz)) 
-            {
-                pgFunction = _DataHelper.GetObjects.GetValOr(Quiz.Definition);
-                sqlParam = _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", id);
-            }
-
-            obj = await _DataHelper.GetObject<T>(pgFunction, sqlParam);
-
-            return obj;
-        }
-
+        /// <summary>
+        /// Get a List&lt;T&gt; of Quiz or Question objects. If getting a list of
+        /// questions id param is required and is the Guid QuizId corresponding to
+        /// questions
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<List<T>> All(string id = null)
         {
             var pgFunction = string.Empty;
@@ -77,9 +50,8 @@ namespace ApiQuizGenerator.DAL
             if (typeof (T) == typeof (Quiz))
             {
                 pgFunction = _DataHelper.ListObjects.GetValOr(Quiz.Definition);
-            }
-
-            if (typeof (T) == typeof (Question)) 
+            } 
+            else if (typeof (T) == typeof (Question)) 
             {
                 Guid quizId;
                 if (Guid.TryParse(id, out quizId)) 
@@ -90,6 +62,42 @@ namespace ApiQuizGenerator.DAL
             }
 
             return await _DataHelper.GetDataList<T>(pgFunction, paramz);
+        }
+
+        /// <summary>
+        /// Get Quiz or Question by id (string id parsed to integer or Guid depending on
+        /// Type T)
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<T> Get(string id) 
+        {
+            T obj = null;
+            var pgFunction = string.Empty;
+            NpgsqlParameter sqlParam = null;
+
+            if (typeof (T) == typeof( Quiz)) 
+            {
+                Guid quizId;
+                if (Guid.TryParse(id, out quizId)) 
+                {   
+                    pgFunction = _DataHelper.GetObjects.GetValOr(Quiz.Definition);
+                    sqlParam = _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quizId);
+                }
+            }
+            else if (typeof (T) == typeof (Question)) 
+            {
+                int questionId;
+                if (Int32.TryParse(id, out questionId)) 
+                {
+                    pgFunction = _DataHelper.GetObjects.GetValOr(Question.Definition);
+                    sqlParam = _DataHelper.NpgParam(NpgsqlDbType.Integer, "p_question_id", questionId);
+                }
+            }
+
+            obj = await _DataHelper.GetObject<T>(pgFunction, sqlParam);
+
+            return obj;
         }
 
         public async Task<bool> Save(T obj)
@@ -109,8 +117,7 @@ namespace ApiQuizGenerator.DAL
                     _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id)
                 };
             }
-
-            if (obj != null && typeof (T) == typeof (Question)) 
+            else if (obj != null && typeof (T) == typeof (Question)) 
             {
                 var question = obj as Question;
                 pgFunction = _DataHelper.SaveObjects.GetValOr(Question.Definition);
@@ -136,6 +143,12 @@ namespace ApiQuizGenerator.DAL
                 var quiz = obj as Quiz;
                 pgFunction = _DataHelper.DeleteObjects.GetValOr(Quiz.Definition);
                 paramz.Add(_DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id));
+            }
+            else if (obj != null && typeof (T) == typeof (Question))
+            {
+                var question = obj as Question;
+                pgFunction = _DataHelper.DeleteObjects.GetValOr(Question.Definition);
+                paramz.Add(_DataHelper.NpgParam(NpgsqlDbType.Integer, "p_question_id", question.Id));
             }
 
             return await _DataHelper.ExecuteNonQuey(pgFunction, paramz);

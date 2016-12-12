@@ -4,21 +4,21 @@ namespace ApiQuizGenerator.DAL
 {
     public interface IDataService 
     {
-        Repository<Quiz> Quizes { get; set; }
+        IRepository<Quiz> Quizes { get; set; }
 
-        Repository<QuizType> QuizTypes { get; set; }
+        IRepository<QuizType> QuizTypes { get; set; }
 
-        Repository<Question> Questions { get; set; }
+        IRepository<Question> Questions { get; set; }
         
     }
 
     public class DataService : IDataService
     {
-       public Repository<Quiz> Quizes { get; set;}
+       public IRepository<Quiz> Quizes { get; set;}
 
-       public Repository<QuizType> QuizTypes { get; set; }
+       public IRepository<QuizType> QuizTypes { get; set; }
 
-       public Repository<Question> Questions { get; set; }
+       public IRepository<Question> Questions { get; set; }
        public DataService() 
        {
            this.Quizes = new Repository<Quiz>(); 

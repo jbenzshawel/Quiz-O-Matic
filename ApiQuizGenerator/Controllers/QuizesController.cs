@@ -5,16 +5,14 @@ using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
 using ApiQuizGenerator.Models;
 
-namespace SimpleCMS.Controllers
+namespace ApiQuizGenerator.Controllers
 {
     [Route("api/[controller]/")]
-    public class QuizesController : Controller
+    public class QuizesController : BaseController
     {
-        private IDataService _DataService { get; set; }
-
-        public QuizesController(IDataService _dataService) 
+        public QuizesController(IDataService _dataService) : base(_dataService)
         {
-            this._DataService = _dataService;
+            _DataService = _dataService;
         }
 
         // GET api/quizes/list
@@ -22,14 +20,14 @@ namespace SimpleCMS.Controllers
         [Route("[action]")]
         public async Task<List<Quiz>> List() 
         {
-            return await this._DataService.Quizes.All(); 
+            return await _DataService.Quizes.All(); 
         }
 
         // GET api/quizes/{id}
         [HttpGet("{id}")]
         public async Task<Quiz> Get(Guid id)
         {
-            Quiz quiz = await this._DataService.Quizes.Get(id);
+            Quiz quiz = await _DataService.Quizes.Get(id.ToString());
 
             if (quiz == null) 
             {
@@ -49,7 +47,7 @@ namespace SimpleCMS.Controllers
                 return;
             }
 
-            bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
+            bool saveStatus = await _DataService.Quizes.Save(quizModel);    
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
@@ -67,12 +65,12 @@ namespace SimpleCMS.Controllers
             }
 
             // make sure object exists before trying to update it
-            Quiz quizSearch = await this._DataService.Quizes.Get(id);
+            Quiz quizSearch = await _DataService.Quizes.Get(id.ToString());
             if (quizSearch != null)
             {
                 quizModel.Id = id;
 
-                bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
+                bool saveStatus = await _DataService.Quizes.Save(quizModel);    
                 if (!saveStatus) 
                 {
                     Response.StatusCode = 500; // internal server error
@@ -88,7 +86,7 @@ namespace SimpleCMS.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(Guid id)
         {   
-            Quiz quiz = await this._DataService.Quizes.Get(id);
+            Quiz quiz = await _DataService.Quizes.Get(id.ToString());
 
             if (quiz == null) 
             {
@@ -96,7 +94,7 @@ namespace SimpleCMS.Controllers
                 return;
             }
 
-            bool saveStatus = await this._DataService.Quizes.Delete(quiz);
+            bool saveStatus = await _DataService.Quizes.Delete(quiz);
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error

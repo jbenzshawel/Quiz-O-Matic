@@ -138,7 +138,7 @@ namespace ApiQuizGenerator.AppClasses
                 
                 try 
                 {
-                    NpgsqlCommand cmd = _GetSqlCommand(pgCon, command, paramz);
+                    NpgsqlCommand cmd = _NpgSqlCommand(pgCon, command, paramz);
                     rowsAffected = await cmd.ExecuteNonQueryAsync(); 
                 }
                 catch (Exception ex) 
@@ -156,6 +156,12 @@ namespace ApiQuizGenerator.AppClasses
             return rowsAffected == -1; 
         }
         
+        /// <summary>
+        /// Gets an object from T table corresponding to T id as sqlParam
+        /// </summary>
+        /// <param name="pgFunction"></param>
+        /// <param name="sqlParam"></param>
+        /// <returns></returns>
         public async Task<T> GetObject<T>(string pgFunction, NpgsqlParameter sqlParam)
             where T: class
         {
@@ -210,7 +216,7 @@ namespace ApiQuizGenerator.AppClasses
                 
                 try 
                 {
-                    NpgsqlCommand cmd = _GetSqlCommand(pgCon, pgFunction, paramz);
+                    NpgsqlCommand cmd = _NpgSqlCommand(pgCon, pgFunction, paramz);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -244,7 +250,7 @@ namespace ApiQuizGenerator.AppClasses
         /// <param name="command"></param>
         /// <param name="paramz"></param>
         /// <returns></returns>
-        private NpgsqlCommand _GetSqlCommand(NpgsqlConnection connection, string command, List<NpgsqlParameter> paramz = null)
+        private NpgsqlCommand _NpgSqlCommand(NpgsqlConnection connection, string command, List<NpgsqlParameter> paramz = null)
         {
             var cmd = new NpgsqlCommand();
             cmd.Connection = connection;

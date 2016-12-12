@@ -8,13 +8,11 @@ using ApiQuizGenerator.Models;
 namespace ApiQuizGenerator.Controllers
 {
     [Route("api/[controller]/")]
-    public class QuestionsController : Controller
+    public class QuestionsController : BaseController
     {
-        private IDataService _DataService { get; set; }
-
-        public QuestionsController(IDataService _dataService) 
+        public QuestionsController(IDataService _dataService) : base(_dataService)
         {
-            this._DataService = _dataService;
+            _DataService = _dataService;
         }
 
         // GET api/questions/list
@@ -22,14 +20,14 @@ namespace ApiQuizGenerator.Controllers
         [Route("[action]/{id}")]
         public async Task<List<Question>> List(Guid id) 
         {
-            return await this._DataService.Questions.All(id.ToString()); 
+            return await _DataService.Questions.All(id.ToString()); 
         }
 
-        // GET api/quizes/{id}
+        // GET api/questions/{id}
         [HttpGet("{id}")]
         public async Task<Question> Get(int id)
         {
-            Question question = await this._DataService.Questions.Get(id);
+            Question question = await _DataService.Questions.Get(id.ToString());
 
             if (question == null) 
             {
@@ -39,7 +37,7 @@ namespace ApiQuizGenerator.Controllers
             return question;
         }
 
-        // POST api/quizes/post
+        // POST api/questions/post
         [HttpPost]        
         public async Task Post([FromBody]Question questionModel)
         {
@@ -49,7 +47,7 @@ namespace ApiQuizGenerator.Controllers
                 return;
             }
 
-            bool saveStatus = await this._DataService.Questions.Save(questionModel);    
+            bool saveStatus = await _DataService.Questions.Save(questionModel);    
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
@@ -67,12 +65,12 @@ namespace ApiQuizGenerator.Controllers
             }
 
             // make sure object exists before trying to update it
-            Question questionSearch = await this._DataService.Questions.Get(id);
+            Question questionSearch = await _DataService.Questions.Get(id.ToString());
             if (questionSearch != null)
             {
                 questionModel.Id = id;
 
-                bool saveStatus = await this._DataService.Questions.Save(questionModel);    
+                bool saveStatus = await _DataService.Questions.Save(questionModel);    
                 if (!saveStatus) 
                 {
                     Response.StatusCode = 500; // internal server error
@@ -88,7 +86,7 @@ namespace ApiQuizGenerator.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {   
-            Question question = await this._DataService.Questions.Get(id);
+            Question question = await _DataService.Questions.Get(id.ToString());
 
             if (question == null) 
             {
@@ -96,7 +94,7 @@ namespace ApiQuizGenerator.Controllers
                 return;
             }
 
-            bool saveStatus = await this._DataService.Questions.Delete(question);
+            bool saveStatus = await _DataService.Questions.Delete(question);
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error

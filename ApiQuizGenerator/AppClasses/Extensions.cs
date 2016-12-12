@@ -19,7 +19,10 @@ namespace ApiQuizGenerator.AppClasses
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
         
-
+        /// <summary>
+        /// Casts a DbDataReader object to a Quiz or Question object
+        /// </summary>
+        /// <param name="@this">reader object</param>
         public static T ToObject<T>(this DbDataReader @this) where T : class
         {
             T objectCast = null;
