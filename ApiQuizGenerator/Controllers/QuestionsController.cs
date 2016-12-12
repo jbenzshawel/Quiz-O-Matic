@@ -20,9 +20,9 @@ namespace ApiQuizGenerator.Controllers
         // GET api/questions/list
         [HttpGet]
         [Route("[action]/{id}")]
-        public async Task<List<Question>> List(Guid quizId) 
+        public async Task<List<Question>> List(Guid id) 
         {
-            return await this._DataService.Questions.All(); 
+            return await this._DataService.Questions.All(id.ToString()); 
         }
 
         // GET api/quizes/{id}
@@ -39,55 +39,68 @@ namespace ApiQuizGenerator.Controllers
             return question;
         }
 
-        // // POST api/quizes/post
-        // [HttpPost]        
-        // public async Task Post([FromBody]Quiz quizModel)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {   
-        //         Response.StatusCode = 400; // bad request 
-        //         return;
-        //     }
-
-        //     bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
-        //     if (!saveStatus) 
-        //     {
-        //         Response.StatusCode = 500; // internal server error
-        //     }
-        // }
-
-        // // PUT api/quizes/put/{id}
-        // [HttpPut("{id}")]
-        // public async Task Put(Guid id, [FromBody]Quiz quizModel)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {   
-        //         Response.StatusCode = 400; // bad request 
-        //         return;
-        //     }
-
-        //     // make sure object exists before trying to update it
-        //     Quiz quizSearch = await this._DataService.Quizes.Get(id);
-        //     if (quizSearch != null)
-        //     {
-        //         quizModel.Id = id;
-
-        //         bool saveStatus = await this._DataService.Quizes.Save(quizModel);    
-        //         if (!saveStatus) 
-        //         {
-        //             Response.StatusCode = 500; // internal server error
-        //         }         
-        //     }
-        //     else 
-        //     {
-        //         Response.StatusCode = 404; // not found
-        //     }
-        // }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        // POST api/quizes/post
+        [HttpPost]        
+        public async Task Post([FromBody]Question questionModel)
         {
+            if (!ModelState.IsValid)
+            {   
+                Response.StatusCode = 400; // bad request 
+                return;
+            }
+
+            bool saveStatus = await this._DataService.Questions.Save(questionModel);    
+            if (!saveStatus) 
+            {
+                Response.StatusCode = 500; // internal server error
+            }
+        }
+
+        // PUT api/quizes/put/{id}
+        [HttpPut("{id}")]
+        public async Task Put(int id, [FromBody]Question questionModel)
+        {
+            if (!ModelState.IsValid)
+            {   
+                Response.StatusCode = 400; // bad request 
+                return;
+            }
+
+            // make sure object exists before trying to update it
+            Question questionSearch = await this._DataService.Questions.Get(id);
+            if (questionSearch != null)
+            {
+                questionModel.Id = id;
+
+                bool saveStatus = await this._DataService.Questions.Save(questionModel);    
+                if (!saveStatus) 
+                {
+                    Response.StatusCode = 500; // internal server error
+                }         
+            }
+            else 
+            {
+                Response.StatusCode = 404; // not found
+            }
+        }
+
+        // DELETE api/question/{id}
+        [HttpDelete("{id}")]
+        public async Task Delete(int id)
+        {   
+            Question question = await this._DataService.Questions.Get(id);
+
+            if (question == null) 
+            {
+                Response.StatusCode = 404; // not found
+                return;
+            }
+
+            bool saveStatus = await this._DataService.Questions.Delete(question);
+            if (!saveStatus) 
+            {
+                Response.StatusCode = 500; // internal server error
+            }
         }
     }
 }

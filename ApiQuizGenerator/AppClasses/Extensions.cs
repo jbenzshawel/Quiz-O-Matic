@@ -7,10 +7,18 @@ namespace ApiQuizGenerator.AppClasses
 {
     public static class Extensions 
     {
+        /// <summary>
+        /// Gets value from Dictionary if it exists else returns null or optional orVal
+        /// </summary>
+        /// <param name="@this"></param>
+        /// <param name="key"></param>
+        /// <param name="orVal"></param>
+        /// <returns></returns>
         public static string GetValOr(this Dictionary<string, string> @this, string key, string orVal = null)
         {
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
+        
 
         public static T ToObject<T>(this DbDataReader @this) where T : class
         {

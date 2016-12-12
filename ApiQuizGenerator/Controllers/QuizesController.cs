@@ -84,10 +84,23 @@ namespace SimpleCMS.Controllers
             }
         }
 
-        // DELETE api/values/5
+        // DELETE api/quiz/{id}
         [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+        public async Task Delete(Guid id)
+        {   
+            Quiz quiz = await this._DataService.Quizes.Get(id);
+
+            if (quiz == null) 
+            {
+                Response.StatusCode = 404; // not found
+                return;
+            }
+
+            bool saveStatus = await this._DataService.Quizes.Delete(quiz);
+            if (!saveStatus) 
+            {
+                Response.StatusCode = 500; // internal server error
+            }
         }
     }
 }

@@ -80,7 +80,7 @@ namespace ApiQuizGenerator.AppClasses
                     _saveObjects = new Dictionary<string, string>
                     {
                         { "Quizes", "save_quiz" },
-                        { "Question", "save_question" }
+                        { "Questions", "save_question" }
                     };
                 
                 return _saveObjects;
@@ -100,7 +100,7 @@ namespace ApiQuizGenerator.AppClasses
                     _deleteObjects = new Dictionary<string, string>
                     {
                         { "Quizes", "delete_quiz" },
-                        { "Question", "delete_question" }
+                        { "Questions", "delete_question" }
                     };
 
                 return _deleteObjects;
@@ -168,6 +168,7 @@ namespace ApiQuizGenerator.AppClasses
                 
                 obj = await GetDataRow<T>(pgFunction, paramz);
             }
+            
             return obj;
         }
 
@@ -213,7 +214,7 @@ namespace ApiQuizGenerator.AppClasses
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
-                        while (reader.Read())
+                        while (await reader.ReadAsync())
                         {
                             T listObj = reader.ToObject<T>();
                             if (listObj != null)

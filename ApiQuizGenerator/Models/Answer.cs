@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-
-namespace ApiQuizGenerator.Models 
+namespace ApiQuizGenerator.Models
 {
     public class Answer
     {    
@@ -17,7 +13,7 @@ namespace ApiQuizGenerator.Models
         public int QuestionId { get; set; }
 
          // used for SQL Commands
-        internal string Definition { get { return "Anserws"; } }
+        internal static string Definition { get { return "Answers"; } }
         
     }
 }
