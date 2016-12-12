@@ -16,8 +16,7 @@ namespace ApiQuizGenerator.Controllers
         }
 
         // GET api/quizes/list
-        [HttpGet]
-        [Route("[action]")]
+        [HttpGet("[action]")]
         public async Task<List<Quiz>> List() 
         {
             return await _DataService.Quizes.All(); 

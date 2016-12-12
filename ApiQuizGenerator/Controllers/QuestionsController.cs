@@ -16,8 +16,7 @@ namespace ApiQuizGenerator.Controllers
         }
 
         // GET api/questions/list
-        [HttpGet]
-        [Route("[action]/{id}")]
+        [HttpGet("[action]/{id}")]
         public async Task<List<Question>> List(Guid id) 
         {
             return await _DataService.Questions.All(id.ToString()); 

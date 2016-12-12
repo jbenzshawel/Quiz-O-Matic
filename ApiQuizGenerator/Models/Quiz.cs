@@ -24,6 +24,5 @@ namespace ApiQuizGenerator.Models
 
         // used for SQL Commands
         internal static string Definition { get { return "Quizes"; } }
-    
     }
 }
