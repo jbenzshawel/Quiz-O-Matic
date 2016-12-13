@@ -5,9 +5,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Npgsql;
 using NpgsqlTypes;
+using ApiQuizGenerator.Models;
 
 namespace ApiQuizGenerator.AppClasses
 {
+    public class PgSqlObject
+    {
+        public string PgFunction { get; set; }
+
+        public NpgsqlParameter[] Parameters { get; set; } 
+    }
     /// <summary>
     /// Contains methods for retrieving data from a PostgreSql database. All Sql calls
     /// are done through stored procedures called out in the objects properties
@@ -31,19 +38,25 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to retrive a 
         /// list of objects from the key Table Name
         /// </summary>
-        private Dictionary<string, string> _listObjects = null;
-        public Dictionary<string, string> ListObjects 
+        private Dictionary<Type, PgSqlObject> _listProcedures = null;
+        public Dictionary<Type, PgSqlObject> ListProcedures 
         { 
             get 
             {
-                if (_listObjects == null)
-                    _listObjects = new Dictionary<string, string> 
+                if (_listProcedures == null)
+                    _listProcedures =  new Dictionary<Type, PgSqlObject> 
                     {
-                        { "Quizes", "list_quizes" },
-                        { "Questions", "list_questions" }
+                        { typeof (Quiz), new PgSqlObject { PgFunction = "list_quizes" } },
+                        { typeof (Question), new PgSqlObject {
+                            PgFunction = "list_questions",
+                            Parameters = new NpgsqlParameter[] 
+                            {
+                                new NpgsqlParameter("p_quiz_id", NpgsqlDbType.Uuid) 
+                            }
+                        }}
                     };
                 
-                return _listObjects;
+                return _listProcedures;
             }
         }
         
@@ -51,19 +64,39 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to retrive a 
         /// single  object from the key Table Name
         /// </summary>
-        private Dictionary<string, string> _getObjects = null;
-        public Dictionary<string, string> GetObjects 
+        private Dictionary<Type, PgSqlObject> _getProcedures = null;
+        public Dictionary<Type, PgSqlObject> GetProcedures 
         { 
             get 
             {
-                if (_getObjects == null) 
-                    _getObjects = new Dictionary<string, string> 
+                if (_getProcedures == null) 
+                    _getProcedures = new Dictionary<Type, PgSqlObject> 
                     {
-                        { "Quizes", "get_quiz_by_id" },
-                        { "Questions", "get_question_by_id" }                
+                        { 
+                            typeof(Quiz), 
+                            new PgSqlObject 
+                            {
+                                PgFunction = "get_quiz_by_id",
+                                Parameters = new NpgsqlParameter[] 
+                                { 
+                                    new NpgsqlParameter("p_quiz_id", NpgsqlDbType.Uuid) 
+                                }
+                            } 
+                        },
+                        { 
+                            typeof(Question), 
+                            new PgSqlObject 
+                            {
+                                PgFunction =  "get_question_by_id",
+                                Parameters = new NpgsqlParameter[] 
+                                { 
+                                    new NpgsqlParameter("p_question_id", NpgsqlDbType.Integer)
+                                }
+                            } 
+                        }                
                     };
 
-                return _getObjects;
+                return _getProcedures;
             }
         }
 
@@ -71,19 +104,19 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to save (upsert)
         /// object in the key Table Name
         /// </summary>
-        private Dictionary<string, string> _saveObjects = null;
-        public Dictionary<string, string> SaveObjects 
+        private Dictionary<string, string> _saveProcedures = null;
+        public Dictionary<string, string> SaveProcedures 
         { 
             get 
             {
-                if (_saveObjects == null)
-                    _saveObjects = new Dictionary<string, string>
+                if (_saveProcedures == null)
+                    _saveProcedures = new Dictionary<string, string>
                     {
                         { "Quizes", "save_quiz" },
                         { "Questions", "save_question" }
                     };
                 
-                return _saveObjects;
+                return _saveProcedures;
             }
         }
 
@@ -91,19 +124,19 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to delete a 
         /// single object from the key Table Name
         /// </summary>
-        private Dictionary<string, string> _deleteObjects = null;
-        public Dictionary<string, string> DeleteObjects 
+        private Dictionary<string, string> _deleteProcedures = null;
+        public Dictionary<string, string> DeleteProcedures 
         { 
             get
             {
-                if (_deleteObjects == null)
-                    _deleteObjects = new Dictionary<string, string>
+                if (_deleteProcedures == null)
+                    _deleteProcedures = new Dictionary<string, string>
                     {
                         { "Quizes", "delete_quiz" },
                         { "Questions", "delete_question" }
                     };
 
-                return _deleteObjects;
+                return _deleteProcedures;
             }
         }
 
@@ -222,7 +255,7 @@ namespace ApiQuizGenerator.AppClasses
                     {
                         while (await reader.ReadAsync())
                         {
-                            T listObj = reader.ToObject<T>();
+                            T listObj = reader.ToModel<T>();
                             if (listObj != null)
                                 allObjects.Add(listObj);
                         }

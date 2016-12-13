@@ -14,7 +14,7 @@ namespace ApiQuizGenerator.AppClasses
         /// <param name="key"></param>
         /// <param name="orVal"></param>
         /// <returns></returns>
-        public static string GetValOr(this Dictionary<string, string> @this, string key, string orVal = null)
+        public static PgSqlObject GetValOr(this Dictionary<Type, PgSqlObject> @this, Type key, PgSqlObject orVal = null)
         {
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
@@ -23,7 +23,7 @@ namespace ApiQuizGenerator.AppClasses
         /// Casts a DbDataReader object to a Quiz or Question object
         /// </summary>
         /// <param name="@this">reader object</param>
-        public static T ToObject<T>(this DbDataReader @this) where T : class
+        public static T ToModel<T>(this DbDataReader @this) where T : class
         {
             T objectCast = null;
 

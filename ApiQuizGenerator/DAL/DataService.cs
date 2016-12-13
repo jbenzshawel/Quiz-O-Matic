@@ -19,6 +19,7 @@ namespace ApiQuizGenerator.DAL
        public IRepository<QuizType> QuizTypes { get; set; }
 
        public IRepository<Question> Questions { get; set; }
+       
        public DataService() 
        {
            this.Quizes = new Repository<Quiz>(); 
