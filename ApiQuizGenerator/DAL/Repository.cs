@@ -90,42 +90,32 @@ namespace ApiQuizGenerator.DAL
             var paramz = new List<NpgsqlParameter>();
 
             if (obj != null) 
-            {
+            {   
                 IEnumerable<PropertyInfo> objProperties = obj.GetType().GetTypeInfo().DeclaredProperties;
+                pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
                 List<NpgsqlParameter> procedureParams = pgSqlObject.Parameters.ToList<NpgsqlParameter>(); 
                 
                 foreach(var property in objProperties)
                 {
-                    ColumnName columnNameAttr = ((object[])property.GetCustomAttributes(typeof (string), false))[0] as ColumnName;
-                    if (columnNameAttr != null)
+                    var prop = property.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
+                    string columnName = prop !=null ? prop.AttributeValue : null;
+                    // get column name attribute from property
+                    if (!string.IsNullOrEmpty(columnName) && 
+                    columnName.Replace("_", "").Equals(property.Name, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        var sqlParam = procedureParams.FirstOrDefault(p => p.ParameterName == ("p_" + columnNameAttr.AttributeValue));
-                        if (sqlParam != null) 
-                            paramz.Add(_PgSql.NpgParam(sqlParam.NpgsqlDbType, sqlParam.ParameterName, property.GetValue(obj, null)));
+                        // find the parameter that matches the column name
+                        var sqlParam = procedureParams.FirstOrDefault(p => p.ParameterName == ("p_" + columnName));
+                        // add the param to the list of parameters
+                        if (sqlParam != null && sqlParam.Value == null && !paramz.Contains(sqlParam)) 
+                        {
+                            sqlParam.Value = property.GetValue(obj, null);
+                            paramz.Add(sqlParam);
+                        }
                     }
                 }
             }
 
-            // if (obj != null && typeof (T) == typeof (Quiz)) 
-            // {
-            //     var quiz = obj as Quiz;
-            //     pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
-                
-            // }
-            // else if (obj != null && typeof (T) == typeof (Question)) 
-            // {
-            //     var question = obj as Question;
-            //     pgFunction = _PgSql.SaveProcedures[Question.Definition];
-            //     paramz = new List<NpgsqlParameter>
-            //     {
-            //         _PgSql.NpgParam(NpgsqlDbType.Text, "p_title", question.Title),
-            //         _PgSql.NpgParam(NpgsqlDbType.Text, "p_attributes", question.Attributes),
-            //         _PgSql.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", question.QuizId),     
-            //         _PgSql.NpgParam(NpgsqlDbType.Integer, "p_question_id", question.Id)               
-            //     };
-            // }
-
-            return await _PgSql.ExecuteNonQuey(pgFunction, paramz);
+            return await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);
         }
 
         public async Task<bool> Delete(string id)

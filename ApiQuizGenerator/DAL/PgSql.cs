@@ -45,6 +45,7 @@ namespace ApiQuizGenerator.AppClasses
             get 
             {
                 if (_listProcedures == null)
+                {
                     _listProcedures =  new Dictionary<Type, PgSqlObject> 
                     {
                         { typeof (Quiz), new PgSqlObject { PgFunction = "list_quizes" } },
@@ -56,7 +57,8 @@ namespace ApiQuizGenerator.AppClasses
                             }
                         }
                     };
-                
+                } // end if _listProcedures == null
+                                    
                 return _listProcedures;
             }
         }
@@ -71,6 +73,7 @@ namespace ApiQuizGenerator.AppClasses
             get 
             {
                 if (_getProcedures == null) 
+                {
                     _getProcedures = new Dictionary<Type, PgSqlObject> 
                     {
                         { 
@@ -88,6 +91,8 @@ namespace ApiQuizGenerator.AppClasses
                             } 
                         }                
                     };
+                } // end if _getProcedures == null
+                    
 
                 return _getProcedures;
             }
@@ -103,21 +108,38 @@ namespace ApiQuizGenerator.AppClasses
             get 
             {
                 if (_saveProcedures == null)
+                {
                     _saveProcedures = new Dictionary<Type, PgSqlObject>
                     {
-                        { typeof (Quiz), new PgSqlObject 
-                        {
-                            PgFunction = "save_quiz",
-                            Parameters = new NpgsqlParameter[] 
+                        { 
+                            typeof (Quiz), new PgSqlObject 
                             {
-                                NpgParam(NpgsqlDbType.Text, "p_name"),
-                                NpgParam(NpgsqlDbType.Text, "p_description"),
-                                NpgParam(NpgsqlDbType.Integer, "p_type_id"),
-                                NpgParam(NpgsqlDbType.Uuid, "p_quiz_id")
+                                PgFunction = "save_quiz",
+                                Parameters = new NpgsqlParameter[] 
+                                {
+                                    NpgParam(NpgsqlDbType.Text, "p_name"),
+                                    NpgParam(NpgsqlDbType.Text, "p_description"),
+                                    NpgParam(NpgsqlDbType.Integer, "p_type_id"),
+                                    NpgParam(NpgsqlDbType.Uuid, "p_quiz_id")
+                                }
+                            } 
+                        },
+                        { 
+                            typeof (Question), new PgSqlObject
+                            {
+                                PgFunction ="save_question",
+                                Parameters = new NpgsqlParameter[]
+                                {
+                                    NpgParam(NpgsqlDbType.Text, "p_title"),
+                                    NpgParam(NpgsqlDbType.Text, "p_attributes"),
+                                    NpgParam(NpgsqlDbType.Uuid, "p_quiz_id"),    
+                                    NpgParam(NpgsqlDbType.Integer, "p_question_id")        
+                                }
                             }
-                        } },
-                        { "Questions", "save_question" }
+                        }
                     };
+                } // end if _saveProcedures == null
+                    
                 
                 return _saveProcedures;
             }
@@ -133,6 +155,7 @@ namespace ApiQuizGenerator.AppClasses
             get
             {
                 if (_deleteProcedures == null)
+                {
                     _deleteProcedures = new Dictionary<Type, PgSqlObject>
                     {
                         { 
@@ -150,6 +173,8 @@ namespace ApiQuizGenerator.AppClasses
                             }
                         }
                     };
+                } // end if _deleteProcedures == null 
+                    
 
                 return _deleteProcedures;
             }

@@ -9,7 +9,6 @@ namespace ApiQuizGenerator.Models
         [ColumnName("quiz_id")]
         public Guid Id { get; set; }
 
-
         [Required]
         [ColumnName("name")]
         public string Name { get; set; }
@@ -30,8 +29,5 @@ namespace ApiQuizGenerator.Models
 
         [ColumnName("updated")]
         public DateTime? Updated { get; set; }
-
-        // used for SQL Commands
-        internal static string Definition { get { return "Quizes"; } }
     }
 }
