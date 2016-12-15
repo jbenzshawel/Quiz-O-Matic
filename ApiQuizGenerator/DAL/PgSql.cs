@@ -15,11 +15,12 @@ namespace ApiQuizGenerator.AppClasses
 
         public NpgsqlParameter[] Parameters { get; set; } 
     }
+    
     /// <summary>
     /// Contains methods for retrieving data from a PostgreSql database. All Sql calls
     /// are done through stored procedures called out in the objects properties
     /// </summary>
-    public class DataHelper
+    public class PgSql
     {
         
         /// <summary>
@@ -47,13 +48,13 @@ namespace ApiQuizGenerator.AppClasses
                     _listProcedures =  new Dictionary<Type, PgSqlObject> 
                     {
                         { typeof (Quiz), new PgSqlObject { PgFunction = "list_quizes" } },
-                        { typeof (Question), new PgSqlObject {
-                            PgFunction = "list_questions",
-                            Parameters = new NpgsqlParameter[] 
+                        { 
+                            typeof (Question), new PgSqlObject 
                             {
-                                new NpgsqlParameter("p_quiz_id", NpgsqlDbType.Uuid) 
+                                PgFunction = "list_questions",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
-                        }}
+                        }
                     };
                 
                 return _listProcedures;
@@ -73,25 +74,17 @@ namespace ApiQuizGenerator.AppClasses
                     _getProcedures = new Dictionary<Type, PgSqlObject> 
                     {
                         { 
-                            typeof(Quiz), 
-                            new PgSqlObject 
+                            typeof(Quiz),  new PgSqlObject 
                             {
                                 PgFunction = "get_quiz_by_id",
-                                Parameters = new NpgsqlParameter[] 
-                                { 
-                                    new NpgsqlParameter("p_quiz_id", NpgsqlDbType.Uuid) 
-                                }
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             } 
                         },
                         { 
-                            typeof(Question), 
-                            new PgSqlObject 
+                            typeof(Question), new PgSqlObject 
                             {
                                 PgFunction =  "get_question_by_id",
-                                Parameters = new NpgsqlParameter[] 
-                                { 
-                                    new NpgsqlParameter("p_question_id", NpgsqlDbType.Integer)
-                                }
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id") }
                             } 
                         }                
                     };
@@ -104,15 +97,25 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to save (upsert)
         /// object in the key Table Name
         /// </summary>
-        private Dictionary<string, string> _saveProcedures = null;
-        public Dictionary<string, string> SaveProcedures 
+        private Dictionary<Type, PgSqlObject> _saveProcedures = null;
+        public Dictionary<Type, PgSqlObject> SaveProcedures 
         { 
             get 
             {
                 if (_saveProcedures == null)
-                    _saveProcedures = new Dictionary<string, string>
+                    _saveProcedures = new Dictionary<Type, PgSqlObject>
                     {
-                        { "Quizes", "save_quiz" },
+                        { typeof (Quiz), new PgSqlObject 
+                        {
+                            PgFunction = "save_quiz",
+                            Parameters = new NpgsqlParameter[] 
+                            {
+                                NpgParam(NpgsqlDbType.Text, "p_name"),
+                                NpgParam(NpgsqlDbType.Text, "p_description"),
+                                NpgParam(NpgsqlDbType.Integer, "p_type_id"),
+                                NpgParam(NpgsqlDbType.Uuid, "p_quiz_id")
+                            }
+                        } },
                         { "Questions", "save_question" }
                     };
                 
@@ -124,16 +127,28 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to delete a 
         /// single object from the key Table Name
         /// </summary>
-        private Dictionary<string, string> _deleteProcedures = null;
-        public Dictionary<string, string> DeleteProcedures 
+        private Dictionary<Type, PgSqlObject> _deleteProcedures = null;
+        public Dictionary<Type, PgSqlObject> DeleteProcedures 
         { 
             get
             {
                 if (_deleteProcedures == null)
-                    _deleteProcedures = new Dictionary<string, string>
+                    _deleteProcedures = new Dictionary<Type, PgSqlObject>
                     {
-                        { "Quizes", "delete_quiz" },
-                        { "Questions", "delete_question" }
+                        { 
+                            typeof (Quiz), new PgSqlObject 
+                            {
+                                PgFunction =  "delete_quiz",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
+                            }
+                        },
+                        { 
+                            typeof (Question), new PgSqlObject 
+                            {
+                                PgFunction = "delete_question",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id")}
+                            }
+                        }
                     };
 
                 return _deleteProcedures;
@@ -147,10 +162,12 @@ namespace ApiQuizGenerator.AppClasses
         /// <param name="paramName"></param>
         /// <param name="val"></param>
         /// <returns></returns>
-        public NpgsqlParameter NpgParam(NpgsqlDbType dbType, string paramName, object val) 
+        public NpgsqlParameter NpgParam(NpgsqlDbType dbType, string paramName, object val = null) 
         {
             var param = new NpgsqlParameter(paramName, dbType);
-            param.Value = val;
+            // add value if set 
+            if (val != null)
+                param.Value = val;
 
             return param;
         }
@@ -217,7 +234,7 @@ namespace ApiQuizGenerator.AppClasses
         /// <param name="pgFunction">stored procedure name</param>
         /// <param name="paramz">optional list of params</param>
         /// <returns></returns>
-        public async Task <T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
+        public async Task<T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
             where T : class
         {
             T obj = null; 

@@ -1,10 +1,12 @@
-using System;
+using System.Reflection;
 using System.Collections.Generic;
 using ApiQuizGenerator.Models;
 using Npgsql;
 using NpgsqlTypes;
 using ApiQuizGenerator.AppClasses;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace ApiQuizGenerator.DAL
 {
@@ -16,23 +18,23 @@ namespace ApiQuizGenerator.DAL
 
         Task<bool> Save(T obj);
 
-        Task<bool> Delete(T obj);
+        Task<bool> Delete(string id);
     }
 
     public class Repository<T> : IRepository<T> 
         where T : class
     {
 
-        private DataHelper _DataHelper { get; set; }
+        private PgSql _PgSql { get; set; }
 
         public Repository()
         {
-            _DataHelper = new DataHelper();
+            _PgSql = new PgSql();
         }
 
-        public Repository(DataHelper _dataHelper)
+        public Repository(PgSql _dataHelper)
         {
-            _DataHelper = _dataHelper;
+            _PgSql = _dataHelper;
         }
 
         /// <summary>
@@ -44,16 +46,22 @@ namespace ApiQuizGenerator.DAL
         /// <returns></returns>
         public async Task<List<T>> All(string id = null)
         {
-            PgSqlObject pgSqlObject = _DataHelper.ListProcedures.GetValOr(typeof (T));
+            List<T> allObjects = new List<T>();
+            PgSqlObject pgSqlObject = _PgSql.ListProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
-            if (pgSqlObject != null && pgSqlObject.Parameters != null)
+            if (pgSqlObject != null)
             {
-                pgSqlObject.Parameters[0].Value = id;
-                paramz.Add(pgSqlObject.Parameters[0]);
+                // id param only needed for list questions / answers
+                if (pgSqlObject.Parameters != null)
+                {
+                    pgSqlObject.Parameters[0].Value = id;
+                    paramz.Add(pgSqlObject.Parameters[0]);
+                }
+                allObjects = await _PgSql.GetDataList<T>(pgSqlObject.PgFunction, paramz);                
             }
-            
-            return await _DataHelper.GetDataList<T>(pgSqlObject.PgFunction, paramz);
+
+            return allObjects;
         }
 
         /// <summary>
@@ -65,73 +73,77 @@ namespace ApiQuizGenerator.DAL
         public async Task<T> Get(string id) 
         {
             T obj = null;
-            PgSqlObject pgSqlObject = _DataHelper.GetProcedures.GetValOr(typeof (T));
+            PgSqlObject pgSqlObject = _PgSql.GetProcedures.GetValOr(typeof (T));
                     
-            if (string.IsNullOrEmpty(id) || pgSqlObject == null)
-            {
-                return null;
-            }
-            
-            if (pgSqlObject.Parameters != null) 
+            if (!string.IsNullOrEmpty(id) && pgSqlObject != null && pgSqlObject.Parameters != null)
             {
                 pgSqlObject.Parameters[0].Value = id;
+                obj = await _PgSql.GetObject<T>(pgSqlObject.PgFunction, pgSqlObject.Parameters[0]);
             }
-
-            return await _DataHelper.GetObject<T>(pgSqlObject.PgFunction, pgSqlObject.Parameters[0]);
+            
+            return obj;
         }
 
         public async Task<bool> Save(T obj)
         {
-            var pgFunction = string.Empty;
+            PgSqlObject pgSqlObject = null;
             var paramz = new List<NpgsqlParameter>();
 
-            if (obj != null && typeof (T) == typeof (Quiz)) 
+            if (obj != null) 
             {
-                var quiz = obj as Quiz;
-                pgFunction = _DataHelper.SaveProcedures[Quiz.Definition];
-                paramz = new List<NpgsqlParameter> 
+                IEnumerable<PropertyInfo> objProperties = obj.GetType().GetTypeInfo().DeclaredProperties;
+                List<NpgsqlParameter> procedureParams = pgSqlObject.Parameters.ToList<NpgsqlParameter>(); 
+                
+                foreach(var property in objProperties)
                 {
-                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_name", quiz.Name),
-                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_description", quiz.Description),
-                    _DataHelper.NpgParam(NpgsqlDbType.Integer, "p_type_id", quiz.TypeId),
-                    _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id)
-                };
-            }
-            else if (obj != null && typeof (T) == typeof (Question)) 
-            {
-                var question = obj as Question;
-                pgFunction = _DataHelper.SaveProcedures[Question.Definition];
-                paramz = new List<NpgsqlParameter>
-                {
-                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_title", question.Title),
-                    _DataHelper.NpgParam(NpgsqlDbType.Text, "p_attributes", question.Attributes),
-                    _DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", question.QuizId),     
-                    _DataHelper.NpgParam(NpgsqlDbType.Integer, "p_question_id", question.Id)               
-                };
+                    ColumnName columnNameAttr = ((object[])property.GetCustomAttributes(typeof (string), false))[0] as ColumnName;
+                    if (columnNameAttr != null)
+                    {
+                        var sqlParam = procedureParams.FirstOrDefault(p => p.ParameterName == ("p_" + columnNameAttr.AttributeValue));
+                        if (sqlParam != null) 
+                            paramz.Add(_PgSql.NpgParam(sqlParam.NpgsqlDbType, sqlParam.ParameterName, property.GetValue(obj, null)));
+                    }
+                }
             }
 
-            return await _DataHelper.ExecuteNonQuey(pgFunction, paramz);
+            // if (obj != null && typeof (T) == typeof (Quiz)) 
+            // {
+            //     var quiz = obj as Quiz;
+            //     pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
+                
+            // }
+            // else if (obj != null && typeof (T) == typeof (Question)) 
+            // {
+            //     var question = obj as Question;
+            //     pgFunction = _PgSql.SaveProcedures[Question.Definition];
+            //     paramz = new List<NpgsqlParameter>
+            //     {
+            //         _PgSql.NpgParam(NpgsqlDbType.Text, "p_title", question.Title),
+            //         _PgSql.NpgParam(NpgsqlDbType.Text, "p_attributes", question.Attributes),
+            //         _PgSql.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", question.QuizId),     
+            //         _PgSql.NpgParam(NpgsqlDbType.Integer, "p_question_id", question.Id)               
+            //     };
+            // }
+
+            return await _PgSql.ExecuteNonQuey(pgFunction, paramz);
         }
 
-        public async Task<bool> Delete(T obj)
+        public async Task<bool> Delete(string id)
         {
-            var pgFunction = string.Empty;
+            bool status = false;
+            PgSqlObject pgSqlObject = _PgSql.DeleteProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
-            if (obj != null && typeof (T) == typeof (Quiz)) 
+            // delete procedures take one parameter which is id of object to delete
+            if (!string.IsNullOrEmpty(id) && pgSqlObject != null && pgSqlObject.Parameters != null)
             {
-                var quiz = obj as Quiz;
-                pgFunction = _DataHelper.DeleteProcedures[Quiz.Definition];
-                paramz.Add(_DataHelper.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id", quiz.Id));
-            }
-            else if (obj != null && typeof (T) == typeof (Question))
-            {
-                var question = obj as Question;
-                pgFunction = _DataHelper.DeleteProcedures[Question.Definition];
-                paramz.Add(_DataHelper.NpgParam(NpgsqlDbType.Integer, "p_question_id", question.Id));
+                pgSqlObject.Parameters[0].Value = id;
+                paramz.Add(pgSqlObject.Parameters[0]);
+
+                status = await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);            
             }
 
-            return await _DataHelper.ExecuteNonQuey(pgFunction, paramz);
+            return status;
         }
     }
 }

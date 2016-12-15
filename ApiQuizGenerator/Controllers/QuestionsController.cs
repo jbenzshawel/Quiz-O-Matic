@@ -93,7 +93,7 @@ namespace ApiQuizGenerator.Controllers
                 return;
             }
 
-            bool saveStatus = await _DataService.Questions.Delete(question);
+            bool saveStatus = await _DataService.Questions.Delete(id.ToString());
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
