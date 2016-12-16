@@ -35,6 +35,8 @@ namespace ApiQuizGenerator.AppClasses
             }
         } 
         
+        #region Object procedure Dictionary properties
+
         /// <summary>
         /// Dictionary with key of Table Name and value of stored procedure name to retrive a 
         /// list of objects from the key Table Name
@@ -53,6 +55,13 @@ namespace ApiQuizGenerator.AppClasses
                             typeof (Question), new PgSqlObject 
                             {
                                 PgFunction = "list_questions",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
+                            }
+                        },
+                        { 
+                            typeof (Answer), new PgSqlObject 
+                            {
+                                PgFunction = "list_answers",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
                         }
@@ -88,6 +97,13 @@ namespace ApiQuizGenerator.AppClasses
                             {
                                 PgFunction =  "get_question_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id") }
+                            } 
+                        },
+                        { 
+                            typeof(Answer), new PgSqlObject 
+                            {
+                                PgFunction =  "get_answer_by_id",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id") }
                             } 
                         }                
                     };
@@ -136,6 +152,20 @@ namespace ApiQuizGenerator.AppClasses
                                     NpgParam(NpgsqlDbType.Integer, "p_question_id")        
                                 }
                             }
+                        },
+                        { 
+                            typeof (Answer), new PgSqlObject
+                            {
+                                PgFunction ="save_answer",
+                                Parameters = new NpgsqlParameter[]
+                                {
+                                    NpgParam(NpgsqlDbType.Integer, "p_answer_id"),
+                                    NpgParam(NpgsqlDbType.Integer, "p_question_id"),
+                                    NpgParam(NpgsqlDbType.Text, "p_content"),    
+                                    NpgParam(NpgsqlDbType.Text, "p_identifier"),   
+                                    NpgParam(NpgsqlDbType.Text, "p_attributes")
+                                }
+                            }
                         }
                     };
                 } // end if _saveProcedures == null
@@ -171,6 +201,13 @@ namespace ApiQuizGenerator.AppClasses
                                 PgFunction = "delete_question",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id")}
                             }
+                        },
+                        { 
+                            typeof (Answer), new PgSqlObject 
+                            {
+                                PgFunction = "delete_answer",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id")}
+                            }
                         }
                     };
                 } // end if _deleteProcedures == null 
@@ -179,6 +216,8 @@ namespace ApiQuizGenerator.AppClasses
                 return _deleteProcedures;
             }
         }
+
+        #endregion
 
         /// <summary>
         /// Creates an NpgsqlParameter with type, name, and value passed in 

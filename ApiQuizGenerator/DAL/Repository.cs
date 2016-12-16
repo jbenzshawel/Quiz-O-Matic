@@ -1,8 +1,6 @@
 using System.Reflection;
 using System.Collections.Generic;
-using ApiQuizGenerator.Models;
 using Npgsql;
-using NpgsqlTypes;
 using ApiQuizGenerator.AppClasses;
 using System.Threading.Tasks;
 using System;
@@ -86,36 +84,38 @@ namespace ApiQuizGenerator.DAL
 
         public async Task<bool> Save(T obj)
         {
-            PgSqlObject pgSqlObject = null;
+            PgSqlObject pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
-            if (obj != null) 
+            if (obj != null && pgSqlObject != null) 
             {   
                 IEnumerable<PropertyInfo> objProperties = obj.GetType().GetTypeInfo().DeclaredProperties;
-                pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
                 List<NpgsqlParameter> procedureParams = pgSqlObject.Parameters.ToList<NpgsqlParameter>(); 
                 
                 foreach(var property in objProperties)
                 {
-                    var prop = property.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
-                    string columnName = prop !=null ? prop.AttributeValue : null;
-                    // get column name attribute from property
+                    // get column name attribute from property                    
+                    ColumnName columnNameAttr = property.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
+                    string columnName = columnNameAttr !=null ? columnNameAttr.AttributeValue : null;
+
+                    // match the column name to an obj property 
                     if (!string.IsNullOrEmpty(columnName) && 
                     columnName.Replace("_", "").Equals(property.Name, StringComparison.CurrentCultureIgnoreCase))
                     {
                         // find the parameter that matches the column name
                         var sqlParam = procedureParams.FirstOrDefault(p => p.ParameterName == ("p_" + columnName));
+
                         // add the param to the list of parameters
                         if (sqlParam != null && sqlParam.Value == null && !paramz.Contains(sqlParam)) 
                         {
                             sqlParam.Value = property.GetValue(obj, null);
                             paramz.Add(sqlParam);
                         }
-                    }
-                }
-            }
+                    } // end if columnName not empty && prop name = columnName
+                } // end foreach property
+            } // end obj != null && pgSqlObject != null
 
-            return await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);
+            return pgSqlObject != null && await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);
         }
 
         public async Task<bool> Delete(string id)

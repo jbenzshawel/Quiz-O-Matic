@@ -62,6 +62,21 @@ namespace ApiQuizGenerator.AppClasses
                 objectCast = question as T;
             }
 
+            if (typeof (T) == typeof (Answer))
+            {
+                var answer = new Answer
+                {
+                    Id = Int32.Parse(@this["answer_id"].ToString()),
+                    Content = @this["content"].ToString(),
+                    Identifier = @this["identifier"].ToString(),
+                    Attributes = @this["attributes"].ToString(),
+                    QuestionId = Int32.Parse(@this["question_id"].ToString())
+                };
+                
+                objectCast = answer as T;
+                
+            }
+
             return objectCast;
         }
 
