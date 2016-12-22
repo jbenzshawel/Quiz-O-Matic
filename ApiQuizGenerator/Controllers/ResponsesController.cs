@@ -8,37 +8,37 @@ using ApiQuizGenerator.Models;
 namespace ApiQuizGenerator.Controllers
 {
     [Route("api/[controller]/")]
-    public class QuestionsController : BaseController
+    public class ResponsesController : BaseController
     {
-        public QuestionsController(IDataService _dataService) : base(_dataService)
+        public ResponsesController(IDataService _dataService) : base(_dataService)
         {
             _DataService = _dataService;
         }
 
-        // GET api/questions/list
+        // GET api/responses/list
         [HttpGet("[action]/{id}")]
-        public async Task<List<Question>> List(Guid id) 
+        public async Task<List<Response>> List(Guid id) 
         {
-            return await _DataService.Questions.All(id.ToString()); 
+            return await _DataService.Responses.All(id.ToString()); 
         }
 
-        // GET api/questions/{id}
+        // GET api/responses/{id}
         [HttpGet("{id}")]
-        public async Task<Question> Get(int id)
+        public async Task<Response> Get(int id)
         {
-            Question question = await _DataService.Questions.Get(id.ToString());
+            Response response = await _DataService.Responses.Get(id.ToString());
 
-            if (question == null) 
+            if (response == null) 
             {
                 Response.StatusCode = 404; // not found
             }
 
-            return question;
+            return response;
         }
 
-        // POST api/questions/post
+        // POST api/responses/post
         [HttpPost]        
-        public async Task Post([FromBody]Question questionModel)
+        public async Task Post([FromBody]Response responseModel)
         {
             if (!ModelState.IsValid)
             {   
@@ -46,16 +46,16 @@ namespace ApiQuizGenerator.Controllers
                 return;
             }
 
-            bool saveStatus = await _DataService.Questions.Save(questionModel);    
+            bool saveStatus = await _DataService.Responses.Save(responseModel);    
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
             }
         }
 
-        // PUT api/questions/put/{id}
+        // PUT api/responses/put/{id}
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]Question questionModel)
+        public async Task Put(int id, [FromBody]Response responseModel)
         {
             if (!ModelState.IsValid)
             {   
@@ -64,12 +64,12 @@ namespace ApiQuizGenerator.Controllers
             }
 
             // make sure object exists before trying to update it
-            Question questionSearch = await _DataService.Questions.Get(id.ToString());
-            if (questionSearch != null)
+            Response responseSearch = await _DataService.Responses.Get(id.ToString());
+            if (responseSearch != null)
             {
-                questionModel.Id = id;
+                responseModel.Id = id;
 
-                bool saveStatus = await _DataService.Questions.Save(questionModel);    
+                bool saveStatus = await _DataService.Responses.Save(responseModel);    
                 if (!saveStatus) 
                 {
                     Response.StatusCode = 500; // internal server error
@@ -81,19 +81,19 @@ namespace ApiQuizGenerator.Controllers
             }
         }
 
-        // DELETE api/question/{id}
+        // DELETE api/responses/{id}
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {   
-            Question question = await _DataService.Questions.Get(id.ToString());
+            Response response = await _DataService.Responses.Get(id.ToString());
 
-            if (question == null) 
+            if (response == null) 
             {
                 Response.StatusCode = 404; // not found
                 return;
             }
 
-            bool saveStatus = await _DataService.Questions.Delete(id.ToString());
+            bool saveStatus = await _DataService.Responses.Delete(id.ToString());
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error

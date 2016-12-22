@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ApiQuizGenerator.AppClasses;
 
-
 namespace ApiQuizGenerator.Models
 {
     public class Answer

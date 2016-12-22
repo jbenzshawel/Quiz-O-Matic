@@ -1,24 +1,18 @@
-{
-  "ConnectionStrings" :{
-    "DefaultConnection" :  "Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw"
-  },
+ {
+//   "ConnectionStrings" :{
+//     "DefaultConnection" :  "Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw"
+//   },
+
   "dependencies": {
-       "System.Reflection": "4.3.0",
         "Microsoft.AspNetCore.Routing": "1.1.0",
         "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
         "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
-        "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",
+        "Microsoft.AspNetCore.Owin": "1.0.0",
         "Microsoft.AspNetCore.Diagnostics": "1.1.0",
         "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0",
         "Microsoft.AspNetCore.Mvc": "1.1.0",
         "Microsoft.AspNetCore.StaticFiles": "1.1.0",
-        "Microsoft.EntityFrameworkCore": "1.1.0",
-        "Microsoft.EntityFrameworkCore.Tools": "1.1.0-preview4-final",
-        "Microsoft.EntityFrameworkCore.Design": {
-          "version": "1.1.0",
-          "type": "build"
-        },
-        "Newtonsoft.Json": "9.0.1",
+        "Microsoft.Extensions.Configuration.FileExtensions": "1.1.0",        
         "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
         "Microsoft.Extensions.Configuration.Json": "1.1.0",
         "Microsoft.Extensions.DependencyModel": "1.1.0",
@@ -30,8 +24,9 @@
             "version": "1.1.0",
             "type": "platform"
         },
-      "Npgsql" : "3.1.8"
-      
+        "Newtonsoft.Json": "9.0.1",
+        "Npgsql" : "3.1.8",
+        "System.Reflection": "4.3.0"
   },
 
   "tools": {
@@ -46,9 +41,6 @@
           "version": "1.1.0"
         }
        }
-        // "frameworkAssemblies": {
-        //   "System.Data": { "version": "4.0.0.0", "type": "build" }
-        // }
     }
   },
 
@@ -78,6 +70,6 @@
   },
 
   "tooling": {
-    "defaultNamespace": "SimpleCMS"
+    "defaultNamespace": "ApiQuizGenerator"
   }
 }

@@ -1,10 +1,10 @@
+using System;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 using Npgsql;
 using ApiQuizGenerator.AppClasses;
-using System.Threading.Tasks;
-using System;
-using System.Linq;
 
 namespace ApiQuizGenerator.DAL
 {
@@ -22,7 +22,6 @@ namespace ApiQuizGenerator.DAL
     public class Repository<T> : IRepository<T> 
         where T : class
     {
-
         private PgSql _PgSql { get; set; }
 
         public Repository()
@@ -30,9 +29,9 @@ namespace ApiQuizGenerator.DAL
             _PgSql = new PgSql();
         }
 
-        public Repository(PgSql _dataHelper)
+        public Repository(PgSql _pgSql)
         {
-            _PgSql = _dataHelper;
+            _PgSql = _pgSql;
         }
 
         /// <summary>

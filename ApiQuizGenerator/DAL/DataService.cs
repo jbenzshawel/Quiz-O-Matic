@@ -11,6 +11,8 @@ namespace ApiQuizGenerator.DAL
         IRepository<Question> Questions { get; set; }
         
         IRepository<Answer> Answers { get; set; }
+
+        IRepository<Response> Responses { get; set; }        
     }
 
     public class DataService : IDataService
@@ -23,12 +25,15 @@ namespace ApiQuizGenerator.DAL
        
        public IRepository<Answer> Answers { get; set; }
 
+       public IRepository<Response> Responses { get; set; }
+
        public DataService() 
        {
            this.Quizes = new Repository<Quiz>(); 
            this.QuizTypes = new Repository<QuizType>();
            this.Questions = new Repository<Question>();
            this.Answers = new Repository<Answer>();
+           this.Responses = new Repository<Response>(); 
        }
     }
 }

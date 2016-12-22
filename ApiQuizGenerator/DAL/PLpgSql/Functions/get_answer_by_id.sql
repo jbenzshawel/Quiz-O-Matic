@@ -19,7 +19,7 @@ BEGIN
 FROM 
 	public.answers 
 WHERE
-	answer_id.answers = p_answer_id
+	answers.answer_id = p_answer_id
 END; $$ 
  
 LANGUAGE 'plpgsql';

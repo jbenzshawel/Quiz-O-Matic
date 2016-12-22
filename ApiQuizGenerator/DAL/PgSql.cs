@@ -64,6 +64,13 @@ namespace ApiQuizGenerator.AppClasses
                                 PgFunction = "list_answers",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
+                        },
+                        { 
+                            typeof (Response), new PgSqlObject 
+                            {
+                                PgFunction = "list_responses",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
+                            }
                         }
                     };
                 } // end if _listProcedures == null
@@ -104,6 +111,13 @@ namespace ApiQuizGenerator.AppClasses
                             {
                                 PgFunction =  "get_answer_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id") }
+                            } 
+                        },
+                        { 
+                            typeof(Response), new PgSqlObject 
+                            {
+                                PgFunction =  "get_response_by_id",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_response_id") }
                             } 
                         }                
                     };
@@ -166,6 +180,19 @@ namespace ApiQuizGenerator.AppClasses
                                     NpgParam(NpgsqlDbType.Text, "p_attributes")
                                 }
                             }
+                        },
+                        { 
+                            typeof (Response), new PgSqlObject
+                            {
+                                PgFunction ="save_response",
+                                Parameters = new NpgsqlParameter[]
+                                {
+                                    NpgParam(NpgsqlDbType.Integer, "p_response_id"),
+                                    NpgParam(NpgsqlDbType.Uuid, "p_quiz_id"),
+                                    NpgParam(NpgsqlDbType.Integer, "p_question_id"),    
+                                    NpgParam(NpgsqlDbType.Text, "p_value")
+                                }
+                            }
                         }
                     };
                 } // end if _saveProcedures == null
@@ -208,10 +235,16 @@ namespace ApiQuizGenerator.AppClasses
                                 PgFunction = "delete_answer",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id")}
                             }
+                        },
+                        { 
+                            typeof (Response), new PgSqlObject 
+                            {
+                                PgFunction = "delete_response",
+                                Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_response_id")}
+                            }
                         }
                     };
                 } // end if _deleteProcedures == null 
-                    
 
                 return _deleteProcedures;
             }
@@ -266,7 +299,7 @@ namespace ApiQuizGenerator.AppClasses
                 }
             } // end using NpgsqlConnection
 
-            // postgresql doesn't support rows affected (as far as I could tell)
+            // postgresql / npgsql doesn't support rows affected (as far as I could tell)
             return rowsAffected == -1; 
         }
         
@@ -358,7 +391,7 @@ namespace ApiQuizGenerator.AppClasses
         }
 
         /// <summary>
-        /// Creates a NpgSqlCommand of type Stored Procedure with parameters and name set
+        /// Creates a NpgSqlCommand of type Stored Procedure with name and optional parameters
         /// </summary>
         /// <param name="connection"></param>
         /// <param name="command"></param>

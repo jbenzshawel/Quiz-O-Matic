@@ -15,14 +15,14 @@ namespace ApiQuizGenerator.Controllers
             _DataService = _dataService;
         }
 
-        // GET api/answer/list
+        // GET api/answers/list
         [HttpGet("[action]/{id}")]
         public async Task<List<Answer>> List(Guid id) 
         {
             return await _DataService.Answers.All(id.ToString()); 
         }
 
-        // GET api/answer/{id}
+        // GET api/answers/{id}
         [HttpGet("{id}")]
         public async Task<Answer> Get(int id)
         {
@@ -36,7 +36,7 @@ namespace ApiQuizGenerator.Controllers
             return answer;
         }
 
-        // POST api/answer/post
+        // POST api/answers/post
         [HttpPost]        
         public async Task Post([FromBody]Answer answerModel)
         {
@@ -53,7 +53,7 @@ namespace ApiQuizGenerator.Controllers
             }
         }
 
-        // PUT api/answer/put/{id}
+        // PUT api/answers/put/{id}
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody]Answer answerModel)
         {
@@ -81,7 +81,7 @@ namespace ApiQuizGenerator.Controllers
             }
         }
 
-        // DELETE api/answer/{id}
+        // DELETE api/answers/{id}
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {   
