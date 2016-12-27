@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using ApiQuizGenerator.Models;
 using System.Data.Common;
+using Npgsql;
+using System.Linq;
 
 namespace ApiQuizGenerator.AppClasses
 {
@@ -14,13 +16,39 @@ namespace ApiQuizGenerator.AppClasses
         /// <param name="key"></param>
         /// <param name="orVal"></param>
         /// <returns></returns>
-        public static PgSqlObject GetValOr(this Dictionary<Type, PgSqlObject> @this, Type key, PgSqlObject orVal = null)
+        public static PgSqlFunction GetValOr(this Dictionary<Type, PgSqlFunction> @this, Type key, PgSqlFunction orVal = null)
         {
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
+
+
+        /// <summary>
+        /// Cast array of NpgsqlParameter objects to a List of NpgsqlParameter objects and
+        /// if @this is null null is returned. Note if a NpgsqlParameter has a null value 
+        /// it is removed from the list by default. Set optional param of removeNulls to 
+        /// false if you would like to keep null values in the param list
+        /// </summary>
+        /// <param name="@this"></param>
+        /// <returns></returns>
+        public static List<NpgsqlParameter> ToListOrNull(this NpgsqlParameter[] @this, bool removeNulls = true)
+        {
+            List<NpgsqlParameter> paramList = null;
+
+            // return early if @this is null or empty            
+            if (@this == null || @this.Length == 0)
+                return null;
+            
+            // either cast to list where NpgsqlParameter.Value != null or just cast to list depending on removeNulls flag 
+            if (removeNulls)
+                paramList = @this.Where(p => p.Value != null).ToList();
+            else
+                paramList = @this.ToList();
+
+            return paramList;
+        }
         
         /// <summary>
-        /// Casts a DbDataReader object to a Quiz or Question object
+        /// Casts a DbDataReader object to a Quiz, QuizType, Question, Answer, or Response object Model
         /// </summary>
         /// <param name="@this">reader object</param>
         public static T ToModel<T>(this DbDataReader @this) where T : class
@@ -33,7 +61,7 @@ namespace ApiQuizGenerator.AppClasses
 
             // ToDo: use GetColumnSchema for generic mapping
             // map NpgsqlDataReader to Quiz type
-            if (typeof (T) == typeof (Quiz)) 
+            if (typeof (T) == typeof (Quiz) && objectCast == null) 
             {
                 var quiz = new Quiz 
                 {
@@ -49,7 +77,7 @@ namespace ApiQuizGenerator.AppClasses
                 objectCast = quiz as T;
             }
 
-            if (typeof (T) == typeof (Question))
+            if (typeof (T) == typeof (Question) && objectCast == null)
             {
                 var question = new Question
                 {
@@ -62,7 +90,7 @@ namespace ApiQuizGenerator.AppClasses
                 objectCast = question as T;
             }
 
-            if (typeof (T) == typeof (Answer))
+            if (typeof (T) == typeof (Answer) && objectCast == null)
             {
                 var answer = new Answer
                 {
@@ -76,7 +104,7 @@ namespace ApiQuizGenerator.AppClasses
                 objectCast = answer as T;   
             }
 
-            if (typeof (T) == typeof (Response))
+            if (typeof (T) == typeof (Response) && objectCast == null)
             {
                 var response = new Response
                 {
@@ -85,6 +113,17 @@ namespace ApiQuizGenerator.AppClasses
                     QuestionId = Int32.Parse(@this["question_id"].ToString()),
                     Value = @this["value"].ToString(),
                     Created = DateTime.Parse(@this["created"].ToString())
+                };
+                
+                objectCast = response as T;   
+            }
+
+            if (typeof (T) == typeof (QuizType) && objectCast == null)
+            {
+                var response = new QuizType
+                {
+                    Id = Int32.Parse(@this["type_id"].ToString()),
+                    Type = @this["type"].ToString()
                 };
                 
                 objectCast = response as T;   

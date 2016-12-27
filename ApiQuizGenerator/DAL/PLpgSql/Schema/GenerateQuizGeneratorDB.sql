@@ -127,10 +127,10 @@ CREATE TABLE public.responses
     value text COLLATE pg_catalog."default" NOT NULL,
     created timestamp with time zone NOT NULL,
     CONSTRAINT responses_pkey PRIMARY KEY (response_id),
-    CONSTRAINT fk_response_question_id FOREIGN KEY (response_id)
-        REFERENCES public.questions (question_id) MATCH SIMPLE
-        ON UPDATE CASCADE
-        ON DELETE CASCADE,
+    -- CONSTRAINT fk_response_question_id FOREIGN KEY (response_id)
+    --     REFERENCES public.questions (question_id) MATCH SIMPLE
+    --     ON UPDATE CASCADE
+    --     ON DELETE CASCADE,
     CONSTRAINT fk_response_quiz_id FOREIGN KEY (quiz_id)
         REFERENCES public.quizes (quiz_id) MATCH SIMPLE
         ON UPDATE CASCADE

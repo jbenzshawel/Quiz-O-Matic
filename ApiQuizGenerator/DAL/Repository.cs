@@ -44,7 +44,7 @@ namespace ApiQuizGenerator.DAL
         public async Task<List<T>> All(string id = null)
         {
             List<T> allObjects = new List<T>();
-            PgSqlObject pgSqlObject = _PgSql.ListProcedures.GetValOr(typeof (T));
+            PgSqlFunction pgSqlObject = _PgSql.ListProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
             if (pgSqlObject != null)
@@ -55,7 +55,7 @@ namespace ApiQuizGenerator.DAL
                     pgSqlObject.Parameters[0].Value = id;
                     paramz.Add(pgSqlObject.Parameters[0]);
                 }
-                allObjects = await _PgSql.GetDataList<T>(pgSqlObject.PgFunction, paramz);                
+                allObjects = await _PgSql.GetDataList<T>(pgSqlObject);                
             }
 
             return allObjects;
@@ -70,12 +70,12 @@ namespace ApiQuizGenerator.DAL
         public async Task<T> Get(string id) 
         {
             T obj = null;
-            PgSqlObject pgSqlObject = _PgSql.GetProcedures.GetValOr(typeof (T));
+            PgSqlFunction pgSqlObject = _PgSql.GetProcedures.GetValOr(typeof (T));
                     
             if (!string.IsNullOrEmpty(id) && pgSqlObject != null && pgSqlObject.Parameters != null)
             {
                 pgSqlObject.Parameters[0].Value = id;
-                obj = await _PgSql.GetObject<T>(pgSqlObject.PgFunction, pgSqlObject.Parameters[0]);
+                obj = await _PgSql.GetObject<T>(pgSqlObject.Name, pgSqlObject.Parameters[0]);
             }
             
             return obj;
@@ -83,7 +83,7 @@ namespace ApiQuizGenerator.DAL
 
         public async Task<bool> Save(T obj)
         {
-            PgSqlObject pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
+            PgSqlFunction pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
             if (obj != null && pgSqlObject != null) 
@@ -99,7 +99,7 @@ namespace ApiQuizGenerator.DAL
 
                     // match the column name to an obj property 
                     if (!string.IsNullOrEmpty(columnName) && 
-                    columnName.Replace("_", "").Equals(property.Name, StringComparison.CurrentCultureIgnoreCase))
+                        columnName.Replace("_", "").Equals(property.Name, StringComparison.CurrentCultureIgnoreCase))
                     {
                         // find the parameter that matches the column name
                         var sqlParam = procedureParams.FirstOrDefault(p => p.ParameterName == ("p_" + columnName));
@@ -107,20 +107,24 @@ namespace ApiQuizGenerator.DAL
                         // add the param to the list of parameters
                         if (sqlParam != null && sqlParam.Value == null && !paramz.Contains(sqlParam)) 
                         {
+                            // try and get the value from the object model
                             sqlParam.Value = property.GetValue(obj, null);
-                            paramz.Add(sqlParam);
+    
+                            // only add the parameter if it has a value
+                            if (sqlParam.Value != null)
+                                paramz.Add(sqlParam);
                         }
                     } // end if columnName not empty && prop name = columnName
                 } // end foreach property
             } // end obj != null && pgSqlObject != null
 
-            return pgSqlObject != null && await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);
+            return pgSqlObject != null && await _PgSql.ExecuteNonQuery(pgSqlObject.Name, paramz.ToList());
         }
 
         public async Task<bool> Delete(string id)
         {
             bool status = false;
-            PgSqlObject pgSqlObject = _PgSql.DeleteProcedures.GetValOr(typeof (T));
+            PgSqlFunction pgSqlObject = _PgSql.DeleteProcedures.GetValOr(typeof (T));
             var paramz = new List<NpgsqlParameter>();
 
             // delete procedures take one parameter which is id of object to delete
@@ -129,7 +133,7 @@ namespace ApiQuizGenerator.DAL
                 pgSqlObject.Parameters[0].Value = id;
                 paramz.Add(pgSqlObject.Parameters[0]);
 
-                status = await _PgSql.ExecuteNonQuey(pgSqlObject.PgFunction, paramz);            
+                status = await _PgSql.ExecuteNonQuery(pgSqlObject);            
             }
 
             return status;

@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 using Npgsql;
 using NpgsqlTypes;
 using ApiQuizGenerator.Models;
+using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.AppClasses
 {
-    public class PgSqlObject
+    /// <summary>
+    /// Object with PostgreSql Function information with Name property of sql 
+    /// function name and  Parameters property of type NpgsqlParameter[]
+    /// </summary>
+    public class PgSqlFunction
     {
-        public string PgFunction { get; set; }
+        public string Name { get; set; }
 
         public NpgsqlParameter[] Parameters { get; set; } 
     }
@@ -38,37 +43,38 @@ namespace ApiQuizGenerator.AppClasses
         #region Object procedure Dictionary properties
 
         /// <summary>
-        /// Dictionary with key of Table Name and value of stored procedure name to retrive a 
-        /// list of objects from the key Table Name
+        /// Dictionary with key of Model type and value of stored procedure name to retrive a 
+        /// list of objects from the table associated with the Model type key
         /// </summary>
-        private Dictionary<Type, PgSqlObject> _listProcedures = null;
-        public Dictionary<Type, PgSqlObject> ListProcedures 
+        private Dictionary<Type, PgSqlFunction> _listProcedures = null;
+        public Dictionary<Type, PgSqlFunction> ListProcedures 
         { 
             get 
             {
                 if (_listProcedures == null)
                 {
-                    _listProcedures =  new Dictionary<Type, PgSqlObject> 
+                    _listProcedures =  new Dictionary<Type, PgSqlFunction> 
                     {
-                        { typeof (Quiz), new PgSqlObject { PgFunction = "list_quizes" } },
+                        { typeof (Quiz), new PgSqlFunction { Name = "list_quizes" } },
+                        { typeof (QuizType), new PgSqlFunction { Name = "list_quiz_types" } },                        
                         { 
-                            typeof (Question), new PgSqlObject 
+                            typeof (Question), new PgSqlFunction 
                             {
-                                PgFunction = "list_questions",
+                                Name = "list_questions",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
                         },
                         { 
-                            typeof (Answer), new PgSqlObject 
+                            typeof (Answer), new PgSqlFunction 
                             {
-                                PgFunction = "list_answers",
+                                Name = "list_answers",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
                         },
                         { 
-                            typeof (Response), new PgSqlObject 
+                            typeof (Response), new PgSqlFunction 
                             {
-                                PgFunction = "list_responses",
+                                Name = "list_responses",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
                         }
@@ -83,40 +89,40 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to retrive a 
         /// single  object from the key Table Name
         /// </summary>
-        private Dictionary<Type, PgSqlObject> _getProcedures = null;
-        public Dictionary<Type, PgSqlObject> GetProcedures 
+        private Dictionary<Type, PgSqlFunction> _getProcedures = null;
+        public Dictionary<Type, PgSqlFunction> GetProcedures 
         { 
             get 
             {
                 if (_getProcedures == null) 
                 {
-                    _getProcedures = new Dictionary<Type, PgSqlObject> 
+                    _getProcedures = new Dictionary<Type, PgSqlFunction> 
                     {
                         { 
-                            typeof(Quiz),  new PgSqlObject 
+                            typeof(Quiz),  new PgSqlFunction 
                             {
-                                PgFunction = "get_quiz_by_id",
+                                Name = "get_quiz_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             } 
                         },
                         { 
-                            typeof(Question), new PgSqlObject 
+                            typeof(Question), new PgSqlFunction 
                             {
-                                PgFunction =  "get_question_by_id",
+                                Name =  "get_question_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id") }
                             } 
                         },
                         { 
-                            typeof(Answer), new PgSqlObject 
+                            typeof(Answer), new PgSqlFunction 
                             {
-                                PgFunction =  "get_answer_by_id",
+                                Name =  "get_answer_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id") }
                             } 
                         },
                         { 
-                            typeof(Response), new PgSqlObject 
+                            typeof(Response), new PgSqlFunction 
                             {
-                                PgFunction =  "get_response_by_id",
+                                Name =  "get_response_by_id",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_response_id") }
                             } 
                         }                
@@ -132,19 +138,19 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to save (upsert)
         /// object in the key Table Name
         /// </summary>
-        private Dictionary<Type, PgSqlObject> _saveProcedures = null;
-        public Dictionary<Type, PgSqlObject> SaveProcedures 
+        private Dictionary<Type, PgSqlFunction> _saveProcedures = null;
+        public Dictionary<Type, PgSqlFunction> SaveProcedures 
         { 
             get 
             {
                 if (_saveProcedures == null)
                 {
-                    _saveProcedures = new Dictionary<Type, PgSqlObject>
+                    _saveProcedures = new Dictionary<Type, PgSqlFunction>
                     {
                         { 
-                            typeof (Quiz), new PgSqlObject 
+                            typeof (Quiz), new PgSqlFunction 
                             {
-                                PgFunction = "save_quiz",
+                                Name = "save_quiz",
                                 Parameters = new NpgsqlParameter[] 
                                 {
                                     NpgParam(NpgsqlDbType.Text, "p_name"),
@@ -155,9 +161,9 @@ namespace ApiQuizGenerator.AppClasses
                             } 
                         },
                         { 
-                            typeof (Question), new PgSqlObject
+                            typeof (Question), new PgSqlFunction
                             {
-                                PgFunction ="save_question",
+                                Name ="save_question",
                                 Parameters = new NpgsqlParameter[]
                                 {
                                     NpgParam(NpgsqlDbType.Text, "p_title"),
@@ -168,9 +174,9 @@ namespace ApiQuizGenerator.AppClasses
                             }
                         },
                         { 
-                            typeof (Answer), new PgSqlObject
+                            typeof (Answer), new PgSqlFunction
                             {
-                                PgFunction ="save_answer",
+                                Name ="save_answer",
                                 Parameters = new NpgsqlParameter[]
                                 {
                                     NpgParam(NpgsqlDbType.Integer, "p_answer_id"),
@@ -182,9 +188,9 @@ namespace ApiQuizGenerator.AppClasses
                             }
                         },
                         { 
-                            typeof (Response), new PgSqlObject
+                            typeof (Response), new PgSqlFunction
                             {
-                                PgFunction ="save_response",
+                                Name ="save_response",
                                 Parameters = new NpgsqlParameter[]
                                 {
                                     NpgParam(NpgsqlDbType.Integer, "p_response_id"),
@@ -206,40 +212,40 @@ namespace ApiQuizGenerator.AppClasses
         /// Dictionary with key of Table Name and value of stored procedure name to delete a 
         /// single object from the key Table Name
         /// </summary>
-        private Dictionary<Type, PgSqlObject> _deleteProcedures = null;
-        public Dictionary<Type, PgSqlObject> DeleteProcedures 
+        private Dictionary<Type, PgSqlFunction> _deleteProcedures = null;
+        public Dictionary<Type, PgSqlFunction> DeleteProcedures 
         { 
             get
             {
                 if (_deleteProcedures == null)
                 {
-                    _deleteProcedures = new Dictionary<Type, PgSqlObject>
+                    _deleteProcedures = new Dictionary<Type, PgSqlFunction>
                     {
                         { 
-                            typeof (Quiz), new PgSqlObject 
+                            typeof (Quiz), new PgSqlFunction 
                             {
-                                PgFunction =  "delete_quiz",
+                                Name =  "delete_quiz",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Uuid, "p_quiz_id") }
                             }
                         },
                         { 
-                            typeof (Question), new PgSqlObject 
+                            typeof (Question), new PgSqlFunction 
                             {
-                                PgFunction = "delete_question",
+                                Name = "delete_question",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_question_id")}
                             }
                         },
                         { 
-                            typeof (Answer), new PgSqlObject 
+                            typeof (Answer), new PgSqlFunction 
                             {
-                                PgFunction = "delete_answer",
+                                Name = "delete_answer",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_answer_id")}
                             }
                         },
                         { 
-                            typeof (Response), new PgSqlObject 
+                            typeof (Response), new PgSqlFunction 
                             {
-                                PgFunction = "delete_response",
+                                Name = "delete_response",
                                 Parameters = new NpgsqlParameter[] { NpgParam(NpgsqlDbType.Integer, "p_response_id")}
                             }
                         }
@@ -269,13 +275,24 @@ namespace ApiQuizGenerator.AppClasses
             return param;
         }
 
+
+        /// <summary>
+        /// Executes a nonquery sql statement and returns boolean if successful 
+        /// </summary>
+        /// <param name="pgSqlFunction"></param>
+        /// <returns></returns>
+        public async Task<bool> ExecuteNonQuery(PgSqlFunction pgSqlFunction) 
+        {
+            return await ExecuteNonQuery(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull());
+        }
+
         /// <summary>
         /// Executes a nonquery sql statement and returns boolean if successful 
         /// </summary>
         /// <param name="command">stored procedure name</param>
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
-        public async Task<bool> ExecuteNonQuey(string command, List<NpgsqlParameter> paramz = null) 
+        public async Task<bool> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null) 
         {
             int rowsAffected = 0;
 
@@ -343,6 +360,19 @@ namespace ApiQuizGenerator.AppClasses
             }
 
             return obj;
+        }
+
+        /// <summary>
+        /// Retrieves a list of objects of type T from the database 
+        /// Overload of GetDataList that has PgSqlFunction as a paramter instead of name 
+        /// and parameter list
+        /// </summary>
+        /// <param name="pgSqlFunction"></param>
+        /// <returns></returns>
+        public async Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
+            where T : class
+        {
+            return await GetDataList<T>(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull());
         }
 
         /// <summary>
