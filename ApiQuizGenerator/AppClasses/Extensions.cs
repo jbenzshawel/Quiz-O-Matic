@@ -21,12 +21,11 @@ namespace ApiQuizGenerator.AppClasses
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
 
-
         /// <summary>
-        /// Cast array of NpgsqlParameter objects to a List of NpgsqlParameter objects and
-        /// if @this is null null is returned. Note if a NpgsqlParameter has a null value 
-        /// it is removed from the list by default. Set optional param of removeNulls to 
-        /// false if you would like to keep null values in the param list
+        /// Cast array of NpgsqlParameter objects to a List of NpgsqlParameter objects. If @this
+        /// is null null is returned. 
+        /// Note if a NpgsqlParameter has a null value it is removed from the list by default. Set
+        /// optional param removeNulls to false if you would like to keep null values in the returned list
         /// </summary>
         /// <param name="@this"></param>
         /// <returns></returns>

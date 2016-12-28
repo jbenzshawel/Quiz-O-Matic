@@ -372,7 +372,7 @@ namespace ApiQuizGenerator.AppClasses
         public async Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
             where T : class
         {
-            return await GetDataList<T>(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull());
+            return await GetDataList<T>(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull(removeNulls: false));
         }
 
         /// <summary>
