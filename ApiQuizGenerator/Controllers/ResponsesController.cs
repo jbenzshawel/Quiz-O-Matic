@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
 using ApiQuizGenerator.Models;
+using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.Controllers
 {
