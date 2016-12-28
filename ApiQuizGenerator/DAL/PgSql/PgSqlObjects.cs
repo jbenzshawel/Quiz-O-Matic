@@ -8,7 +8,7 @@ namespace ApiQuizGenerator.DAL
 {
     /// <summary>
     /// Contains Dictionary&lt;Type, PgSqlFunction&gt; Propertis for getting List, Get, Save, and Delete 
-    /// PgSql Function name by Type of Model (DB Table)
+    /// PgSql Function names by Type of Model (DB Table)
     /// </summary>
     public class PgSqlObjects
     {
@@ -99,7 +99,6 @@ namespace ApiQuizGenerator.DAL
                     };
                 } // end if _getProcedures == null
                     
-
                 return _getProcedures;
             }
         }
@@ -172,7 +171,6 @@ namespace ApiQuizGenerator.DAL
                         }
                     };
                 } // end if _saveProcedures == null
-                    
                 
                 return _saveProcedures;
             }

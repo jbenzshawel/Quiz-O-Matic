@@ -8,6 +8,9 @@ using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.DAL
 {
+    /// <summary>
+    /// Repository for Listing, Getting, Saving, or Deleting an object in a PostgreSql DB
+    /// </summary>
     public interface IRepository<T> 
     {
         Task<List<T>> All(string id = null);
@@ -19,6 +22,9 @@ namespace ApiQuizGenerator.DAL
         Task<bool> Delete(string id);
     }
 
+    /// <summary>
+    /// Repository for Listing, Getting, Saving, or Deleting an object in a PostgreSql DB
+    /// </summary>
     public class Repository<T> : IRepository<T> 
         where T : class
     {
@@ -37,7 +43,7 @@ namespace ApiQuizGenerator.DAL
         }
 
         /// <summary>
-        /// Get a List&lt;T&gt; of Quiz or Question objects. If getting a list of
+        /// Get a List&lt;T&gt; of Quiz, QuizType, Question, Answer, or Response objects. If getting a list of
         /// questions id param is required and is the Guid QuizId corresponding to
         /// questions
         /// </summary>
@@ -64,8 +70,8 @@ namespace ApiQuizGenerator.DAL
         }
 
         /// <summary>
-        /// Get Quiz or Question by id (string id parsed to integer or Guid depending on
-        /// Type T)
+        /// Get Quiz, QuizType, Question, Answer, or Response by id (string id parsed to integer or Guid 
+        /// depending on Type T)
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -83,6 +89,12 @@ namespace ApiQuizGenerator.DAL
             return obj;
         }
 
+        /// <summary>
+        /// Saves an object of type Quiz, QuizType, Question, Answer, or Response in the DB
+        /// Note: Uses Reflection to map Object proeprties to NpgSql Parameters 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public async Task<bool> Save(T obj)
         {
             PgSqlFunction pgSqlObject = _PgSql.SaveProcedures.GetValOr(typeof (T));
@@ -123,6 +135,11 @@ namespace ApiQuizGenerator.DAL
             return pgSqlObject != null && await _PgSql.ExecuteNonQuery(pgSqlObject.Name, paramz.ToList());
         }
 
+        /// <summary>
+        /// Deletes a Quiz, QuizType, Question, Answer, or Response object from the DB by id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<bool> Delete(string id)
         {
             bool status = false;

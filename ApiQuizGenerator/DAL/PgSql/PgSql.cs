@@ -15,7 +15,6 @@ namespace ApiQuizGenerator.DAL
     /// </summary>
     public class PgSql : PgSqlObjects
     {
-        
         /// <summary>
         /// PostgreSql Connection String
         /// </summary>
