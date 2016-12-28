@@ -4,6 +4,7 @@ using ApiQuizGenerator.Models;
 using System.Data.Common;
 using Npgsql;
 using System.Linq;
+using ApiQuizGenerator.DAL;
 
 namespace ApiQuizGenerator.AppClasses
 {

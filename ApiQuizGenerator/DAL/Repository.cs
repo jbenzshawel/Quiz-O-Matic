@@ -24,6 +24,8 @@ namespace ApiQuizGenerator.DAL
     {
         private PgSql _PgSql { get; set; }
 
+        private PgSqlObjects _PgSqlObjectLists { get; set; }
+
         public Repository()
         {
             _PgSql = new PgSql();
