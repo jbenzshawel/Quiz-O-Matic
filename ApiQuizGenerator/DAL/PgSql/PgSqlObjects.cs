@@ -7,8 +7,8 @@ using NpgsqlTypes;
 namespace ApiQuizGenerator.DAL
 {
     /// <summary>
-    /// Contains Dictionary&lt;Type, PgSqlFunction&gt; Propertis for getting List, Get, Save, and Delete 
-    /// PgSql Function names by Type of Model (DB Table)
+    /// Contains Dictionary&lt;Type, PgSqlFunction&gt; Properties for getting List, Get, Save, and Delete 
+    /// PgSql Function names and parameters by Type of Model (DB Table)
     /// </summary>
     public class PgSqlObjects
     {

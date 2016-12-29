@@ -44,7 +44,6 @@ namespace ApiQuizGenerator.DAL
             return param;
         }
 
-
         /// <summary>
         /// Executes a nonquery sql statement and returns boolean if successful 
         /// </summary>

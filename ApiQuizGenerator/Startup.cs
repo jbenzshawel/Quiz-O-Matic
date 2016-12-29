@@ -19,9 +19,9 @@ namespace ApiQuizGenerator
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+
             // set connection string
             ConnectionString = ConfigurationExtensions.GetConnectionString(Configuration, "ConnectionStrings:DefaultConnection");
-           
         }
 
         public IConfigurationRoot Configuration { get; }

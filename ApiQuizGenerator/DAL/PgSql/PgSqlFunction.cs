@@ -8,9 +8,16 @@ namespace ApiQuizGenerator.DAL
     /// </summary>
     public class PgSqlFunction
     {
+        /// <summary>
+        /// Name of PostgreSql Function
+        /// </summary>
+        /// <returns></returns>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Optional arry of PostgreSql Parameters
+        /// </summary>
+        /// <returns></returns>
         public NpgsqlParameter[] Parameters { get; set; } 
     }
-    
 }
