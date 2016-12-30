@@ -1,3 +1,3 @@
 set -ev
 dotnet restore
-dotnet build 
+dotnet build ./ApiQuizGenerator/project.json
