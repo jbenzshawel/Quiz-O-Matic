@@ -3,5 +3,9 @@ dist: trusty
 sudo: required
 mono: none
 dotnet: 1.0.0-preview2-003121
+install:
+  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
+before_script:
+  - chmod a+x ./ApiQuizGenerator/build.sh 
 script:
   - ./ApiQuizGenerator/build.sh --quiet verify
