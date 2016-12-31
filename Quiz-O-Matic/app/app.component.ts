@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'my-app',
-  template: `<h1>Hello {{name}}</h1>`,
+  selector: 'quiz-o-matic',
+  templateUrl: 'app/app.component.html'
+  //,styleUrls:  []
 })
-export class AppComponent  { name = 'Angular'; }
+export class AppComponent  { name = 'Quiz-O-Matic'; }
