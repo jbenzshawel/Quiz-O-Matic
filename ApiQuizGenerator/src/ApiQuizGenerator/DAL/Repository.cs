@@ -28,14 +28,14 @@ namespace ApiQuizGenerator.DAL
     public class Repository<T> : IRepository<T> 
         where T : class
     {
-        private PgSql _PgSql { get; set; }
+        private IPgSql _PgSql { get; set; }
 
         public Repository()
         {
             _PgSql = new PgSql();
         }
 
-        public Repository(PgSql _pgSql)
+        public Repository(IPgSql _pgSql)
         {
             _PgSql = _pgSql;
         }

@@ -13,7 +13,7 @@ namespace ApiQuizGenerator.DAL
     /// Contains methods for retrieving data from a PostgreSql database. All Sql calls
     /// are done through stored procedures called out in the objects properties
     /// </summary>
-    public class PgSql : PgSqlObjects
+    public class PgSql :  PgSqlObjects, IPgSql
     {
         /// <summary>
         /// PostgreSql Connection String
