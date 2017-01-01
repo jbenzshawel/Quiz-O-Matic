@@ -1,8 +1,6 @@
  {
-//   "ConnectionStrings" :{
-//     "DefaultConnection" :  "Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw"
-//   },
-
+   "version": "1.0.0-*",
+   
   "dependencies": {
         "Microsoft.AspNetCore.Routing": "1.1.0",
         "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",

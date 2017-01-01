@@ -30,8 +30,6 @@ namespace ApiQuizGenerator.DAL
     {
         private PgSql _PgSql { get; set; }
 
-        private PgSqlObjects _PgSqlObjectLists { get; set; }
-
         public Repository()
         {
             _PgSql = new PgSql();
@@ -53,16 +51,15 @@ namespace ApiQuizGenerator.DAL
         {
             List<T> allObjects = new List<T>();
             PgSqlFunction pgSqlObject = _PgSql.ListProcedures.GetValOr(typeof (T));
-            var paramz = new List<NpgsqlParameter>();
-
+            
             if (pgSqlObject != null)
             {
-                // id param only needed for list questions / answers
-                if (pgSqlObject.Parameters != null)
+                // add the id parameter if it is set (only some objects require a list param)
+                if (pgSqlObject.Parameters != null && !string.IsNullOrEmpty(id))
                 {
                     pgSqlObject.Parameters[0].Value = id;
-                    paramz.Add(pgSqlObject.Parameters[0]);
                 }
+
                 allObjects = await _PgSql.GetDataList<T>(pgSqlObject);                
             }
 
