@@ -6,7 +6,7 @@ namespace ApiQuizGenerator.Tests.Mocks
     {
         public IPgSql MockPgSql { get; set; }
 
-        public DataService DataService { get; set; }
+        public IDataService DataService { get; set; }
 
         public MockDAL() 
         {

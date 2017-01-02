@@ -2,11 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.Tests.Mocks
 {
     public class MockData
     {
+        /// <summary>
+        /// A Lorem ipsum string
+        /// </summary>
+        /// <returns></returns>
         public static string String 
         { 
             get 
@@ -40,7 +45,7 @@ namespace ApiQuizGenerator.Tests.Mocks
         }
 
         /// <summary>
-        /// A semi random DateTime in the future (now plus a random number of minutes)
+        /// A semi-random DateTime in the future (now plus a random number of minutes)
         /// </summary>
         /// <returns></returns>
         public static DateTime DateTime
@@ -69,7 +74,7 @@ namespace ApiQuizGenerator.Tests.Mocks
         /// <summary>
         /// Generates IQueryable&lt;T&gt; of mock objects with random data for testing 
         /// Note this relies a lot on reflection and is not very fast but since this is only used
-        /// for testing for optimal performance isn't critical
+        /// for testing optimal performance isn't critical
         /// </summary>
         /// <param name="numberMocks"></param>
         /// <returns></returns>
@@ -86,9 +91,14 @@ namespace ApiQuizGenerator.Tests.Mocks
             return mockObjects.AsQueryable();
         }
 
+        /// <summary>
+        /// Returns a new object T with properties that have random / mock data 
+        /// </summary>
         public static T GetMockObj<T>() where T : class, new()
         {
             T obj = new T(); 
+            
+            // get generic obj T properties
             IEnumerable<PropertyInfo> objProperties = obj.GetType().GetTypeInfo().DeclaredProperties;
 
             // loop over the properties and set mock data for each prop
@@ -110,11 +120,11 @@ namespace ApiQuizGenerator.Tests.Mocks
                 }
                 else if (propType == typeof (DateTime))
                 {
-                property.SetValue(obj, MockData.DateTime, null);
+                    property.SetValue(obj, MockData.DateTime, null);
                 } 
                 else if (propType == typeof (DateTime?))
                 {
-                property.SetValue(obj, (DateTime?)MockData.DateTime, null);
+                    property.SetValue(obj, (DateTime?)MockData.DateTime, null);
                 }
             }
                 
