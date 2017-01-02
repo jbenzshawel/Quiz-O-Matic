@@ -46,7 +46,7 @@ namespace ApiQuizGenerator.DAL
         /// </summary>
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
-        Task<bool> ExecuteNonQuery(PgSqlFunction pgSqlFunction);
+        Task<int> ExecuteNonQuery(PgSqlFunction pgSqlFunction);
 
         /// <summary>
         /// Executes a nonquery sql statement and returns boolean if successful 
@@ -54,7 +54,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="command">stored procedure name</param>
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
-        Task<bool> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null);
+        Task<int> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null);
 
         /// <summary>
         /// Gets an object from T table corresponding to T id as sqlParam

@@ -129,7 +129,7 @@ namespace ApiQuizGenerator.DAL
                 } // end foreach property
             } // end obj != null && pgSqlObject != null
 
-            return pgSqlObject != null && await _PgSql.ExecuteNonQuery(pgSqlObject.Name, paramz.ToList());
+            return pgSqlObject != null && await _PgSql.ExecuteNonQuery(pgSqlObject.Name, paramz.ToList()) > 0;
         }
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace ApiQuizGenerator.DAL
                 pgSqlObject.Parameters[0].Value = id;
                 paramz.Add(pgSqlObject.Parameters[0]);
 
-                status = await _PgSql.ExecuteNonQuery(pgSqlObject);            
+                status = await _PgSql.ExecuteNonQuery(pgSqlObject) > 0;            
             }
 
             return status;

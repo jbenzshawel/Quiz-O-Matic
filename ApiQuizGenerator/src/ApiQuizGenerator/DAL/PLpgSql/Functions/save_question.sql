@@ -4,8 +4,9 @@ CREATE OR REPLACE FUNCTION save_question (
    p_quiz_id UUID, 
    p_question_id Integer DEFAULT NULL
 ) 
- RETURNS void 
+ RETURNS BigInt 
 AS $$
+	DECLARE affected_rows Integer DEFAULT 0;
 BEGIN
 
  IF (p_question_id IS NOT NULL AND p_question_id > 0 AND 
@@ -19,7 +20,8 @@ BEGIN
     	VALUES (p_title, p_attributes, p_quiz_id);
  END IF; 
  
- RETURN;
+ GET DIAGNOSTICS affected_rows = ROW_COUNT;
+ RETURN affected_rows;
 END; $$ 
  
 LANGUAGE 'plpgsql';

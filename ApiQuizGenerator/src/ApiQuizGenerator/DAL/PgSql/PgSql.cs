@@ -13,7 +13,7 @@ namespace ApiQuizGenerator.DAL
     /// Contains methods for retrieving data from a PostgreSql database. All Sql calls
     /// are done through stored procedures called out in the objects properties
     /// </summary>
-    public class PgSql :  PgSqlObjects, IPgSql
+    public class PgSql : PgSqlObjects, IPgSql
     {
         /// <summary>
         /// PostgreSql Connection String
@@ -49,7 +49,7 @@ namespace ApiQuizGenerator.DAL
         /// </summary>
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
-        public async Task<bool> ExecuteNonQuery(PgSqlFunction pgSqlFunction) 
+        public async Task<int> ExecuteNonQuery(PgSqlFunction pgSqlFunction) 
         {
             return await ExecuteNonQuery(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull());
         }
@@ -60,7 +60,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="command">stored procedure name</param>
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
-        public async Task<bool> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null) 
+        public async Task<int> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null) 
         {
             int rowsAffected = 0;
 
@@ -71,7 +71,15 @@ namespace ApiQuizGenerator.DAL
                 try 
                 {
                     NpgsqlCommand cmd = _NpgSqlCommand(pgCon, command, paramz);
-                    rowsAffected = await cmd.ExecuteNonQueryAsync(); 
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                           rowsAffected = reader[0] != null && reader.FieldCount > 0 ? 
+                                            reader[0].ToIntOr(0) : 0;
+                        }
+                    } // end using SqlDataReader 
                 }
                 catch (Exception ex) 
                 {
@@ -84,8 +92,7 @@ namespace ApiQuizGenerator.DAL
                 }
             } // end using NpgsqlConnection
 
-            // postgresql / npgsql doesn't support rows affected (as far as I could tell)
-            return rowsAffected == -1; 
+            return rowsAffected; 
         }
         
         /// <summary>

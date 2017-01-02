@@ -22,6 +22,16 @@ namespace ApiQuizGenerator.AppClasses
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
 
+        public static int ToIntOr(this object @this, int orVal = 0)
+        {
+            int castInt;
+
+            if (int.TryParse(@this.ToString(), out castInt))
+                return castInt;
+        
+            return orVal; 
+        }
+
         /// <summary>
         /// Cast array of NpgsqlParameter objects to a List of NpgsqlParameter objects. If @this
         /// is null null is returned. 
