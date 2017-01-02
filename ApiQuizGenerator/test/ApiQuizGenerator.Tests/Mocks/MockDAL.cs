@@ -8,6 +8,8 @@ namespace ApiQuizGenerator.Tests.Mocks
 
         public IDataService DataService { get; set; }
 
+        // ToDo: Move mock tables to MockDAL class then use Moq Framework for 
+        // mocking PgSql sql calls that return mock data from mock tables
         public MockDAL() 
         {
             MockPgSql = new MockPgSql();
