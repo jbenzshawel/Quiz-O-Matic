@@ -22,7 +22,9 @@
     "buildOptions": {
         "copyToOutput": {
             "include": [ "xunit.runner.json" ]
-        }
+        },
+        "emitEntryPoint": true,
+        "debugType": "portable"
     },
     "tooling": {
         "defaultNamespace": "ApiQuizGenerator.Tests"

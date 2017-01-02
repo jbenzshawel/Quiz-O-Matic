@@ -45,11 +45,37 @@ namespace ApiQuizGenerator.DAL
         }
 
         /// <summary>
+        /// Creates a NpgSqlCommand of type Stored Procedure with name and optional parameters
+        /// </summary>
+        /// <param name="connection"></param>
+        /// <param name="command"></param>
+        /// <param name="paramz"></param>
+        /// <returns></returns>
+        public static NpgsqlCommand NpgSqlCommand(NpgsqlConnection connection, string command, List<NpgsqlParameter> paramz = null)
+        {
+            var cmd = new NpgsqlCommand();
+            cmd.Connection = connection;
+            
+            // pass in the inputed sql command or stored procedure 
+            cmd.CommandText = command;
+            cmd.CommandType = System.Data.CommandType.StoredProcedure;
+
+            // if there are any parameters add them
+            if (paramz != null && paramz.Any()) 
+            {
+                foreach (NpgsqlParameter param in paramz)
+                    cmd.Parameters.Add(param);
+            }
+
+            return cmd;
+        }
+
+        /// <summary>
         /// Executes a nonquery sql statement and returns boolean if successful 
         /// </summary>
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
-        public async Task<int> ExecuteNonQuery(PgSqlFunction pgSqlFunction) 
+        public virtual async Task<int> ExecuteNonQuery(PgSqlFunction pgSqlFunction) 
         {
             return await ExecuteNonQuery(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull());
         }
@@ -60,7 +86,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="command">stored procedure name</param>
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
-        public async Task<int> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null) 
+        public virtual async Task<int> ExecuteNonQuery(string command, List<NpgsqlParameter> paramz = null) 
         {
             int rowsAffected = 0;
 
@@ -70,7 +96,7 @@ namespace ApiQuizGenerator.DAL
                 
                 try 
                 {
-                    NpgsqlCommand cmd = _NpgSqlCommand(pgCon, command, paramz);
+                    NpgsqlCommand cmd = NpgSqlCommand(pgCon, command, paramz);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -79,7 +105,7 @@ namespace ApiQuizGenerator.DAL
                            rowsAffected = reader[0] != null && reader.FieldCount > 0 ? 
                                             reader[0].ToIntOr(0) : 0;
                         }
-                    } // end using SqlDataReader 
+                    } // end using DbDataReader 
                 }
                 catch (Exception ex) 
                 {
@@ -101,7 +127,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgFunction"></param>
         /// <param name="sqlParam"></param>
         /// <returns></returns>
-        public async Task<T> GetObject<T>(string pgFunction, NpgsqlParameter sqlParam)
+        public virtual async Task<T> GetObject<T>(string pgFunction, NpgsqlParameter sqlParam)
             where T: class
         {
             T obj = null;
@@ -123,7 +149,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgFunction">stored procedure name</param>
         /// <param name="paramz">optional list of params</param>
         /// <returns></returns>
-        public async Task<T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
+        public virtual async Task<T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
             where T : class
         {
             T obj = null; 
@@ -144,7 +170,7 @@ namespace ApiQuizGenerator.DAL
         /// </summary>
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
-        public async Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
+        public virtual async Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
             where T : class
         {
             return await GetDataList<T>(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull(removeNulls: false));
@@ -156,7 +182,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgFunction">stored procedure name</param>
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
-        public async Task<List<T>> GetDataList<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
+        public virtual async Task<List<T>> GetDataList<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
             where T : class
         {
             // list of generics for return
@@ -168,7 +194,7 @@ namespace ApiQuizGenerator.DAL
                 
                 try 
                 {
-                    NpgsqlCommand cmd = _NpgSqlCommand(pgCon, pgFunction, paramz);
+                    NpgsqlCommand cmd = NpgSqlCommand(pgCon, pgFunction, paramz);
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -178,7 +204,7 @@ namespace ApiQuizGenerator.DAL
                             if (listObj != null)
                                 allObjects.Add(listObj);
                         }
-                    } // end using SqlDataReader 
+                    } // end using DbDataReader 
                 }
                 catch (Exception ex) 
                 {
@@ -193,32 +219,6 @@ namespace ApiQuizGenerator.DAL
             } // end using NpgsqlConnection 
 
             return allObjects;
-        }
-
-        /// <summary>
-        /// Creates a NpgSqlCommand of type Stored Procedure with name and optional parameters
-        /// </summary>
-        /// <param name="connection"></param>
-        /// <param name="command"></param>
-        /// <param name="paramz"></param>
-        /// <returns></returns>
-        private NpgsqlCommand _NpgSqlCommand(NpgsqlConnection connection, string command, List<NpgsqlParameter> paramz = null)
-        {
-            var cmd = new NpgsqlCommand();
-            cmd.Connection = connection;
-            
-            // pass in the inputed sql command or stored procedure 
-            cmd.CommandText = command;
-            cmd.CommandType = System.Data.CommandType.StoredProcedure;
-
-            // if there are any parameters add them
-            if (paramz != null && paramz.Any()) 
-            {
-                foreach (NpgsqlParameter param in paramz)
-                    cmd.Parameters.Add(param);
-            }
-
-            return cmd;
         }
     }
 }

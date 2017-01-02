@@ -5,6 +5,7 @@ using System.Data.Common;
 using Npgsql;
 using System.Linq;
 using ApiQuizGenerator.DAL;
+using System.Reflection;
 
 namespace ApiQuizGenerator.AppClasses
 {
@@ -22,6 +23,12 @@ namespace ApiQuizGenerator.AppClasses
             return @this.ContainsKey(key) ? @this[key] : orVal;
         }
 
+        /// <summary>
+        /// Casts an object to an integer or returns orVal if cast unsuccessful 
+        /// </summary>
+        /// <param name="@this"></param>
+        /// <param name="orVal"></param>
+        /// <returns></returns>
         public static int ToIntOr(this object @this, int orVal = 0)
         {
             int castInt;
@@ -140,6 +147,60 @@ namespace ApiQuizGenerator.AppClasses
             }
 
             return objectCast;
+        }
+
+        /// <summary>
+        /// Copies the data of one object to another. The target object 'pulls' properties of the first. 
+        /// Any matching source properties are written to the target.
+        /// 
+        /// The object copy is a shallow copy only. Any nested types will be copied as 
+        /// whole values rather than individual property assignments (ie. via assignment)
+        /// Taken from: 
+        /// https://weblog.west-wind.com/posts/2009/Aug/04/Simplistic-Object-Copying-in-NET
+        /// </summary>
+        /// <param name="source">The source object to copy from</param>
+        /// <param name="target">The object to copy to</param>
+        /// <param name="excludedProperties">A comma delimited list of properties that should not be copied</param>
+        /// <param name="memberAccess">Reflection binding access</param>
+        public static void CopyObjectData(object source, object target, string excludedProperties, BindingFlags memberAccess)
+        {
+            string[] excluded = null;
+            if (!string.IsNullOrEmpty(excludedProperties))
+                excluded = excludedProperties.Split(new char[1] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            MemberInfo[] miT = target.GetType().GetMembers(memberAccess);
+            foreach (MemberInfo Field in miT)
+            {
+                string name = Field.Name;
+
+                // Skip over any property exceptions
+                if (!string.IsNullOrEmpty(excludedProperties) &&
+                    excluded.Contains(name))
+                    continue;
+
+                if (Field.MemberType == MemberTypes.Field)
+                {
+                    FieldInfo SourceField = source.GetType().GetField(name);
+                    if (SourceField == null)
+                        continue;
+
+                    object SourceValue = SourceField.GetValue(source);
+                    ((FieldInfo)Field).SetValue(target, SourceValue);
+                }
+                else if (Field.MemberType == MemberTypes.Property)
+                {
+                    PropertyInfo piTarget = Field as PropertyInfo;
+                    PropertyInfo SourceField = source.GetType().GetProperty(name, memberAccess);
+                    if (SourceField == null)
+                        continue;
+
+                    if (piTarget.CanWrite && SourceField.CanRead)
+                    {
+                        object SourceValue = SourceField.GetValue(source, null);
+                        piTarget.SetValue(target, SourceValue, null);
+                    }
+                }
+            }
         }
 
         public static T GetObject<T>() where T : new()
