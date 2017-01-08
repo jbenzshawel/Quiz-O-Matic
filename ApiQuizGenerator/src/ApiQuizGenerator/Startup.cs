@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ApiQuizGenerator.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApiQuizGenerator
 {
@@ -24,6 +25,7 @@ namespace ApiQuizGenerator
             ConnectionString = ConfigurationExtensions.GetConnectionString(Configuration, "ConnectionStrings:DefaultConnection");
         }
 
+
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -32,6 +34,10 @@ namespace ApiQuizGenerator
             // Add framework services.
             services.AddMvc();
 
+             services.AddDbContext<ApplicationDbContext>(option => 
+                 option.UseNpgsql("Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw")
+             );
+            
             // add data service as scoped to request
             services.AddScoped<IDataService, DataService>();
         }

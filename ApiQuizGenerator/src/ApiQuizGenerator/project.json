@@ -1,10 +1,17 @@
  {
    "version": "1.0.0-*",
-   
+
+   "Data": {
+        "DefaultConnection": {
+          "ConnectionString": "Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw"
+        }
+  },
+
   "dependencies": {
         "Microsoft.AspNetCore.Routing": "1.1.0",
         "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0",
         "Microsoft.AspNetCore.Server.Kestrel": "1.1.0",
+        "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "1.1.0",
         "Microsoft.AspNetCore.Owin": "1.0.0",
         "Microsoft.AspNetCore.Diagnostics": "1.1.0",
         "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "1.1.0",
@@ -22,13 +29,24 @@
             "version": "1.1.0",
             "type": "platform"
         },
+        "Microsoft.EntityFrameworkCore.Design": {
+          "version": "1.1.0",
+          "type": "build"
+        },
         "Newtonsoft.Json": "9.0.1",
-        "Npgsql" : "3.1.8",
+         "Npgsql" : "3.1.9",
+        "Npgsql.EntityFrameworkCore.PostgreSQL": "1.1.0",        
         "System.Reflection": "4.3.0"
   },
 
   "tools": {
-    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final"
+    "Microsoft.AspNetCore.Server.IISIntegration.Tools": "1.1.0-preview4-final",
+    "Microsoft.EntityFrameworkCore.Tools.DotNet": "1.1.0-preview4-final",
+    "Microsoft.Extensions.SecretManager.Tools": "1.1.0-preview4-final",
+     "Microsoft.EntityFrameworkCore.Tools": {
+      "version": "1.0.0-preview2-final",
+      "imports": "portable-net45+win8+dnxcore50"
+    }
   },
 
    "frameworks": {
