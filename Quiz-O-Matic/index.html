@@ -26,6 +26,7 @@
   <body>
     <div class="container">
       <header class="main-header">
+        <h1>Quiz-O-Matic</h1>              
         <nav>
           <ul class="nav masthead-nav">
             <li role="presentation" class="active"><a href="#">Home</a></li>
@@ -33,11 +34,16 @@
             <li role="presentation"><a href="#">Contact</a></li>
           </ul>
         </nav>
-        <h1>Quiz-O-Matic</h1>
       </header>
-      <!-- angular app content-->
       <quiz-o-matic>
-        Loading app ...
+        <!-- loading message -->
+        <div class="loading" *ngIf="loaded == false">
+          <img class="center" src="/img/pencil-loading.gif" />
+          <p>Loading . . .</p>
+        </div>      
+        <app *ngIf="loaded">
+          <!-- angular app content-->            
+        </app>
       </quiz-o-matic>
     </div> <!-- /.container -->
     <!-- Scripts -->

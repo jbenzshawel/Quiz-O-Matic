@@ -1,6 +1,38 @@
+/**
+ * Styles for Quiz-O-Matic
+ * Author: Addison B. 
+ */ 
+
+/* shared / utility classes */
+.center {
+  margin:0 auto;
+  display: block
+}
+
+.btn {
+  border-color: #333;
+  border-width: 1.5px;
+}
+
+.btn:hover {
+  border-color: #444;  
+
+}
+
+.btn-info {
+    color: #fff;
+    background-color: #337ab7;
+    border-width: 2px  
+}
+
+.btn-info:hover {
+  background-color: #4787be;
+  color:#f2f2f2;  
+}
+
 /* main header */
 header {
-  margin-bottom: 20px;
+  margin: 10px 0 20px 0;
   /*border-bottom: 1px solid #555;*/
 }
 
@@ -8,7 +40,16 @@ header.main-header h1 {
   color: #555;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 250%;
-  margin-bottom: 20px;
+  font-weight: 100;
+  width: 250px;
+  float: left;
+  text-align: left;
+  margin: 0;
+}
+
+nav {
+  min-width: 200px;
+  float: right;
 }
 
 .masthead-nav > li {
@@ -39,16 +80,47 @@ header.main-header h1 {
 
 /* main container */
 .container {
-  width: 100%
+  max-width: 1000px;
+}
+
+.loading img {
+  width: 250px;
+  margin: 5px auto 20px auto;
+}
+
+.loading {
+  text-align: center;
+  font-weight: 100;
+  font-size: 24px;
+}
+
+/* home */
+.home {
+  margin-top:75px;
+}
+.home .section {
+  margin-bottom: 12px;
 }
 
 /* media queries */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .container {
-    max-width: 1000px;
+    max-width: 100%
   }
 
-  .masthead-nav {
-    float: right;
+  .home .btn-group-lg>.btn, .btn-lg  {
+    padding: 8px 12px;
+    font-size: 100%;
+  }
+
+  header.main-header h1 {
+    float: none;
+    text-align: center;
+    width: 100%;
+  }  
+
+  nav {
+    width: 100%;
+    text-align: center;
   }
 }
