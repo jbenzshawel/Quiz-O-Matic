@@ -4,7 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ApiQuizGenerator.DAL;
+using ApiQuizGenerator.Models;
 using Microsoft.EntityFrameworkCore;
+using ApiQuizGenerator.Services;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ApiQuizGenerator
 {
@@ -32,12 +35,19 @@ namespace ApiQuizGenerator
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
+            services.AddDbContext<ApplicationDbContext>(option => 
+                option.UseNpgsql("Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw")
+            );
+
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddMvc();
 
-             services.AddDbContext<ApplicationDbContext>(option => 
-                 option.UseNpgsql("Host=localhost;Database=QuizGenerator;Username=QuizGeneratorAdmin;Password=localdbpw")
-             );
-            
+            // Add application services.
+            services.AddTransient<IEmailSender, AuthMessageSender>();
+            services.AddTransient<ISmsSender, AuthMessageSender>();
             // add data service as scoped to request
             services.AddScoped<IDataService, DataService>();
         }
@@ -47,6 +57,8 @@ namespace ApiQuizGenerator
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            app.UseIdentity();
 
             app.UseMvc();
         }

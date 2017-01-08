@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -68,7 +66,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/RemoveLogin
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemoveLogin(RemoveLoginViewModel account)
         {
             ManageMessageId? message = ManageMessageId.Error;
@@ -95,7 +92,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/AddPhoneNumber
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddPhoneNumber(AddPhoneNumberViewModel model)
         {
             if (!ModelState.IsValid)
@@ -116,7 +112,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/EnableTwoFactorAuthentication
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EnableTwoFactorAuthentication()
         {
             var user = await GetCurrentUserAsync();
@@ -132,7 +127,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/DisableTwoFactorAuthentication
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DisableTwoFactorAuthentication()
         {
             var user = await GetCurrentUserAsync();
@@ -163,7 +157,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/VerifyPhoneNumber
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> VerifyPhoneNumber(VerifyPhoneNumberViewModel model)
         {
             if (!ModelState.IsValid)
@@ -188,7 +181,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/RemovePhoneNumber
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> RemovePhoneNumber()
         {
             var user = await GetCurrentUserAsync();
@@ -215,8 +207,7 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        [ValidateAntiForgeryToken]        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -249,7 +240,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/SetPassword
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -299,7 +289,6 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/LinkLogin
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult LinkLogin(string provider)
         {
             // Request a redirect to the external login provider to link a login for the current user
