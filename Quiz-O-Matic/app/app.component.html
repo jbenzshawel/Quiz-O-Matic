@@ -1,5 +1,5 @@
-<div class="row home">
-    <div class="col-md-8 col-xs-12">
+<div class="row home" *ngIf="loaded">
+    <div class="col-sm-8 col-xs-12">
         <h3>Welcome to Quiz-O-Matic!</h3>
         <p>Select an option below to take or create a quiz:</p>    
         <div class="col-md-6 col-xs-12 section">            
@@ -11,7 +11,7 @@
             <button type="button" class="btn btn-info btn-lg center">Take a Quiz</button>        
         </div>
     </div>
-    <div class="col-md-4 col-xs-12">
+    <div class="col-sm-4 col-xs-12">
         <h3>Login</h3>
         <form>
             <div class="form-group">

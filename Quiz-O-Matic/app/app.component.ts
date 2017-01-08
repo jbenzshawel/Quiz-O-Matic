@@ -13,7 +13,8 @@ export class AppComponent  {
   constructor() {
     // show content and hide loading message on app start
     window.setTimeout(function() {
+      $(".loading").hide();
       this.loaded = true;
-    }.bind(this), 1250);
+    }.bind(this), 900);
   }
 }
