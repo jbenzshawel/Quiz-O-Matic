@@ -27,7 +27,9 @@ export class AuthenticationService {
                 let loginResult = response.json();
                 let authKey: string = null;
 
-                if (loginResult != null && loginResult.result.succeeded) {
+                if (loginResult != null && 
+                    loginResult.hasOwnProperty("signInResult")&&
+                    loginResult.signInResult.succeeded) {
                     // get auth cookie
                     this.authKey = loginResult.authKey;
                     let token: string = this.getCookie(this.authKey);
@@ -47,7 +49,8 @@ export class AuthenticationService {
     // returns true if user is authenticated
     public authenticated(): boolean
     {
-        let sessionToken = sessionStorage.getItem("currentUser");
+        let currentUser = sessionStorage.getItem("currentUser");
+        let sessionToken = currentUser != null ? JSON.parse(currentUser).token : "";
         let cookieToken = this.getCookie(this.authKey);
 
         return sessionToken == cookieToken;

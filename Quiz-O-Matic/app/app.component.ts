@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { Http, Headers, Response } from '@angular/http';
 import { AuthenticationService } from './services/authentication.service';
 
+
+// to do : move login stuff to separate login component
 @Component({
   selector: 'quiz-o-matic',
   templateUrl: 'app/app.component.html',
@@ -18,10 +20,7 @@ export class AppComponent implements OnInit  {
   constructor(private authenticationService: AuthenticationService) {
     // show content and hide loading message on app start
     $(".loading").hide();
-      this.loaded = true;
-    // window.setTimeout(function() {
-      
-    // }.bind(this), 900);
+    this.loaded = true;
   }
 
   ngOnInit() {
