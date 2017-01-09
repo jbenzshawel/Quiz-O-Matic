@@ -7,9 +7,12 @@ namespace ApiQuizGenerator.AppClasses
     {
         internal IDataService _DataService { get; set; }
 
+        internal ApiAuthentication _Authenticaiton {get; set;}
+
         public BaseController(IDataService _dataService) 
         {
             _DataService = _dataService;
+            _Authenticaiton = new ApiAuthentication(this);
         }
     }
 }

@@ -43,6 +43,16 @@ namespace ApiQuizGenerator
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
+            // Add service and create Policy with options
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials() );
+            });
+
             services.AddMvc();
 
             // Add application services.
@@ -59,6 +69,8 @@ namespace ApiQuizGenerator
             loggerFactory.AddDebug();
 
             app.UseIdentity();
+
+            app.UseCors("CorsPolicy");
 
             app.UseMvc();
         }

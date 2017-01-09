@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -11,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using ApiQuizGenerator.Models;
 using ApiQuizGenerator.Models.AccountViewModels;
 using ApiQuizGenerator.Services;
+using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.Controllers
 {
@@ -24,6 +24,8 @@ namespace ApiQuizGenerator.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        private readonly ApiAuthentication _apiAuthentication;
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -36,6 +38,7 @@ namespace ApiQuizGenerator.Controllers
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            _apiAuthentication = new ApiAuthentication(this);
         }
 
         //
@@ -45,6 +48,7 @@ namespace ApiQuizGenerator.Controllers
         public async Task<JsonResult> Login([FromBody]LoginViewModel model, string returnUrl = null)
         {
             Microsoft.AspNetCore.Identity.SignInResult result = null;
+            var authenticationResult = new AuthenticationResult();
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -53,25 +57,27 @@ namespace ApiQuizGenerator.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation(1, "User logged in.");
-                    return Json(new { result, returnUrl });
+                    authenticationResult.SignInResult = result;
+                    authenticationResult.Email = model.Email;
+                    authenticationResult.AuthKey = _apiAuthentication.AUTH_COOKIE_KEY;
+                    authenticationResult.RememberMe = model.RememberMe;
                 }
-                if (result.RequiresTwoFactor)
-                {
-                    return Json(new { result, ReturnUrl = returnUrl, RememberMe = model.RememberMe });
-                }
-                if (result.IsLockedOut)
+                else if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
-                    return Json(new { result, status = "Lockout" });
+                    authenticationResult.LockOut = true;
+                    Response.Cookies.Delete(_apiAuthentication.AUTH_COOKIE_KEY);
                 }
-                else
+                else 
                 {
+                    _logger.LogInformation(1, "Failed login attempt");
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    authenticationResult.SignInResult = result != null ? result : new Microsoft.AspNetCore.Identity.SignInResult();
                 }
+                
             }
 
-            // If we got this far, something failed, redisplay form
-            return Json(new { result, model });
+            return Json(authenticationResult);
         }
 
         //
