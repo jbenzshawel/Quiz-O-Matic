@@ -4,7 +4,7 @@ import { FormsModule }           from '@angular/forms';
 import { HttpModule }            from '@angular/http';
  
 import { AppComponent }          from './app.component';
-//import { routing }               from './app.routing';
+import { LoginFormComponent }    from './components/login-form.component';
 
 import { AuthenticationService } from './services/authentication.service'; 
 import { AuthGuard }             from './app.authguard';
@@ -18,6 +18,7 @@ import { AuthGuard }             from './app.authguard';
     ],
     declarations: [
         AppComponent,
+        LoginFormComponent
     ],
     providers: [
         AuthGuard,

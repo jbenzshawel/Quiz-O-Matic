@@ -13,26 +13,7 @@
     </div>
     <div class="col-sm-4 col-xs-12">
         <h3>Login</h3>
-        <form  name="login-form" #loginForm="ngForm">
-            <div *ngIf="error" class="alert alert-danger">{{error}}</div>
-            <div class="form-group">
-                <label for="username">Username:</label>
-                <input class="form-control" type="text" id="username" 
-                    required
-                    [(ngModel)]="model.username" name="username" />
-            </div>            
-            <div class="form-group">
-                <label for="password">Password:</label>
-                <input class="form-control" type="password" id="password"
-                    required
-                    [(ngModel)]="model.password" name="password" />
-            </div>     
-            <button type="button" class="btn btn-default center" id="submitPasword" 
-                 [disabled]="!loginForm.form.valid" 
-                 (click)="loginUser()">
-                Submit
-            </button>       
-        </form>
+        <login-form></login-form>
     </div>
     
 </div>

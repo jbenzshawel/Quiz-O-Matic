@@ -48,7 +48,12 @@ namespace ApiQuizGenerator.Controllers
         public async Task<JsonResult> Login([FromBody]LoginViewModel model, string returnUrl = null)
         {
             Microsoft.AspNetCore.Identity.SignInResult result = null;
-            var authenticationResult = new AuthenticationResult();
+            // initialize return model with failing sign in result
+            var authenticationResult = new AuthenticationResult
+            {
+                SignInResult = new Microsoft.AspNetCore.Identity.SignInResult()
+            };
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -68,13 +73,15 @@ namespace ApiQuizGenerator.Controllers
                     authenticationResult.LockOut = true;
                     Response.Cookies.Delete(_apiAuthentication.AUTH_COOKIE_KEY);
                 }
-                else 
-                {
-                    _logger.LogInformation(1, "Failed login attempt");
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    authenticationResult.SignInResult = result != null ? result : new Microsoft.AspNetCore.Identity.SignInResult();
-                }
-                
+            }
+
+            // if invalid request parameters or failed to login log attempted and make sure   
+            // return model is set
+            if (!ModelState.IsValid || result == null || result.Succeeded == false)
+            {
+                _logger.LogInformation(1, "Failed login attempt");
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                authenticationResult.SignInResult = result != null ? result : new Microsoft.AspNetCore.Identity.SignInResult();
             }
 
             return Json(authenticationResult);
