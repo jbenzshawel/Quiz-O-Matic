@@ -4,10 +4,16 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
 // auth service modified from http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial 
-// to rely on Identity Authenticaiton Cookie instead of local storage 
+// to rely on ASP.NET Identity Authenticaiton Cookie instead of local storage 
 @Injectable()
 export class AuthenticationService {
     public token: string;
+
+    public isLockedOut: boolean;
+
+    public isNotAllowed: boolean;
+
+    public requiresTwoFactor: boolean;
     
     private authKey: string; 
 
@@ -16,39 +22,51 @@ export class AuthenticationService {
         var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
     }
- 
+    
+    // submits login request and completes front end post authenticatin
     public login(username: string, password: string): Observable<boolean> {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify({ Email: username, Password: password });
         return this.http.post('//localhost:5000/api/account/login', body, options)
             .map((response: Response) => {
-                // login successful if there's a jwt token in the response
                 let loginResult = response.json();
                 let authKey: string = null;
+                let signInResult: any = null;
 
+                // set auth service properties based on Identity sign in result
                 if (loginResult != null && 
-                    loginResult.hasOwnProperty("signInResult")&&
-                    loginResult.signInResult.succeeded) {
+                    loginResult.hasOwnProperty("signInResult")) {
+                    signInResult = loginResult.signInResult;
+                    this.isLockedOut = signInResult.isLockedOut;
+                    this.isNotAllowed = signInResult.isNotAllowed;
+                    this.requiresTwoFactor = signInResult.requiresTwoFactor;
+                }
+                else {
+                    // if we did not get the signInResult in the response see if the lockOut property was set
+                    this.isLockedOut = loginResult.hasOwnProperty("lockOut") ? 
+                                        loginResult.lockOut : 
+                                        false;
+                    // since there was not a signInResult set succeeded to false
+                    signInResult = { succeeded : false };
+                }
+
+                // complete post authentication if this user was authenticated 
+                if (signInResult != null && signInResult.succeeded) {
                     // get auth cookie
                     this.authKey = loginResult.authKey;
                     let token: string = this.getCookie(this.authKey);
  
                     // store username and jwt token in session storage to keep user logged in between page refreshes
                     sessionStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
- 
-                    // return true to indicate successful login
-                    return true;
-                } else {
-                    // return false to indicate failed login
-                    return false;
-                }
+                } 
+
+                return signInResult.succeeded;
             });
     }
     
     // returns true if user is authenticated
-    public authenticated(): boolean
-    {
+    public authenticated(): boolean {
         let currentUser = sessionStorage.getItem("currentUser");
         let sessionToken = currentUser != null ? JSON.parse(currentUser).token : "";
         let cookieToken = this.getCookie(this.authKey);
@@ -57,11 +75,12 @@ export class AuthenticationService {
     }
 
     public logout(): void {
-        // clear token remove user from session storage to log user out
+        // clear token and remove user from session storage 
         this.token = null;
         sessionStorage.removeItem('currentUser');
     }
 
+    // returns a cookie with key name or null if the cookie does not exist
     public getCookie(name: string): string {
         let value: string = "; " + document.cookie;
         let parts: string[] = value.split("; " + name + "=");

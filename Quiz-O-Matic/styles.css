@@ -4,9 +4,40 @@
  */ 
 
 /* shared / utility classes */
+.error-message {
+  color: #A31919;
+}
+
+.has-error {
+  border-color: #A31919;
+}
 .center {
-  margin:0 auto;
-  display: block
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+.left {
+  float: left;
+}
+
+.right {
+  float:right;
+}
+
+.create-link {
+  font-size: 16px;
+  margin-top: -20px;
+  cursor: pointer;
+}
+
+.primaryButton {
+  background-color: rgb(16,108,200);
+  color: white !important;
+}
+
+.loginButton {
+    background-color: white;
+    border:1px solid #333;
 }
 
 .btn {

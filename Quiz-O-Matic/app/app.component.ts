@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
+declare var $:any;
 
 // to do : move login stuff to separate login component
 @Component({
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls:  [ 'app/app.component.css']
 })
 export class AppComponent  { 
-
+  
   public loaded:boolean = false;
   
   constructor() {

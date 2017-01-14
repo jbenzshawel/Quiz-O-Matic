@@ -1,0 +1,69 @@
+<!-- Login Section -->
+<div *ngIf="showLogin">
+    <h3>Login</h3>
+    <a class="right create-link" (click)="toggleRegister()">Create an account</a>
+    <form  name="login-form"  (ngSubmit)="loginUser($event)" #loginForm="ngForm">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input class="form-control" type="text" id="username" 
+                required
+                [(ngModel)]="model.username" name="username" />
+        </div>            
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input class="form-control" type="password" id="password"
+                required
+                [(ngModel)]="model.password" name="password" />
+        </div>     
+        <button type="submit" md-raised-button class="loginButton center" id="submitPasword" 
+                [disabled]="!loginForm.form.valid" >
+            Submit
+        </button>       
+    </form><!-- /end login-form -->
+</div><!-- /end *ngIf="showLogin" -->
+
+<!-- Register Form -->
+<div *ngIf="showRegister">
+    <h3>Register</h3>
+    <a class="right create-link" (click)="showRegister=false;showLogin=true;">Login</a>
+    <form name="register-form" (ngSubmit)="registerUser($event)" #registerForm="ngForm">
+        <div class="form-group">
+            <label for="reg-email">Email:</label>
+            <input class="form-control" type="email" 
+                id="reg-email"
+                placeholder="handle@site.com"
+                required
+                [(ngModel)]="model.regEmail" name="regEmail">
+        </div>
+        <div class="form-group">
+           
+            <label for="reg-password">Password: 
+            </label>
+             <a (click)="togglePassReq()"
+                style="cursor:pointer" class="right"
+                title = "{{passwordReqText}}">
+                ?</a>
+            <span *ngIf="passwordRequirements" style="font-weight: normal;">
+                {{passwordReqText}}
+                </span>
+            <input class="form-control" type="password" 
+            placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
+                id="reg-password"
+                required
+                [(ngModel)]="model.regPassword" name="regPassword">
+        </div>
+        <div class="form-group">
+            <label for="reg-confirm-password">Confirm Password:</label>
+            <input class="form-control" type="password" placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
+             id="reg-confirm-password"
+                required
+                [(ngModel)]="model.regConfirmPassword" name="regConfirmPassword">
+        </div>
+        <button type="submit" md-raised-button class="loginButton center" id="submitRegister" 
+            [disabled]="!registerForm.form.valid" >
+            Submit
+        </button>       
+    </form>
+
+
+</div>
