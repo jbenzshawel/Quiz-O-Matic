@@ -25,7 +25,7 @@
 <!-- Register Form -->
 <div *ngIf="showRegister">
     <h3>Register</h3>
-    <a class="right create-link" (click)="showRegister=false;showLogin=true;">Login</a>
+    <a class="right create-link" (click)="toggleLogin()">Login</a>
     <form name="register-form" (ngSubmit)="registerUser($event)" #registerForm="ngForm">
         <div class="form-group">
             <label for="reg-email">Email:</label>

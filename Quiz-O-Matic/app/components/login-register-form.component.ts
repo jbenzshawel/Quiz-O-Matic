@@ -28,6 +28,9 @@ export class LoginFormComponent implements OnInit {
   regPasswordSel: string = "#reg-password";
   regConfirmPasswordSel: string = "#reg-confirm-password";
   
+  loginForm: any; 
+  registerForm:any;
+
   constructor(private authenticationService: AuthenticationService) { }
 
   ngOnInit() {
@@ -57,27 +60,15 @@ export class LoginFormComponent implements OnInit {
     // validate fields on change
     let scopedThis: any = this;    
     $("body").on("blur", this.regEmailSel, function() {
-      if (scopedThis.default.validateEmail(scopedThis.model.regEmail)) {
-        scopedThis.default.removeError(scopedThis.regEmailSel);
-      } else {
-        scopedThis.default.addError(scopedThis.regEmailSel, "Invalid email address");
-      }
+      scopedThis.validateRegEmail();
     });
     
     $("body").on("blur", this.regPasswordSel, function() {
-      if (!scopedThis.default.validatePassword(scopedThis.model.regPassword, scopedThis.regPasswordSel)) {
-        scopedThis.passwordRequirements = true;
-      } else {
-        scopedThis.passwordRequirements = false;
-      }
+      scopedThis.validateRegPassword();
     })
 
     $("body").on("blur", this.regConfirmPasswordSel, function() {
-      if (scopedThis.model.regPassword != scopedThis.model.regConfirmPassword) {
-        scopedThis.default.addError(scopedThis.regConfirmPasswordSel, "Password and Confirm Password do not match")
-      } else {
-        scopedThis.default.removeError(scopedThis.regConfirmPasswordSel);
-      }
+      scopedThis.validateRegConfirmPassword();
     })
   }
 
@@ -86,7 +77,7 @@ export class LoginFormComponent implements OnInit {
     this.model.username = "";
     this.model.password= "";
     this.default.clearErrors();
-    // toggle displat
+    // toggle display
     this.showLogin = true;
     this.showRegister = false;
   }
@@ -105,5 +96,35 @@ export class LoginFormComponent implements OnInit {
                     this.default.addError("#password", "Username or Password are incorrect");
                 }
             });
+  }
+
+  validateRegPassword(): boolean {
+    let isValid: boolean = this.default.validatePassword(this.model.regPassword, this.regPasswordSel);
+    if (!isValid) {
+        this.passwordRequirements = true;
+    } else {
+      this.passwordRequirements = false;
+    }
+    return isValid;
+  }
+
+  validateRegEmail(): boolean {
+    let isValid: boolean = this.default.validateEmail(this.model.regEmail);
+    if (isValid) {
+        this.default.removeError(this.regEmailSel);
+    } else {
+      this.default.addError(this.regEmailSel, "Invalid email address");
+    }
+    return isValid;
+  }
+
+  validateRegConfirmPassword(): boolean {
+    let isValid: boolean = this.model.regPassword === this.model.regConfirmPassword;
+    if (!isValid) {
+        this.default.addError(this.regConfirmPasswordSel, "Password and Confirm Password do not match")
+    } else {  
+      this.default.removeError(this.regConfirmPasswordSel);
+    }
+    return isValid;
   }
 }
