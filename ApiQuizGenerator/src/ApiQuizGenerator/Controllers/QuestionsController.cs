@@ -11,9 +11,11 @@ namespace ApiQuizGenerator.Controllers
     [Route("api/[controller]/")]
     public class QuestionsController : BaseController
     {
-        public QuestionsController(IDataService _dataService) : base(_dataService)
+        public QuestionsController(IDataService _dataService, ITokenProvider _tokenProvider) :
+            base(_dataService, _tokenProvider)
         {
             _DataService = _dataService;
+            _TokenProvider = _tokenProvider;
         }
 
         // GET api/questions/list

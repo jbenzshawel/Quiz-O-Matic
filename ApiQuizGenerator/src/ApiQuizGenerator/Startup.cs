@@ -64,6 +64,7 @@ namespace ApiQuizGenerator
             services.AddTransient<ISmsSender, AuthMessageSender>();
             // add data service as scoped to request
             services.AddScoped<IDataService, DataService>();
+            services.AddScoped<ITokenProvider, TokenProvider>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

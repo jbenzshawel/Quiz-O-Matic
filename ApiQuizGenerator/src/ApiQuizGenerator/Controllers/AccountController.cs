@@ -26,14 +26,15 @@ namespace ApiQuizGenerator.Controllers
 
         private readonly ApiAuthentication _apiAuthentication;
 
-        private TokenProvider _TokenProvier { get; set; }
+        private ITokenProvider _TokenProvier { get; set; }
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            ITokenProvider tokenProvider)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -41,7 +42,8 @@ namespace ApiQuizGenerator.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _apiAuthentication = new ApiAuthentication(this);
-            _TokenProvier = new TokenProvider();
+            _TokenProvier = tokenProvider;
+
         }
 
         //
@@ -132,7 +134,7 @@ namespace ApiQuizGenerator.Controllers
                 await _signInManager.SignOutAsync();
                 _logger.LogInformation(4, "User logged out.");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return false;
             }

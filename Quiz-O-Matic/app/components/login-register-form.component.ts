@@ -36,6 +36,7 @@ export class LoginRegisterFormComponent implements OnInit {
     // reset login status
     this.authenticationService.logout();
     this.default = new Default();
+    this.model = {};
   }
 
   togglePassReq(): void {
@@ -59,17 +60,17 @@ export class LoginRegisterFormComponent implements OnInit {
     // validate fields on change
     let that: any = this;    
     $("body").on("blur", this.regEmailSel, function() {
-      if (that.model.regEmail.length > 0)
+      if (that.model.regEmail != undefined && that.model.regEmail.length > 0)
         that.validateRegEmail();
     });
     
     $("body").on("blur", this.regPasswordSel, function() {
-      if (that.model.regPassword.length > 0)
+      if (that.model.regPassword != undefined &&that.model.regPassword.length > 0)
         that.validateRegPassword();
     })
 
     $("body").on("blur", this.regConfirmPasswordSel, function() {
-      if (that.model.regConfirmPassword.length > 0)
+      if (that.model.regConfirmPassword != undefined &&that.model.regConfirmPassword.length > 0)
         that.validateRegConfirmPassword();
     })
   }
@@ -85,12 +86,12 @@ export class LoginRegisterFormComponent implements OnInit {
     // validate on field change
     let that = this;
     $("body").on("blur", this.usernameSel, function() {
-      if (this.model.username.trim().length > 0)
+      if (that.model.username != undefined && that.model.username.trim().length > 0)
         this.default.removeError(this.usernameSel);
     });
 
     $("body").on("blur", this.passwordSel, function() {
-      if (this.model.password.trim().length > 0)
+      if (that.model.password != undefined && that.model.password.trim().length > 0)
         this.default.removeError(this.passwordSel);
     })
 

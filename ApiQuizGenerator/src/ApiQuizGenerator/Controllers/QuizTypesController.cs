@@ -10,9 +10,11 @@ namespace ApiQuizGenerator.Controllers
     [Route("api/[controller]/")]
     public class QuizTypes : BaseController
     {
-        public QuizTypes(IDataService _dataService) : base(_dataService)
+        public QuizTypes(IDataService _dataService, ITokenProvider _tokenProvider) :
+            base(_dataService, _tokenProvider)
         {
             _DataService = _dataService;
+            _TokenProvider = _tokenProvider;
         }
 
         // GET api/quiztypes/list

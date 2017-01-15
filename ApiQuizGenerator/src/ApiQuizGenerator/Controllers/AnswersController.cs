@@ -8,12 +8,15 @@ using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.Controllers
 {
+    [ServiceFilter(typeof(JwtAuthorizeAttribute))]    
     [Route("api/[controller]/")]
     public class AnswersController : BaseController
     {
-        public AnswersController(IDataService _dataService) : base(_dataService)
+        public AnswersController(IDataService _dataService, ITokenProvider _tokenProvider) :
+            base(_dataService, _tokenProvider)
         {
             _DataService = _dataService;
+            _TokenProvider = _tokenProvider;
         }
 
         // GET api/answers/list

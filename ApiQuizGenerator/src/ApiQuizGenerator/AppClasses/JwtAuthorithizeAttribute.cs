@@ -4,22 +4,28 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace ApiQuizGenerator.AppClasses
 {
-    public class ApiJwtAuthAttribute : ActionFilterAttribute
+    public class JwtAuthorizeAttribute : ActionFilterAttribute
     {
+        private ITokenProvider _tokenProvider { get; set; }
+        public JwtAuthorizeAttribute(ITokenProvider tokenProvider) 
+        {
+            _tokenProvider = tokenProvider;
+        }
+
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-        string token = null;
-        bool validToken = false;;
+            string token = null;
+            bool validToken = false;;
+            
             try 
             {
                 token = filterContext.HttpContext.Request.Cookies[ApiAuthentication.AUTH_COOKIE_KEY].ToString();
-                var tokenProvider = new TokenProvider();
-                if (tokenProvider.ValidateToken(token)) 
+                if (_tokenProvider.ValidateToken(token)) 
                 {
                     validToken = true;
                 }
             }
-            catch (Exception ex) 
+            catch (Exception) 
             {
                 validToken = false;
             }
