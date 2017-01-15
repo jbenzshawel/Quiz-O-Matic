@@ -5,7 +5,7 @@ namespace ApiQuizGenerator.AppClasses
 {
     public class ApiAuthentication
     {
-        public string AUTH_COOKIE_KEY { get { return ".AspNetCore.Identity.Application"; } }
+        public static string AUTH_COOKIE_KEY { get { return ".AspNetCore.Identity.Application"; } }
 
         private Controller _Controller { get; set;}
         internal string AuthCookie 

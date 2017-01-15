@@ -17,5 +17,7 @@ namespace ApiQuizGenerator.Models.AccountViewModels
         public bool RememberMe { get; set; }
 
         public bool LockOut { get; set; }
+
+        public string Token { get; set; }
     }
 }

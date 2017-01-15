@@ -26,6 +26,8 @@ namespace ApiQuizGenerator.Controllers
 
         private readonly ApiAuthentication _apiAuthentication;
 
+        private TokenProvider _TokenProvier { get; set; }
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
@@ -39,6 +41,7 @@ namespace ApiQuizGenerator.Controllers
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             _apiAuthentication = new ApiAuthentication(this);
+            _TokenProvier = new TokenProvider();
         }
 
         //
@@ -64,14 +67,15 @@ namespace ApiQuizGenerator.Controllers
                     _logger.LogInformation(1, "User logged in.");
                     authenticationResult.SignInResult = result;
                     authenticationResult.Email = model.Email;
-                    authenticationResult.AuthKey = _apiAuthentication.AUTH_COOKIE_KEY;
+                    authenticationResult.AuthKey = ApiAuthentication.AUTH_COOKIE_KEY;
                     authenticationResult.RememberMe = model.RememberMe;
+                    authenticationResult.Token =  _TokenProvier.GenerateToken(this.HttpContext, model.Email);
                 }
                 else if (result.IsLockedOut)
                 {
                     _logger.LogWarning(2, "User account locked out.");
                     authenticationResult.LockOut = true;
-                    Response.Cookies.Delete(_apiAuthentication.AUTH_COOKIE_KEY);
+                    Response.Cookies.Delete(ApiAuthentication.AUTH_COOKIE_KEY);
                 }
             }
 

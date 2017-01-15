@@ -8,6 +8,10 @@ using ApiQuizGenerator.Models;
 using Microsoft.EntityFrameworkCore;
 using ApiQuizGenerator.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using ApiQuizGenerator.AppClasses;
+using System.Text;
 
 namespace ApiQuizGenerator
 {
@@ -73,6 +77,24 @@ namespace ApiQuizGenerator
             app.UseCors("CorsPolicy");
 
             app.UseMvc();
+
+            var tokenProvider = new ApiQuizGenerator.AppClasses.TokenProvider();
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                AuthenticationScheme = "Cookie",
+                CookieName = "access_token",
+                TicketDataFormat = new CustomJwtDataFormat(
+                    SecurityAlgorithms.HmacSha256,
+                    tokenProvider.ValidationParameters)
+            });
+
+            app.UseJwtBearerAuthentication(new JwtBearerOptions {
+                TokenValidationParameters = tokenProvider.ValidationParameters
+            });
+        
+
         }
     }
 }

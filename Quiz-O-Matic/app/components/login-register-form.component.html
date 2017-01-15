@@ -6,12 +6,14 @@
         <div class="form-group">
             <label for="username">Username:</label>
             <input class="form-control" type="text" id="username" 
+                placeholder="Username"
                 required
                 [(ngModel)]="model.username" name="username" />
         </div>            
         <div class="form-group">
             <label for="password">Password:</label>
             <input class="form-control" type="password" id="password"
+                placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
                 required
                 [(ngModel)]="model.password" name="password" />
         </div>     
@@ -47,15 +49,16 @@
                 {{passwordReqText}}
                 </span>
             <input class="form-control" type="password" 
-            placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
+                placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
                 id="reg-password"
                 required
                 [(ngModel)]="model.regPassword" name="regPassword">
         </div>
         <div class="form-group">
             <label for="reg-confirm-password">Confirm Password:</label>
-            <input class="form-control" type="password" placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
-             id="reg-confirm-password"
+            <input class="form-control" type="password" 
+                placeholder="&middot;&middot;&middot;&middot;&middot;&middot;&middot;&middot;"
+                id="reg-confirm-password"
                 required
                 [(ngModel)]="model.regConfirmPassword" name="regConfirmPassword">
         </div>

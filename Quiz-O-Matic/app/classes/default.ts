@@ -28,7 +28,10 @@ export class Default {
     
     addError (selector: string, message: string) : void {
         $(selector).addClass("has-error");
-        $(selector).after("<div class=\"error-message\"><p>" + message + "</p></div>");
+        let $nextElem:any = $(selector).next();
+        if (!$nextElem.hasClass("error-message"))   {
+            $(selector).after("<div class=\"error-message\"><p>" + message + "</p></div>");            
+        }     
     }
 
     removeError (selector: string): void {

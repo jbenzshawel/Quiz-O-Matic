@@ -17,6 +17,8 @@ export class AuthenticationService {
     
     private authKey: string; 
 
+    private cookieLength: number = 5;
+
     constructor(private http: Http) {
         // set token if saved in session storage
         var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -28,11 +30,13 @@ export class AuthenticationService {
         let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers });
         let body = JSON.stringify({ Email: username, Password: password });
+
         return this.http.post('//localhost:5000/api/account/login', body, options)
             .map((response: Response) => {
                 let loginResult = response.json();
                 let authKey: string = null;
                 let signInResult: any = null;
+                let token: string = null;
 
                 // set auth service properties based on Identity sign in result
                 if (loginResult != null && 
@@ -41,6 +45,8 @@ export class AuthenticationService {
                     this.isLockedOut = signInResult.isLockedOut;
                     this.isNotAllowed = signInResult.isNotAllowed;
                     this.requiresTwoFactor = signInResult.requiresTwoFactor;
+                    this.token = loginResult.token;
+                    this.authKey = loginResult.authKey;
                 }
                 else {
                     // if we did not get the signInResult in the response see if the lockOut property was set
@@ -52,13 +58,10 @@ export class AuthenticationService {
                 }
 
                 // complete post authentication if this user was authenticated 
-                if (signInResult != null && signInResult.succeeded) {
-                    // get auth cookie
-                    this.authKey = loginResult.authKey;
-                    let token: string = this.getCookie(this.authKey);
- 
+                if (signInResult != null && signInResult.succeeded && this.token != null) {
+                    this.createCookie(this.authKey, this.token, this.cookieLength);
                     // store username and jwt token in session storage to keep user logged in between page refreshes
-                    sessionStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
+                    sessionStorage.setItem('currentUser', JSON.stringify({ username: username, token: this.token }));
                 } 
 
                 return signInResult.succeeded;
@@ -91,4 +94,14 @@ export class AuthenticationService {
         
         return result;
     }
+
+    private createCookie(name:string,value:string,days: number): void {
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        var expires = "; expires=" + date.toUTCString();
+    }
+    else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
 }

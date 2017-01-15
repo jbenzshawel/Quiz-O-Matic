@@ -5,7 +5,7 @@ import { HttpModule }            from '@angular/http';
 import { MaterialModule } from '@angular/material';
  
 import { AppComponent }          from './app.component';
-import { LoginFormComponent }    from './components/login-register-form.component';
+import { LoginRegisterFormComponent }    from './components/login-register-form.component';
 
 import { AuthenticationService } from './services/authentication.service'; 
 import { AuthGuard }             from './app.authguard';
@@ -22,7 +22,7 @@ import 'hammerjs';
     ],
     declarations: [
         AppComponent,
-        LoginFormComponent
+        LoginRegisterFormComponent
     ],
     providers: [
         AuthGuard,

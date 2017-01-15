@@ -13,23 +13,22 @@ declare var $:any;
   selector: 'login-register-form',
   templateUrl: 'login-register-form.component.html'
 })
-export class LoginFormComponent implements OnInit {
+export class LoginRegisterFormComponent implements OnInit {
   public model: any = {};
+  public default: Default;
 
   public showLogin:boolean = true;
   public showRegister:boolean = false;
+
   public passwordRequirements:boolean = false;
   public passwordReqText:string = "Password must be 8 characters, contain one upper case letter, and one special character";
 
-  public error:string = "";
-  public default: Default;
-
+  // selectors for input form fields 
+  usernameSel: string = "#username";
+  passwordSel:string = "#password";
   regEmailSel: string = "#reg-email";
   regPasswordSel: string = "#reg-password";
   regConfirmPasswordSel: string = "#reg-confirm-password";
-  
-  loginForm: any; 
-  registerForm:any;
 
   constructor(private authenticationService: AuthenticationService) { }
 
@@ -56,19 +55,22 @@ export class LoginFormComponent implements OnInit {
     // toggle display
     this.showLogin = false;
     this.showRegister = true;
-
+    this.passwordRequirements = false;
     // validate fields on change
-    let scopedThis: any = this;    
+    let that: any = this;    
     $("body").on("blur", this.regEmailSel, function() {
-      scopedThis.validateRegEmail();
+      if (that.model.regEmail.length > 0)
+        that.validateRegEmail();
     });
     
     $("body").on("blur", this.regPasswordSel, function() {
-      scopedThis.validateRegPassword();
+      if (that.model.regPassword.length > 0)
+        that.validateRegPassword();
     })
 
     $("body").on("blur", this.regConfirmPasswordSel, function() {
-      scopedThis.validateRegConfirmPassword();
+      if (that.model.regConfirmPassword.length > 0)
+        that.validateRegConfirmPassword();
     })
   }
 
@@ -80,22 +82,46 @@ export class LoginFormComponent implements OnInit {
     // toggle display
     this.showLogin = true;
     this.showRegister = false;
+    // validate on field change
+    let that = this;
+    $("body").on("blur", this.usernameSel, function() {
+      if (this.model.username.trim().length > 0)
+        this.default.removeError(this.usernameSel);
+    });
+
+    $("body").on("blur", this.passwordSel, function() {
+      if (this.model.password.trim().length > 0)
+        this.default.removeError(this.passwordSel);
+    })
+
   }
   
   loginUser(event: Event): void {
     event.preventDefault();
     this.default.clearErrors();
-    this.authenticationService.login(this.model.username, this.model.password)
-       .subscribe(result => {
-                if (result === true) {
-                    // login successful
-                  //  this.router.navigate(['/dashboard']);
-                } else {
-                    // login failed
-                    this.default.addError("#username", "Username or Password are incorrect");
-                    this.default.addError("#password", "Username or Password are incorrect");
-                }
-            });
+    let isValid = true;
+    if (this.model.username.trim().length === 0) {
+      isValid = false;
+      this.default.addError(this.usernameSel, "The Username field is required");
+    }
+    if (this.model.password.trim().length === 0) {
+      isValid = false;
+      this.default.addError(this.passwordSel, "The Password field is required");
+    }
+    if (isValid) {
+      this.authenticationService.login(this.model.username, this.model.password)
+        .subscribe(result => {
+                  if (result === true) {
+                      // login successful
+                    //  this.router.navigate(['/dashboard']);
+                  } else {
+                      // login failed
+                      this.default.addError("#username", "Username or Password are incorrect");
+                      this.default.addError("#password", "Username or Password are incorrect");
+                  }
+              });
+    } 
+    return;
   }
 
   validateRegPassword(): boolean {
