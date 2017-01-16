@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import {  } from '@angular/router';
+
+
 declare var $:any;
 
 // to do : move login stuff to separate login component
 @Component({
   selector: 'quiz-o-matic',
-  templateUrl: 'app/app.component.html',
+  template: '<router-outlet></router-outlet>',
   styleUrls:  [ 'app/app.component.css']
 })
 export class AppComponent  { 

@@ -7,6 +7,12 @@ namespace ApiQuizGenerator.AppClasses
     public class JwtAuthorizeAttribute : ActionFilterAttribute
     {
         private ITokenProvider _tokenProvider { get; set; }
+            
+        public JwtAuthorizeAttribute()
+        {
+            _tokenProvider = new TokenProvider();
+        }
+        
         public JwtAuthorizeAttribute(ITokenProvider tokenProvider) 
         {
             _tokenProvider = tokenProvider;
@@ -33,7 +39,7 @@ namespace ApiQuizGenerator.AppClasses
             if (!validToken)
             {
                 var response = filterContext.HttpContext.Response;
-                response.StatusCode = 403;
+                response.StatusCode = 404;
                 filterContext.Result = new RedirectResult("/");
             }
         }

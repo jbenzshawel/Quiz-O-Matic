@@ -1,7 +1,7 @@
 <!-- Login Section -->
 <div *ngIf="showLogin">
     <h3>Login</h3>
-    <a class="right create-link" (click)="toggleRegister()">Create an account</a>
+    <a class="right create-link" (click)="toggleRegister()" #createLinkt>Create an account</a>
     <form  name="login-form"  (ngSubmit)="loginUser($event)" #loginForm="ngForm">
         <div class="form-group">
             <label for="username">Username:</label>
@@ -38,7 +38,6 @@
                 [(ngModel)]="model.regEmail" name="regEmail">
         </div>
         <div class="form-group">
-           
             <label for="reg-password">Password: 
             </label>
              <a (click)="togglePassReq()"

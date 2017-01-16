@@ -3,7 +3,25 @@
  * Author: Addison B. 
  */ 
 
-/* shared / utility classes */
+ /* primary colors */
+ a {
+    color: rgb(16,108,200);
+    text-decoration: none;
+}
+
+.primaryButton {
+  background-color: rgb(16,108,200);
+  color: white !important;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover {
+    color: #fff;
+    background-color: rgb(16, 108,200);
+}
+
+
+/* shared classes */
+
 .error-message {
   color: #A31919;
 }
@@ -11,6 +29,7 @@
 .has-error {
   border-color: #A31919;
 }
+
 .center {
   margin: 0 auto !important;
   display: block !important;
@@ -30,10 +49,6 @@
   cursor: pointer;
 }
 
-.primaryButton {
-  background-color: rgb(16,108,200);
-  color: white !important;
-}
 
 .loginButton {
     background-color: white;
@@ -78,6 +93,9 @@ header.main-header h1 {
   margin: 0;
 }
 
+
+/* top nav */ 
+
 nav {
   min-width: 200px;
   float: right;
@@ -109,6 +127,12 @@ nav {
   border-bottom-color: #333;
 }
 
+
+/* side nav */ 
+.nav-pills>li {
+  width: 100%;
+}
+
 /* main container */
 .container {
   max-width: 1000px;
@@ -125,10 +149,14 @@ nav {
   font-size: 24px;
 }
 
-/* home */
-.home {
+.home, .dashboard {
   margin-top:75px;
 }
+
+.dashboard h3 {
+  margin-top: 0
+}
+
 .home .section {
   margin-bottom: 12px;
 }

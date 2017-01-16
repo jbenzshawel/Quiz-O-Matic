@@ -1,5 +1,10 @@
-<div class="row home" *ngIf="loaded">
-    <div class="col-sm-8 col-xs-12">
+<!-- Login Section -->
+<div *ngIf="authenticated" class="row dashboard">
+    <div class="col-xs-3 left">
+       <app-navigation></app-navigation>
+    </div>
+    <div class="col-xs-9 right">
+        <router-outlet></router-outlet>
         <h3>Welcome to Quiz-O-Matic!</h3>
         <p>Select an option below to take or create a quiz:</p>    
         <div class="col-xs-12 section">  
@@ -13,14 +18,10 @@
         <div class="col-xs-12 section">
             <div class="col-sm-6 col-xs-12">
             <p>Browse through and take different quizes others have create.</p>
-</div>
-            <div class="col-sm-6 col-xs-12">
-            <button button md-raised-button color="primary" class="primaryButton center">Take a Quiz</button>        
-      </div>
+            </div>
+                <div class="col-sm-6 col-xs-12">
+                    <button button md-raised-button color="primary" class="primaryButton center">Take a Quiz</button>        
+            </div>
         </div>
     </div>
-    <div class="col-sm-4 col-xs-12">
-        <login-register-form></login-register-form>
-    </div>
-    
 </div>

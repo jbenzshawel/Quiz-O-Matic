@@ -11,6 +11,7 @@ using ApiQuizGenerator.Models;
 using ApiQuizGenerator.Models.AccountViewModels;
 using ApiQuizGenerator.Services;
 using ApiQuizGenerator.AppClasses;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ApiQuizGenerator.Controllers
 {
@@ -44,6 +45,15 @@ namespace ApiQuizGenerator.Controllers
             _apiAuthentication = new ApiAuthentication(this);
             _TokenProvier = tokenProvider;
 
+        }
+
+        [HttpGet("[action]/{username}")]
+        [AllowAnonymous]
+        public JsonResult UsernameExists(string username)
+        {
+            var userNameExists = false;
+            userNameExists = _userManager.Users.Any(u => u.Email.Equals(username, StringComparison.OrdinalIgnoreCase));
+            return Json(new { usernameExists = userNameExists });
         }
 
         //
@@ -125,21 +135,20 @@ namespace ApiQuizGenerator.Controllers
         }
 
         //
-        // POST: /Account/LogOff
-        [HttpPost]
-        public async Task<bool> LogOff()
+        // GET: /Account/LogOff
+        [HttpGet("[action]")]
+        public async Task LogOff()
         {
             try 
             {
-                await _signInManager.SignOutAsync();
+                await HttpContext.Authentication.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                 _logger.LogInformation(4, "User logged out.");
+                return;
             }
             catch (Exception)
             {
-                return false;
             }
-
-            return true;
+            return;
         }
 
         //

@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Default } from './../classes/default';
+
 import 'rxjs/add/operator/map'
 
 // auth service modified from http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial 
@@ -15,14 +17,17 @@ export class AuthenticationService {
 
     public requiresTwoFactor: boolean;
     
-    private authKey: string; 
+    private authKey: string = ".AspNetCore.Identity.Application"; 
 
     private cookieLength: number = 5;
+
+    private default: Default;
 
     constructor(private http: Http) {
         // set token if saved in session storage
         var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
+        this.default = new Default();
     }
     
     // submits login request and completes front end post authenticatin
@@ -67,20 +72,56 @@ export class AuthenticationService {
                 return signInResult.succeeded;
             });
     }
+
+    // submits login request and completes front end post authenticatin
+    public createUser(username: string, password: string, confirmPassword:string): boolean {
+        let body = JSON.stringify({ Email: username, Password: password, ConfirmPassword: confirmPassword });
+        let callback = (response: any) => {
+            let status:boolean = false;
+            if (response != null && response.hasOwnProperty("succeeded")) {
+                status = response.succeeded;
+                if (status) {
+                    this.login(username, password);
+                }
+            }
+            return status;
+        };
+        let settings = {
+            url: '//localhost:5000/api/account/register',
+            data: body,
+            success: callback
+        }
+
+        return this.default.post(settings);
+        
+    }
     
     // returns true if user is authenticated
     public authenticated(): boolean {
         let currentUser = sessionStorage.getItem("currentUser");
         let sessionToken = currentUser != null ? JSON.parse(currentUser).token : "";
-        let cookieToken = this.getCookie(this.authKey);
+        let cookieToken = this.getCookie(".AspNetCore.Identity.Application");
 
         return sessionToken == cookieToken;
     }
 
-    public logout(): void {
+    public logout(refresh:boolean = false): void {
         // clear token and remove user from session storage 
+        let settings: any = {
+            url: "//localhost:5000/api/account/logoff"
+        };
+        if (refresh) {
+            settings.success = () => {
+                window.location.reload();
+            }
+        }
+        try {
+            this.default.get(settings);            
+        }
+        catch (ex) {}
         this.token = null;
         sessionStorage.removeItem('currentUser');
+        this.deleteCookie(this.authKey);
     }
 
     // returns a cookie with key name or null if the cookie does not exist
@@ -96,12 +137,17 @@ export class AuthenticationService {
     }
 
     private createCookie(name:string,value:string,days: number): void {
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days*24*60*60*1000));
-        var expires = "; expires=" + date.toUTCString();
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            var expires = "; expires=" + date.toUTCString();
+        }
+        else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
     }
-    else var expires = "";
-    document.cookie = name + "=" + value + expires + "; path=/";
-}
+
+    private deleteCookie(name:string): void {
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }
+
 }

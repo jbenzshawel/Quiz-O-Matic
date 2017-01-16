@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map'
 
 import { AuthenticationService } from './../services/authentication.service';
 import { Default } from './../classes/default';
@@ -30,11 +34,9 @@ export class LoginRegisterFormComponent implements OnInit {
   regPasswordSel: string = "#reg-password";
   regConfirmPasswordSel: string = "#reg-confirm-password";
 
-  constructor(private authenticationService: AuthenticationService) { }
+  constructor(private authenticationService: AuthenticationService, private router: Router) { }
 
   ngOnInit() {
-    // reset login status
-    this.authenticationService.logout();
     this.default = new Default();
     this.model = {};
   }
@@ -87,12 +89,12 @@ export class LoginRegisterFormComponent implements OnInit {
     let that = this;
     $("body").on("blur", this.usernameSel, function() {
       if (that.model.username != undefined && that.model.username.trim().length > 0)
-        this.default.removeError(this.usernameSel);
+        that.default.removeError(this.usernameSel);
     });
 
     $("body").on("blur", this.passwordSel, function() {
       if (that.model.password != undefined && that.model.password.trim().length > 0)
-        this.default.removeError(this.passwordSel);
+        that.default.removeError(this.passwordSel);
     })
 
   }
@@ -101,6 +103,10 @@ export class LoginRegisterFormComponent implements OnInit {
     event.preventDefault();
     this.default.clearErrors();
     let isValid = true;
+    let returnUrl = this.default.getQueryStringParam("returnUrl");
+    if (returnUrl != null) {
+      returnUrl = decodeURIComponent(returnUrl);
+    }
     if (this.model.username.trim().length === 0) {
       isValid = false;
       this.default.addError(this.usernameSel, "The Username field is required");
@@ -114,7 +120,11 @@ export class LoginRegisterFormComponent implements OnInit {
         .subscribe(result => {
                   if (result === true) {
                       // login successful
-                    //  this.router.navigate(['/dashboard']);
+                      if (returnUrl != null && returnUrl.length > 0) {
+                        this.router.navigate([returnUrl]);
+                      } else {
+                        this.router.navigate(['/dashboard']);                        
+                      }
                   } else {
                       // login failed
                       this.default.addError("#username", "Username or Password are incorrect");
@@ -125,7 +135,18 @@ export class LoginRegisterFormComponent implements OnInit {
     return;
   }
 
+  registerUser(event: Event): void {
+    event.preventDefault();
+    this.default.clearErrors();
+
+    if (this.validateRegEmail() && this.validateRegPassword() && this.validateRegConfirmPassword()) {
+      this.authenticationService.createUser(this.model.regEmail, 
+        this.model.regPassword, this.model.regConfirmPassword);
+    }
+  }
+
   validateRegPassword(): boolean {
+    this.default.removeError(this.regPasswordSel)    
     let isValid: boolean = this.default.validatePassword(this.model.regPassword, this.regPasswordSel);
     if (!isValid) {
         this.passwordRequirements = true;
@@ -135,17 +156,8 @@ export class LoginRegisterFormComponent implements OnInit {
     return isValid;
   }
 
-  validateRegEmail(): boolean {
-    let isValid: boolean = this.default.validateEmail(this.model.regEmail);
-    if (isValid) {
-        this.default.removeError(this.regEmailSel);
-    } else {
-      this.default.addError(this.regEmailSel, "Invalid email address");
-    }
-    return isValid;
-  }
-
-  validateRegConfirmPassword(): boolean {
+   validateRegConfirmPassword(): boolean {
+    this.default.removeError(this.regConfirmPasswordSel);
     let isValid: boolean = this.model.regPassword === this.model.regConfirmPassword;
     if (!isValid) {
         this.default.addError(this.regConfirmPasswordSel, "Password and Confirm Password do not match")
@@ -154,4 +166,41 @@ export class LoginRegisterFormComponent implements OnInit {
     }
     return isValid;
   }
+
+  validateRegEmail(): any {
+    this.default.removeError(this.regEmailSel)
+    let isValid: boolean = this.default.validateEmail(this.model.regEmail);
+    if (isValid) {
+        this.default.removeError(this.regEmailSel);
+    } else {
+      this.default.addError(this.regEmailSel, "Invalid email address");
+    }
+
+    // privaate function to validate username`
+    if (isValid)
+      return this.checkUsername(this.model.regEmail);
+
+    return isValid;
+  }
+
+ 
+  checkUsername(username: string): boolean {
+      let that = this;        
+      let apiEndpoint: string = '//localhost:5000/api/account/UsernameExists/' + username;    
+      let callback = function(data:any) {
+          if (data != null && data.hasOwnProperty("usernameExists")) {
+            if (data.usernameExists) {
+              that.default.addError(that.regEmailSel, "Username already exists");
+            }
+
+            return data.userNameExists;
+          }
+      }
+      let settings = {
+        url: apiEndpoint,
+        success: callback
+      }
+      return this.default.get(settings);
+    } 
+
 }
