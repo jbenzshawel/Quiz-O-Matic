@@ -4,10 +4,14 @@
        <app-navigation></app-navigation>
     </div>
     <div class="col-xs-9 right">
-        <router-outlet></router-outlet>
+        <div class="right user-info">
+            <a href="#">{{ username }}</a>
+        </div>
         <h3>Welcome to Quiz-O-Matic!</h3>
+
         <p>Select an option below to take or create a quiz:</p>    
         <div class="col-xs-12 section">  
+            <router-outlet></router-outlet>            
             <div class="col-sm-6 col-xs-12">
                 <p>Quiz-O-Matic allows you to create a quiz or "would you rather" which you can share with your friends and the internet.</p>
             </div>

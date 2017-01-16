@@ -157,6 +157,10 @@ nav {
   margin-top: 0
 }
 
+.dashboard .user-info {
+  margin-top:-10px
+}
+
 .home .section {
   margin-bottom: 12px;
 }

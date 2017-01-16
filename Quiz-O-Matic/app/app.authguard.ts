@@ -9,18 +9,23 @@ export class AuthGuard implements CanActivate {
  
     canActivate() {
         let authSession = sessionStorage.getItem('currentUser');
+        let status: boolean = false;
         if (authSession != null) {
             // logged in so return true
-            return this.authenticationService.authenticated();
+            status = this.authenticationService.authenticated();
         }
-        let returnUrl: string = encodeURIComponent(window.location.pathname);
-         // that contains our global query params and fragment
-    let navigationExtras: NavigationExtras = {
-      queryParams: { 'returnUrl': returnUrl }
-    };
-        // to do: add return url
-        // not logged in so redirect to login page
-        this.router.navigate(['/home'], navigationExtras);
-        return false;
+        
+        if (!status) {
+            let returnUrl: string = encodeURIComponent(window.location.pathname);
+            // that contains our global query params and fragment
+            let navigationExtras: NavigationExtras = {
+                queryParams: { 'returnUrl': returnUrl }
+            };
+
+            // not logged in so redirect to login page
+            this.router.navigate(['/home'], navigationExtras);
+        }
+        
+        return status;
     }
 }

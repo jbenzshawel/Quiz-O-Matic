@@ -13,7 +13,12 @@ import { AuthenticationService } from './../services/authentication.service';
 export class DashboardComponent  {
   authenticated: boolean = false;
 
+  public username: string = "";
+
     constructor(private authenticationService: AuthenticationService) {
       this.authenticated = authenticationService.authenticated();
+      if (this.authenticated) {
+        this.username = authenticationService.getUsername();
+      }
     }
 }

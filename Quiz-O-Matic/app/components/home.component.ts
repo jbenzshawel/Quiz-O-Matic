@@ -22,14 +22,7 @@ export class HomeComponent  {
     $(".loading").hide();
     this.loaded = true;
     if (authenticationService.authenticated()) {
-        router.navigate["/dashboard"];
+        router.navigate(["/dashboard"]);
     }
   }
-
-  showRegister():void {
-      this.renderer.invokeElementMethod(this.clickElRef.nativeElement, 
-        'dispatchEvent', 
-        [new MouseEvent('click', { bubbles: true, cancelable: true })]);
-  }
-
 }

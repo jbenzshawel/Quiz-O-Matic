@@ -29,6 +29,13 @@ export class AuthenticationService {
         this.token = currentUser && currentUser.token;
         this.default = new Default();
     }
+
+    private getUserSession(): any {
+        let currentUser = sessionStorage.getItem("currentUser");
+        let userObject = currentUser != null ? JSON.parse(currentUser) : null;
+        
+        return userObject;
+    }
     
     // submits login request and completes front end post authenticatin
     public login(username: string, password: string): Observable<boolean> {
@@ -98,11 +105,24 @@ export class AuthenticationService {
     
     // returns true if user is authenticated
     public authenticated(): boolean {
-        let currentUser = sessionStorage.getItem("currentUser");
-        let sessionToken = currentUser != null ? JSON.parse(currentUser).token : "";
+        let userObject = this.getUserSession();
+        if (userObject == null) {
+            return false;
+        }
+        let sessionToken = userObject.token;
         let cookieToken = this.getCookie(".AspNetCore.Identity.Application");
 
         return sessionToken == cookieToken;
+    }
+
+    public getUsername(): string {
+        let userObject: any = this.getUserSession();
+        let username: string = "";
+        if (userObject != null) {
+            username = userObject.username
+        }
+        
+        return username;
     }
 
     public logout(refresh:boolean = false): void {
