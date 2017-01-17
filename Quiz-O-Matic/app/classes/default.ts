@@ -47,7 +47,7 @@ export class Default {
         $(".error-message").remove();
         if (formID != undefined) {
             var form = document.getElementById(formID);
-            form.reset();
+            //form.reset();
         }
     }
     

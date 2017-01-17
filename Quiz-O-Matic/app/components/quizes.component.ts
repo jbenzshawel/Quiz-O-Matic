@@ -7,9 +7,9 @@ import { AuthenticationService } from './../services/authentication.service';
    providers: [
     AuthenticationService
   ],
-  templateUrl: 'dashboard.component.html'
+  templateUrl: 'quizes.component.html'
 })
-export class DashboardComponent  {
+export class QuizesComponent  {
   authenticated: boolean = false;
 
   public username: string = "";

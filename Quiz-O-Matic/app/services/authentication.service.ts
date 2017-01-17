@@ -5,6 +5,7 @@ import { Default } from './../classes/default';
 
 import 'rxjs/add/operator/map'
 
+// ToDo: Refactor to use local storage instead of session storage or just be cookie based?
 // auth service modified from http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial 
 // to rely on ASP.NET Identity Authenticaiton Cookie instead of local storage 
 @Injectable()

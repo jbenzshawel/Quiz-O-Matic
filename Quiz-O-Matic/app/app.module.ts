@@ -10,12 +10,12 @@ import { HomeComponent }         from './components/home.component';
 import { LoginRegisterFormComponent }    from './components/login-register-form.component';
 import { DashboardComponent } from './components/dashboard.component';
 import { NavigationComponent } from './components/navigation.component';
+import { QuizesComponent } from './components/quizes.component';
 import { AuthenticationService } from './services/authentication.service'; 
 import { AuthGuard }             from './app.authguard';
 import { AppRoutingModule } from './app-routing.module';
 
 import 'hammerjs';
-
 
 @NgModule({
  imports: [
@@ -30,6 +30,7 @@ import 'hammerjs';
         HomeComponent,
         NavigationComponent,
         DashboardComponent,
+        QuizesComponent,
         LoginRegisterFormComponent
     ],
     providers: [

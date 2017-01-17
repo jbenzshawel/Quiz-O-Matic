@@ -149,20 +149,20 @@ nav {
   font-size: 24px;
 }
 
-.home, .dashboard {
+.home, .main {
   margin-top:75px;
 }
 
-.dashboard h3 {
+.main h3 {
   margin-top: 0
 }
 
-.dashboard .user-info {
+.main .user-info {
   margin-top:-10px
 }
 
 .home .section {
-  margin-bottom: 12px;
+  margin-top: 16px;
 }
 
 /* media queries */

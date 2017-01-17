@@ -14,8 +14,23 @@ declare var $:any;
   templateUrl: 'navigation.component.html'
 })
 export class NavigationComponent implements OnInit {
+  dashboardActive: boolean = false;
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+  myQuizesActive: boolean = false;
+  
+  myResultsActive: boolean = false;
+
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
+    let currentRoute: string = this.router.url.toLowerCase();
+    switch (currentRoute) {
+      case "/dashboard":
+        this.dashboardActive = true;
+        break;
+      case "/quizes":
+        this.myQuizesActive = true;
+        break;
+    }
+  }
 
   ngOnInit() {
   }

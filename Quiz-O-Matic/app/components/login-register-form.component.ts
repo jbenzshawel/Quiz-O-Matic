@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map'
 
@@ -34,7 +35,7 @@ export class LoginRegisterFormComponent implements OnInit {
   regPasswordSel: string = "#reg-password";
   regConfirmPasswordSel: string = "#reg-confirm-password";
 
-  constructor(private authenticationService: AuthenticationService, private router: Router) { }
+  constructor(private authenticationService: AuthenticationService, private router: Router, private http: Http) { }
 
   ngOnInit() {
     this.default = new Default();
@@ -156,7 +157,7 @@ export class LoginRegisterFormComponent implements OnInit {
     return isValid;
   }
 
-   validateRegConfirmPassword(): boolean {
+  validateRegConfirmPassword(): boolean {
     this.default.removeError(this.regConfirmPasswordSel);
     let isValid: boolean = this.model.regPassword === this.model.regConfirmPassword;
     if (!isValid) {
@@ -176,31 +177,33 @@ export class LoginRegisterFormComponent implements OnInit {
       this.default.addError(this.regEmailSel, "Invalid email address");
     }
 
-    // privaate function to validate username`
-    if (isValid)
-      return this.checkUsername(this.model.regEmail);
+    if (isValid) {
+       this.checkUsername(this.model.regEmail)
+                .subscribe(nameExists => { 
+                  if (nameExists)
+                    isValid = false;
+                });
+    }
 
     return isValid;
   }
 
  
-  checkUsername(username: string): boolean {
+  checkUsername(username: string): Observable<boolean> {
       let that = this;        
       let apiEndpoint: string = '//localhost:5000/api/account/UsernameExists/' + username;    
-      let callback = function(data:any) {
-          if (data != null && data.hasOwnProperty("usernameExists")) {
-            if (data.usernameExists) {
-              that.default.addError(that.regEmailSel, "Username already exists");
-            }
+      
+      return this.http.get(apiEndpoint)
+              .map((response: Response) => {
+                let data = response.json();
+                if (data != null && data.hasOwnProperty("usernameExists")) {
+                  if (data.usernameExists) {
+                    that.default.addError(that.regEmailSel, "Username already exists");
+                  }
+                }
 
-            return data.userNameExists;
-          }
-      }
-      let settings = {
-        url: apiEndpoint,
-        success: callback
-      }
-      return this.default.get(settings);
+                return data.usernameExists;
+              });
     } 
 
 }
