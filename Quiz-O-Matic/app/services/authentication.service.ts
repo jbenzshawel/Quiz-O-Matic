@@ -18,21 +18,22 @@ export class AuthenticationService {
 
     public requiresTwoFactor: boolean;
     
-    private authKey: string = ".AspNetCore.Identity.Application"; 
+    private _authKey: string = ".AspNetCore.Identity.Application"; 
 
-    private cookieLength: number = 5;
+    private _cookieLength: number = 5;
 
-    private default: Default;
+    private _default: Default;
 
-    private headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+    private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
     constructor(private http: Http) {
         // set token if saved in session storage
-        var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
+        let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this.default = new Default();
+        this._default = new Default();
     }
 
+    // returns user object (username and token) from session storage
     private getUserSession(): any {
         let currentUser = sessionStorage.getItem("currentUser");
         let userObject = currentUser != null ? JSON.parse(currentUser) : null;
@@ -42,7 +43,7 @@ export class AuthenticationService {
     
     // submits login request and completes front end post authenticatin
     public login(username: string, password: string): Observable<boolean> {
-        let options = new RequestOptions({ headers: this.headers });
+        let options = new RequestOptions({ headers: this._headers });
         let body = JSON.stringify({ Email: username, Password: password });
 
         return this.http.post('//localhost:5000/api/account/login', body, options)
@@ -60,7 +61,7 @@ export class AuthenticationService {
                     this.isNotAllowed = signInResult.isNotAllowed;
                     this.requiresTwoFactor = signInResult.requiresTwoFactor;
                     this.token = loginResult.token;
-                    this.authKey = loginResult.authKey;
+                    this._authKey = loginResult.authKey;
                 }
                 else {
                     // if we did not get the signInResult in the response see if the lockOut property was set
@@ -73,18 +74,22 @@ export class AuthenticationService {
 
                 // complete post authentication if this user was authenticated 
                 if (signInResult != null && signInResult.succeeded && this.token != null) {
-                    this.createCookie(this.authKey, this.token, this.cookieLength);
+                    this.createCookie(this._authKey, this.token, this._cookieLength);
                     // store username and jwt token in session storage to keep user logged in between page refreshes
                     sessionStorage.setItem('currentUser', JSON.stringify({ username: username, token: this.token }));
+                    
+                    return signInResult.succeeded;
+                    
                 } 
 
-                return signInResult.succeeded;
+                // if we get this far sign in result unsuccessful. no response from server
+                return false;
             });
     }
 
     // submits login request and completes front end post authenticatin
     public createUser(username: string, password: string, confirmPassword:string): Observable<boolean> {
-        let options = new RequestOptions({ headers: this.headers });
+        let options = new RequestOptions({ headers: this._headers });
         let body = JSON.stringify({ Email: username, Password: password, ConfirmPassword: confirmPassword });        
 
         return this.http.post('//localhost:5000/api/account/register', body, options)
@@ -110,6 +115,8 @@ export class AuthenticationService {
         return sessionToken == cookieToken;
     }
 
+    // returns current user's username if a user is authenticated
+    // else returns empty string
     public getUsername(): string {
         let userObject: any = this.getUserSession();
         let username: string = "";
@@ -120,6 +127,7 @@ export class AuthenticationService {
         return username;
     }
 
+    // logs out current user 
     public logout(refresh:boolean = false): void {
         // clear token and remove user from session storage 
         let settings: any = {
@@ -130,13 +138,24 @@ export class AuthenticationService {
                 window.location.reload();
             }
         }
-        try {
-            this.default.get(settings);            
-        }
-        catch (ex) {}
+        // clear token and cookies
         this.token = null;
         sessionStorage.removeItem('currentUser');
-        this.deleteCookie(this.authKey);
+        this.deleteCookie(this._authKey);
+        // log out of identity session
+        this.http.get("//localhost:5000/api/account/logoff")
+           .map((res: Response) => {
+               if (res.status < 400) {
+                  if (refresh) {
+                     window.location.reload();
+                  }
+                  
+                  return true;                
+               }
+               
+               return false;
+           })
+           .subscribe();
     }
 
     // returns a cookie with key name or null if the cookie does not exist
@@ -151,6 +170,7 @@ export class AuthenticationService {
         return result;
     }
 
+    // creates a cookie with the name, value, and number of days passed in
     private createCookie(name:string,value:string,days: number): void {
         if (days) {
             var date = new Date();
@@ -160,7 +180,8 @@ export class AuthenticationService {
         else var expires = "";
         document.cookie = name + "=" + value + expires + "; path=/";
     }
-
+    
+    // deletes a cookie with the passed in name
     private deleteCookie(name:string): void {
         document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
     }
