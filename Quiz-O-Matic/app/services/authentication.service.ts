@@ -24,6 +24,8 @@ export class AuthenticationService {
 
     private default: Default;
 
+    private headers: Headers = new Headers({ 'Content-Type': 'application/json' });
+
     constructor(private http: Http) {
         // set token if saved in session storage
         var currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
@@ -40,8 +42,7 @@ export class AuthenticationService {
     
     // submits login request and completes front end post authenticatin
     public login(username: string, password: string): Observable<boolean> {
-        let headers = new Headers({ 'Content-Type': 'application/json' });
-        let options = new RequestOptions({ headers: headers });
+        let options = new RequestOptions({ headers: this.headers });
         let body = JSON.stringify({ Email: username, Password: password });
 
         return this.http.post('//localhost:5000/api/account/login', body, options)
@@ -82,26 +83,19 @@ export class AuthenticationService {
     }
 
     // submits login request and completes front end post authenticatin
-    public createUser(username: string, password: string, confirmPassword:string): boolean {
-        let body = JSON.stringify({ Email: username, Password: password, ConfirmPassword: confirmPassword });
-        let callback = (response: any) => {
-            let status:boolean = false;
-            if (response != null && response.hasOwnProperty("succeeded")) {
-                status = response.succeeded;
-                if (status) {
-                    this.login(username, password);
-                }
-            }
-            return status;
-        };
-        let settings = {
-            url: '//localhost:5000/api/account/register',
-            data: body,
-            success: callback
-        }
+    public createUser(username: string, password: string, confirmPassword:string): Observable<boolean> {
+        let options = new RequestOptions({ headers: this.headers });
+        let body = JSON.stringify({ Email: username, Password: password, ConfirmPassword: confirmPassword });        
 
-        return this.default.post(settings);
-        
+        return this.http.post('//localhost:5000/api/account/register', body, options)
+            .map((response: Response) => {
+                let status:boolean = false;
+                let result = response.json();
+                if (result != null && result.hasOwnProperty("succeeded")) {
+                    status = result.succeeded;
+                }
+                return status;
+            });
     }
     
     // returns true if user is authenticated

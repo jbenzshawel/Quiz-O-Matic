@@ -9,9 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ApiQuizGenerator.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System;
 using ApiQuizGenerator.AppClasses;
-using System.Text;
 
 namespace ApiQuizGenerator
 {

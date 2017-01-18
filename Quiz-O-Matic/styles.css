@@ -78,8 +78,11 @@
 
 /* main header */
 header {
-  margin: 10px 0 20px 0;
-  /*border-bottom: 1px solid #555;*/
+  margin: 10px 0 10px 0;
+}
+
+.main-header {
+  min-height: 50px
 }
 
 header.main-header h1 {
@@ -147,10 +150,6 @@ nav {
   text-align: center;
   font-weight: 100;
   font-size: 24px;
-}
-
-.home, .main {
-  margin-top:75px;
 }
 
 .main h3 {
