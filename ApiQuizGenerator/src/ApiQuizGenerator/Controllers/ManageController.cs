@@ -207,7 +207,8 @@ namespace ApiQuizGenerator.Controllers
         //
         // POST: /Manage/ChangePassword
         [HttpPost]
-        [ValidateAntiForgeryToken]        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        [ValidateAntiForgeryToken]        
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
             {

@@ -50,10 +50,11 @@
 }
 
 
-.loginButton {
+.loginButton, .quizButton {
     background-color: white;
     border:1px solid #333;
 }
+
 
 .btn {
   border-color: #333;
@@ -182,10 +183,19 @@ nav {
   margin: 0 0 10px 10px;
 }
 
+.quizForm {
+  margin-bottom:25px
+}
+
+
 /* media queries */
 @media (max-width: 768px) {
   .container {
     max-width: 100%
+  }
+
+  .center-xs {
+    text-align: center;
   }
 
   .home .btn-group-lg>.btn, .btn-lg  {

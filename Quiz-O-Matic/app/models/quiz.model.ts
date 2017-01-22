@@ -6,6 +6,8 @@ export class Quiz {
 
     public description: string;
 
+    public attributes: any;
+
     public type: string;
 
     public typeId: string;
@@ -13,4 +15,16 @@ export class Quiz {
     public created: Date; 
 
     public updated: Date;
+
+    constructor(id: string, name:string, description: string, attributes: any, type: string, typeId: string, created: Date, updated: Date = null)
+    {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.attributes = attributes;
+        this.type = type;
+        this.typeId = typeId;
+        this.created = created;
+        this.updated = updated;
+    }
 }

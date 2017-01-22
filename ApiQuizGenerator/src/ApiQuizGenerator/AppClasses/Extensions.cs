@@ -88,7 +88,8 @@ namespace ApiQuizGenerator.AppClasses
                     Type = @this["type"] != DBNull.Value ? @this["type"].ToString() : null,
                     TypeId = @this["type_id"] != DBNull.Value ? Int32.Parse(@this["type_id"].ToString()) : 0,
                     Created = @this["created"] != DBNull.Value ? DateTime.Parse(@this["created"].ToString()) : DateTime.MinValue,
-                    Updated = @this["updated"] != DBNull.Value ? (DateTime?)DateTime.Parse(@this["updated"].ToString()) : null              
+                    Updated = @this["updated"] != DBNull.Value ? (DateTime?)DateTime.Parse(@this["updated"].ToString()) : null,              
+                    Attributes = @this["attributes"] != DBNull.Value ? @this["attributes"].ToString() : string.Empty
                 };
 
                 objectCast = quiz as T;

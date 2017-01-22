@@ -15,7 +15,7 @@ import { QuizesComponent } from './components/quizes.component';
 import { TakeQuizComponent } from './components/take-quiz.component';
 // services 
 import { AuthenticationService } from './services/authentication.service'; 
-import { QuizService } from './services/quiz.service'; 
+import { DataService } from './services/data.service'; 
 // guards and modules
 import { AuthGuard }             from './app.authguard';
 import { AppRoutingModule } from './app-routing.module';
@@ -42,7 +42,7 @@ import 'hammerjs';
     providers: [
         AuthGuard,
         AuthenticationService,
-        QuizService
+        DataService
     ],
     bootstrap: [AppComponent]
 })

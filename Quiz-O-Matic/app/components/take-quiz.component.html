@@ -12,19 +12,51 @@
         </div><!-- end if listQuizes -->
 
         <div *ngIf="takeQuiz && currentQuiz !== null">
-            <a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>
-            <h2>{{ currentQuiz.name }}</h2>
-            <p>{{ currentQuiz.description }}</p>
-            <div class="col-sm-10 col-sm-offset-1 col-xs-12" *ngIf="currentAnswers != null">
-                <div class="question-row" *ngFor="let question of currentQuestions">
-                    <h4>{{ question.title }}</h4>
-                    <ul class="question-options">
-                        <li *ngFor="let answer of question.answers">
-                            {{ answer.identifier }}.) {{ answer.content }}
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-sm-6 col-xs-12">
+                <h3>{{ currentQuiz.name }}</h3>
             </div>
+            <div class="col-sm-6 col-xs-12">
+                <a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>
+            </div>
+            <!-- Quiz Desription -->
+            <div class="col-xs-12">
+                <p>{{ currentQuiz.description }}</p>
+            </div>
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12" *ngIf="currentAnswers != null">
+                <!-- Quiz Form -->
+                <form (ngSubmit)="submitQuiz($event); quizForm.reset()" #quizForm="ngForm" class="quizForm" *ngIf="!hideForm">
+                    <div class="question-row" *ngFor="let question of currentQuestions">
+                        <h4>{{ question.title }}</h4>
+                        <ul class="question-options">
+                            <li *ngFor="let answer of question.answers;">
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" 
+                                               name="response_{{ question.id }}" 
+                                               value="{{ answer.identifier }}"                                         
+                                               [(ngModel)]="model.response[question.id]" 
+                                               (ngModelChange)="onResponse($event)"
+                                               [attr.required]="question.answers[0].identifier == answer.identifier ? true : null" /> 
+                                        {{ answer.identifier }}.) {{ answer.content }}
+                                    </label>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> <!--/.question-row-->
+                    <button type="submit" md-raised-button class="quizButton center" id="submitQuiz" 
+                        [disabled]="!isValidForm" >
+                        Submit
+                    </button> 
+                </form> <!-- end #quizForm -->
+            </div>
+
+            <!-- Results Section -->
+            <div *ngIf="showResult && quizResult != null" class="col-xs-12">
+                <h4>Results</h4>
+                <p>{{ quizResult }}</p>
+                <p>Learn more about civic professionals at XXXX.</p>
+                <p class="center"><a href="#" (click)="toggleResetForm($event)">Take Again</a></p>
+            </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->
 </div>

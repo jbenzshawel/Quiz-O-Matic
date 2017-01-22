@@ -8,7 +8,8 @@ CREATE OR REPLACE FUNCTION list_quizes (
  type Text,
  type_id smallint,
  created timestamp with time zone,
- updated timestamp with time zone
+ updated timestamp with time zone,
+ attributes JSON
 ) 
 AS $$
 BEGIN
@@ -20,9 +21,10 @@ BEGIN
 			quiz_type.type,
 			quiz_type.type_id,
 			quizes.created,
-			quizes.updated
+			quizes.updated,
+			quizes.attributes
 		FROM 
-			public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id;
+			public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id
 		WHERE
 			quizes.is_visible = p_only_visible;
 	ELSE
@@ -33,7 +35,8 @@ BEGIN
 			quiz_type.type,
 			quiz_type.type_id,
 			quizes.created,
-			quizes.updated
+			quizes.updated,
+			quizes.attributes			
 		FROM 
 			public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id;
 	END IF;

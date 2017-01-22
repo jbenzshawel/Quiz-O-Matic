@@ -29,5 +29,8 @@ namespace ApiQuizGenerator.Models
 
         [ColumnName("updated")]
         public DateTime? Updated { get; set; }
+
+        [ColumnName("attributes")]
+        public string Attributes { get; set; }
     }
 }

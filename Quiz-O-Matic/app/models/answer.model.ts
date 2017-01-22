@@ -5,7 +5,7 @@ export class Answer {
 
     public identifier: string;
 
-    public attributes: Object;
+    public attributes: string;
 
     public questionId: number;
 }
