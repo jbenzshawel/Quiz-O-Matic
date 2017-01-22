@@ -21,9 +21,12 @@ export class QuizService {
         this._default = new Default();
     }
 
+    ///////////////////////////////////////////////////////////////
+    /// GET Methods
+
     // ToDo: add pagination 
     // gets a list of quizes from the database
-    public list():Observable<Quiz[]> {
+    public getQuizes():Observable<Quiz[]> {
         let quizList: Quiz[] = null;
         let apiEndpoint: string = "//localhost:5000/api/quizes/list";
 
@@ -38,20 +41,50 @@ export class QuizService {
         });
     }
 
+
     public getQuestions(quizId: string): Observable<Question[]> {
-        let questionList: Question[] = null;
+        let questionList: Question[] = [];
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = "//localhost:5000/api/questions/list/" + quizId;;
+            apiEndpoint = "//localhost:5000/api/questions/list/" + quizId;
+
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
                     let data = response.json();
-                    questionList = data;
-                    
+                    if (data != null)
+                        data.forEach((question: Question) => {
+                            questionList.push(new Question(question.id, question.title, question.attributes, question.quizId))
+                        })
+
                     return questionList;
                 });
         }
+        
+        return null;
+    }
+
+    public getAnswers(quizId: string): Observable<Answer[]> {
+        let questionAnswer: Answer[] =  [];
+        let apiEndpoint: string = null;
+
+        if (this._default.isGuid(quizId)) {
+            apiEndpoint = "//localhost:5000/api/answers/list/" + quizId;
+
+            return this.http.get(apiEndpoint)
+                .map((response: Response) => {
+                    let data: Answer[] = response.json();
+                    
+                    if (data != null) {
+                        data.forEach(answer => {
+                            questionAnswer.push(answer)
+                        });
+                    }
+
+                    return questionAnswer;
+                });
+        }
+
         return null;
     }
 }

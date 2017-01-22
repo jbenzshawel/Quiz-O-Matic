@@ -17,9 +17,11 @@ BEGIN
  answers.identifier,
  answers.attributes
 FROM 
-	public.answers INNER JOIN public.questions ON answer.question_id = questions.question_id
+	public.answers INNER JOIN public.questions ON answers.question_id = questions.question_id
 WHERE
-	question.quiz_id = p_quiz_id;
+	questions.quiz_id = p_quiz_id
+ORDER BY
+	answers.answer_id;
 END; $$ 
  
 LANGUAGE 'plpgsql';

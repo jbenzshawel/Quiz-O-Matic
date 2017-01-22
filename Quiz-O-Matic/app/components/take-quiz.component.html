@@ -1,19 +1,30 @@
 <div class="row main">
-        <div class="col-sm-10 col-sm-offset-1 col-xs-12">
-            <div *ngIf="listQuizes && quizList !== null" class="list-quizes">
-                    <h3>List Quizes</h3>
-                    <ul>
-                        <li *ngFor="let quiz of quizList">
-                            <a [routerLink]="['/take-quiz', quiz.id]">{{ quiz.name }}</a>
-                            <p>{{ quiz.description }}</p>
+    <div class="col-xs-12">
+        <div *ngIf="listQuizes && quizList !== null" class="list-quizes">
+            <a class="right" [routerLink]="['/home']">Home</a>            
+            <h3>List Quizes</h3>
+            <ul>
+                <li *ngFor="let quiz of quizList">
+                    <a [routerLink]="['/take-quiz', quiz.id]">{{ quiz.name }}</a>
+                    <p>{{ quiz.description }}</p>
+                </li>
+            </ul>
+        </div><!-- end if listQuizes -->
+
+        <div *ngIf="takeQuiz && currentQuiz !== null">
+            <a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>
+            <h2>{{ currentQuiz.name }}</h2>
+            <p>{{ currentQuiz.description }}</p>
+            <div class="col-sm-10 col-sm-offset-1 col-xs-12" *ngIf="currentAnswers != null">
+                <div class="question-row" *ngFor="let question of currentQuestions">
+                    <h4>{{ question.title }}</h4>
+                    <ul class="question-options">
+                        <li *ngFor="let answer of question.answers">
+                            {{ answer.identifier }}.) {{ answer.content }}
                         </li>
                     </ul>
-            </div><!-- end if listQuizes -->
-
-            <div *ngIf="takeQuiz && currentQuiz !== null">
-                <h2>{{ currentQuiz.name }}</h2>
-                <p>{{ currentQuiz.description }}</p>
-            </div><!-- end if takeQuiz -->
-        </div>
-    
+                </div>
+            </div>
+        </div><!-- end if takeQuiz -->
+    </div><!--/.col-xs-12-->
 </div>

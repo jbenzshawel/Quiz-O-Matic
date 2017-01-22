@@ -166,10 +166,20 @@ nav {
 
 .list-quizes ul {
   list-style-type: none;
+  padding:0 0 0 15px;
 }
 
 .list-quizes ul li a {
   font-size: 22px;
+}
+
+.question-options {
+  list-style-type: none;
+  padding-left: 15px;
+}
+
+.question-options li {
+  margin: 0 0 10px 10px;
 }
 
 /* media queries */

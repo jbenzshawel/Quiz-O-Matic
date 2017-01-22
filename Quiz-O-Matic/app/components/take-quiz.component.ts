@@ -29,7 +29,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public currentQuestions: Question[] = null
 
-   public currentQuestionAnswers: QuestionAnswer = null;
+   public currentAnswers: Answer[] = null;
 
    public takeQuiz: boolean = false;
 
@@ -71,26 +71,58 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    // sets public property quizList with data from api
    private _getQuizList(): void {
       let that = this;
-      this._quizService.list()
+
+      this._quizService.getQuizes()
          .subscribe(quizes => {
              that.quizList = quizes;
              if (that.id != null && that.quizList != null) {
                 that.quizList.forEach(quiz => {
                     if (quiz.id === that.id) {
-                        this.currentQuiz = quiz;
+                        that.currentQuiz = quiz;
+                        that._getQuestions();
                     }
                 }); // end foreach
              }
-             this.toggleDisplay();
+             that.toggleDisplay();
          }); // end subscribe callback
    }
 
-   private _getQuestions() : void {
+   private _getQuestions(quizId: string = null) : void {
+       let that = this;
+       if (quizId === null && this.id != null) {
+           quizId = this.id;
+       }
 
-
+       if (quizId != null) {
+          this._quizService.getQuestions(quizId)
+             .subscribe(questions => {
+               that.currentQuestions = questions;
+               that._getAnswers();               
+           });
+       } // end if quizId != null
    }
 
-   private _getQuizOptions(): void {
+   private _getAnswers(quizId: string = null) : void {
+       let that = this;
+       if (quizId === null && this.id != null) {
+           quizId = this.id;
+       }
 
+       if (quizId != null) {
+          this._quizService.getAnswers(quizId)
+             .subscribe(answers => {
+                 that.currentAnswers = answers;
+                 if (that.currentQuiz != null && that.currentQuestions != null) {
+                     that.currentQuestions.forEach((question, index) => {
+                         for (var i = 0; i < that.currentAnswers.length; i++) {
+                             if (question.id == that.currentAnswers[i].questionId) {
+                                that.currentQuestions[index].answers.push(that.currentAnswers[i]);
+                             }
+                         } // end for each answer
+                    }); // end for each question
+                 }
+                 
+           });
+       } // end if quizId != null
    }
 }
