@@ -17,7 +17,6 @@ import { Default } from './../classes/default';
   templateUrl: 'take-quiz.component.html'
 })
 export class TakeQuizComponent implements OnInit, OnDestroy  {
-   
    public id: string = null;
 
    // default to list view
@@ -46,18 +45,19 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this._sub = this._activatedRoute.params.subscribe(params => {
          let idParam: string = params["id"];
 
-         if (idParam.toLowerCase() === "list" || this._default.isGuid(idParam)) {
-             this.id = idParam;
-         } 
+         if (idParam.toLowerCase() === "list" || this._default.isGuid(idParam)) 
+            this.id = idParam;
          
-         this._getQuizList();                 
-      });
+         if (this.id != null)
+            this._getQuizData();                                       
+      }); // end subscribe to activatedRoute params
    }
 
    ngOnDestroy() {
       this._sub.unsubscribe();
    }
 
+   // toggles take-quiz view depending on id property / url param
    public toggleDisplay(): void {
        if (this.id === "list") {
            this.listQuizes = true;
@@ -68,8 +68,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        }
    }
 
-   // sets public property quizList with data from api
-   private _getQuizList(): void {
+   // sets public properties quizList, currentQuiz, and currentAnswers  
+   // with quiz data from the quiz-o-matic api
+   private _getQuizData(): void {
       let that = this;
 
       this._quizService.getQuizes()
@@ -79,7 +80,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                 that.quizList.forEach(quiz => {
                     if (quiz.id === that.id) {
                         that.currentQuiz = quiz;
-                        that._getQuestions();
+                        if (that.currentQuiz != null)
+                            that._getQuestions();
                     }
                 }); // end foreach
              }
@@ -87,8 +89,10 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
          }); // end subscribe callback
    }
 
+   // sets currentQuestions property
    private _getQuestions(quizId: string = null) : void {
        let that = this;
+
        if (quizId === null && this.id != null) {
            quizId = this.id;
        }
@@ -97,11 +101,15 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
           this._quizService.getQuestions(quizId)
              .subscribe(questions => {
                that.currentQuestions = questions;
-               that._getAnswers();               
+               if (that.currentQuestions != null)
+                  that._getAnswers();               
            });
        } // end if quizId != null
    }
 
+   // sets currentAnswers
+   // note: dependent on currentQuiz and currentQuestions already 
+   // being set with data from api.
    private _getAnswers(quizId: string = null) : void {
        let that = this;
        if (quizId === null && this.id != null) {
@@ -113,6 +121,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
              .subscribe(answers => {
                  that.currentAnswers = answers;
                  if (that.currentQuiz != null && that.currentQuestions != null) {
+                     // loop over each question and set its answers property
                      that.currentQuestions.forEach((question, index) => {
                          for (var i = 0; i < that.currentAnswers.length; i++) {
                              if (question.id == that.currentAnswers[i].questionId) {
@@ -121,7 +130,6 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                          } // end for each answer
                     }); // end for each question
                  }
-                 
            });
        } // end if quizId != null
    }
