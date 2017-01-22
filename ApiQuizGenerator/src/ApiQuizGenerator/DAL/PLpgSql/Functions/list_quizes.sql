@@ -1,4 +1,6 @@
-CREATE OR REPLACE FUNCTION list_quizes () 
+CREATE OR REPLACE FUNCTION list_quizes (
+	p_only_visible BOOLEAN DEFAULT true
+) 
  RETURNS TABLE (
  quiz_id UUID,
  name Text,
@@ -10,16 +12,31 @@ CREATE OR REPLACE FUNCTION list_quizes ()
 ) 
 AS $$
 BEGIN
- RETURN QUERY SELECT 
- quizes.quiz_id, 
- quizes.name, 
- quizes.description, 
- quiz_type.type,
- quiz_type.type_id,
- quizes.created,
- quizes.updated
-FROM 
-	public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id;
+	IF (p_only_visible) THEN
+		RETURN QUERY SELECT 
+			quizes.quiz_id, 
+			quizes.name, 
+			quizes.description, 
+			quiz_type.type,
+			quiz_type.type_id,
+			quizes.created,
+			quizes.updated
+		FROM 
+			public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id;
+		WHERE
+			quizes.is_visible = p_only_visible;
+	ELSE
+		 RETURN QUERY SELECT 
+			quizes.quiz_id, 
+			quizes.name, 
+			quizes.description, 
+			quiz_type.type,
+			quiz_type.type_id,
+			quizes.created,
+			quizes.updated
+		FROM 
+			public.quizes LEFT OUTER JOIN public.quiz_type ON quizes.type_id = quiz_type.type_id;
+	END IF;
 END; $$ 
  
 LANGUAGE 'plpgsql';

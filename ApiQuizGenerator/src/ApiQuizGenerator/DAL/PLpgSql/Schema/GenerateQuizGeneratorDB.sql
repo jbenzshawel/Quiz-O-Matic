@@ -16,7 +16,8 @@ CREATE DATABASE "QuizGenerator"
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
 
- -- Table: public.quizes
+
+-- Table: public.quizes
 
 -- DROP TABLE public.quizes;
 
@@ -28,6 +29,7 @@ CREATE TABLE public.quizes
     type_id integer,
     created timestamp with time zone DEFAULT now(),
     updated timestamp with time zone,
+    is_visible boolean,
     CONSTRAINT "QuizIdPK" PRIMARY KEY (quiz_id)
 )
 WITH (

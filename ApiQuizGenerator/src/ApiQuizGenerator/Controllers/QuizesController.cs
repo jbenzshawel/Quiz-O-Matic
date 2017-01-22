@@ -18,11 +18,14 @@ namespace ApiQuizGenerator.Controllers
             _TokenProvider = _tokenProvider;
         }
 
-        // GET api/quizes/list
-        [HttpGet("[action]")]
-        public async Task<List<Quiz>> List() 
+        // GET api/quizes/list/{onlyVisible:bool?}
+        [HttpGet("[action]/{onlyVisible:bool?}")]
+        public async Task<List<Quiz>> List(bool? onlyVisible = null) 
         {
-            return await _DataService.Quizes.All(); 
+            if (onlyVisible == null)
+                onlyVisible = true;
+            
+            return await _DataService.Quizes.All(onlyVisible.ToString().ToLower()); 
         }
 
         // GET api/quizes/{id}

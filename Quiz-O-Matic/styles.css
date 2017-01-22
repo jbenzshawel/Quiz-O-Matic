@@ -164,6 +164,14 @@ nav {
   margin-top: 16px;
 }
 
+.list-quizes ul {
+  list-style-type: none;
+}
+
+.list-quizes ul li a {
+  font-size: 22px;
+}
+
 /* media queries */
 @media (max-width: 768px) {
   .container {

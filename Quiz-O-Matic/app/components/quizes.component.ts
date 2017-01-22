@@ -10,9 +10,9 @@ import { AuthenticationService } from './../services/authentication.service';
   templateUrl: 'quizes.component.html'
 })
 export class QuizesComponent  {
-  authenticated: boolean = false;
+   authenticated: boolean = false;
 
-  public username: string = "";
+   public username: string = "";
 
     constructor(private authenticationService: AuthenticationService) {
       this.authenticated = authenticationService.authenticated();

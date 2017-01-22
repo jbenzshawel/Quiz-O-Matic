@@ -25,7 +25,13 @@ namespace ApiQuizGenerator.DAL
                 {
                     _listProcedures =  new Dictionary<Type, PgSqlFunction> 
                     {
-                        { typeof (Quiz), new PgSqlFunction { Name = "list_quizes" } },
+                        { 
+                            typeof (Quiz), new PgSqlFunction 
+                            { 
+                                Name = "list_quizes",
+                                Parameters = new NpgsqlParameter[] { PgSql.NpgParam(NpgsqlDbType.Boolean, "p_only_visible" ) }
+                            } 
+                        },
                         { typeof (QuizType), new PgSqlFunction { Name = "list_quiz_types" } },                        
                         { 
                             typeof (Question), new PgSqlFunction 

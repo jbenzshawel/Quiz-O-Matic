@@ -1,10 +1,14 @@
+// @angular
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Default } from './../classes/default';
-import { Quiz } from './../models/quiz.model';
-
 import 'rxjs/add/operator/map'
+// models
+import { Quiz } from './../models/quiz.model';
+import { Question } from './../models/question.model';
+import { Answer, QuestionAnswer } from './../models/answer.model';
+import { Default } from './../classes/default';
+
 
 @Injectable()
 export class QuizService {
@@ -17,6 +21,7 @@ export class QuizService {
         this._default = new Default();
     }
 
+    // ToDo: add pagination 
     // gets a list of quizes from the database
     public list():Observable<Quiz[]> {
         let quizList: Quiz[] = null;
@@ -31,5 +36,22 @@ export class QuizService {
 
             return quizList;
         });
+    }
+
+    public getQuestions(quizId: string): Observable<Question[]> {
+        let questionList: Question[] = null;
+        let apiEndpoint: string = null;
+
+        if (this._default.isGuid(quizId)) {
+            apiEndpoint = "//localhost:5000/api/questions/list/" + quizId;;
+            return this.http.get(apiEndpoint)
+                .map((response: Response) => {
+                    let data = response.json();
+                    questionList = data;
+                    
+                    return questionList;
+                });
+        }
+        return null;
     }
 }

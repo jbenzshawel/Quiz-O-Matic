@@ -8,7 +8,6 @@ using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator.Controllers
 {
-    [JwtAuthorizeAttribute]    
     [Route("api/[controller]/")]
     public class AnswersController : BaseController
     {
