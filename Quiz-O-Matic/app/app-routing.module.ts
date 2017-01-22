@@ -1,25 +1,26 @@
+// @angular 
 import { NgModule }              from '@angular/core';
 import { RouterModule, Routes }  from '@angular/router';
+// components 
 import { LoginRegisterFormComponent }    from './components/login-register-form.component';
 import { AppComponent }          from './app.component';
 import { DashboardComponent } from './components/dashboard.component';
 import { QuizesComponent } from './components/quizes.component';
 import { HomeComponent } from './components/home.component';
-import { AuthenticationService } from './services/authentication.service'; 
+import { TakeQuizComponent } from './components/take-quiz.component';
+// guards
 import { AuthGuard }             from './app.authguard';
 
 const appRoutes: Routes = [
     { path: 'app',   component: AppComponent },
     { path: 'home', component: HomeComponent },    
+    { path: 'take-quiz/:id', component: TakeQuizComponent },
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'quizes', component: QuizesComponent, canActivate: [AuthGuard]},
-    { 
-        path: '',
-        redirectTo: '/home',
-        pathMatch: 'full'
-    },
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
     // otherwise redirect to home
-    { path: '**', redirectTo: '' }
+    // ToDo: Add PageNotFoundComponent
+    { path: '**', redirectTo: '/home' }
     //,{ path: '**', component: PageNotFoundComponent }
 ];
 @NgModule({

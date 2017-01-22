@@ -1,0 +1,14 @@
+<div *ngIf="listQuizes" class="row main">
+    <div class="col-xs-12">
+        <h3>List Quizes</h3>
+          <ul>
+            <li *ngFor="let quiz of quizList">
+                <a [routerLink]="['/take-quiz', quiz.id]">{{ quiz.name }}</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div *ngIf="takeQuiz" class="row main">
+    
+</div>

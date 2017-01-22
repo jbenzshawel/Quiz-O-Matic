@@ -81,6 +81,15 @@ export class Default {
         return false;
     }
 
+    // validates that a string is a guid
+    isGuid(stringToTest: string): boolean {
+        if (stringToTest[0] === "{") {
+            stringToTest = stringToTest.substring(1, stringToTest.length - 1);
+        }
+        let regexGuid: RegExp = /^(\{){0,1}[0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}(\}){0,1}$/gi;
+        return regexGuid.test(stringToTest);
+    }
+
     getQueryStringParam(name: string): string {
         name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
         let regex = new RegExp('[\\?&]' + name + '=([^&#]*)');

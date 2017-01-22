@@ -13,6 +13,8 @@ using ApiQuizGenerator.AppClasses;
 
 namespace ApiQuizGenerator
 {
+    // ToDo: Add roles to store in auth token. Make all API requests require auth token
+    // that falls into differenet roles (authenticated, unauthentiacted, admin, etc.)
     public class Startup
     {
         public static string ConnectionString { get; private set; }

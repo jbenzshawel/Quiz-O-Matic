@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map'
 // to rely on ASP.NET Identity Authenticaiton Cookie instead of local storage 
 @Injectable()
 export class AuthenticationService {
+    // property for JWt 
     public token: string;
 
     public isLockedOut: boolean;
@@ -18,8 +19,10 @@ export class AuthenticationService {
 
     public requiresTwoFactor: boolean;
     
+    // key used for auth cookie
     private _authKey: string = ".AspNetCore.Identity.Application"; 
 
+    // number of days until cookie expires 
     private _cookieLength: number = 5;
 
     private _default: Default;
