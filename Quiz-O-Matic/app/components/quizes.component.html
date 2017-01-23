@@ -1,0 +1,15 @@
+<!-- Login Section -->
+<div *ngIf="authenticated" class="row main">
+    <div class="col-xs-3 left">
+       <app-navigation></app-navigation>
+    </div>
+    <div class="col-xs-9 right">
+        <div class="right user-info">
+            <a href="#">{{ username }}</a>
+        </div>
+        <h3>My Quizes</h3>   
+        <div class="col-xs-12 section">  
+            <router-outlet></router-outlet>            
+        </div>
+    </div>
+</div>
