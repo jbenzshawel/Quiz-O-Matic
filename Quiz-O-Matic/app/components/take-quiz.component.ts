@@ -10,6 +10,8 @@ import { DataService } from './../services/data.service';
 import { Default } from './../classes/default';
 import { QuizEngine } from './../classes/quiz.engine';
 
+declare var $: any;
+
 @Component({
   moduleId: module.id,
    providers: [
@@ -44,6 +46,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public hideForm: boolean = false;
 
+   public activeOption: any = {};
+
    private _sub: any;
 
    private _default: Default; 
@@ -57,6 +61,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       };
       this._default = new Default();
       this._handleRoute();
+      this.activeOption = {};
+      $(".activeOption").removeClass("activeOption");      
    }
 
    ngOnDestroy() {
@@ -64,6 +70,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this.currentQuestions = null;
       this.currentAnswers = null;
       this.currentQuiz = null;
+      this.activeOption = {};      
+      $(".activeOption").removeClass("activeOption");            
    }
 
    // toggles take-quiz view depending on id property / url param

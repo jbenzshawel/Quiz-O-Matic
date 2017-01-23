@@ -8,8 +8,7 @@ declare var $:any;
 // to do : move login stuff to separate login component
 @Component({
   selector: 'quiz-o-matic',
-  template: '<router-outlet></router-outlet>',
-  styleUrls:  [ 'app/app.component.css']
+  template: '<router-outlet></router-outlet>'
 })
 export class AppComponent  { 
   

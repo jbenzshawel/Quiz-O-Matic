@@ -3,6 +3,18 @@
  * Author: Addison B. 
  */ 
 
+ /* fonts */
+ p, a, strong, ul, li, ol, div, label {
+   font-family: 'Roboto', sans-serif;
+   font-weight: 300;
+   font-size: 15px;
+ }
+
+ h1, h2, h3, h4, h5, h6 {
+   font-family: 'Open Sans', sans-serif;
+   /*font-weight: 300;*/
+ }
+
  /* primary colors */
  a {
     color: rgb(16,108,200);
@@ -88,7 +100,7 @@ header {
 
 header.main-header h1 {
   color: #555;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 250%;
   font-weight: 100;
   width: 250px;
@@ -115,7 +127,6 @@ nav {
   padding-right: 0;
   padding-left: 0;
   font-size: 16px;
-  font-weight: bold;
   border-bottom: 2px solid transparent;
 }
 .masthead-nav > li > a:hover,
@@ -177,16 +188,50 @@ nav {
 .question-options {
   list-style-type: none;
   padding-left: 15px;
+  margin-bottom: 15px;
 }
 
 .question-options li {
   margin: 0 0 10px 10px;
 }
 
+.question-options label {
+  font-size: 18px;
+  font-weight: 300;
+  width: 100%
+}
+
+.question-options input {
+  width: 100%;
+}
+
+.question-options img {
+  margin: 10px auto;
+  display: block;
+}
+
+.question-options .radio {
+    padding: 20px;
+}
+
 .quizForm {
   margin-bottom:25px
 }
 
+.activeOption {
+  border: 1px solid rgb(16,108,200);
+  border-radius: 15px;
+}
+
+.results img {
+  margin: 15px auto;
+  display: block;
+}
+
+/* home */
+.home .section {
+  margin-bottom: 12px;
+}
 
 /* media queries */
 @media (max-width: 768px) {
@@ -212,5 +257,17 @@ nav {
   nav {
     width: 100%;
     text-align: center;
+  }
+
+  .home {
+      margin: 0;
+  }
+  .home .btn-group-lg>.btn, .btn-lg  {
+    padding: 8px 12px;
+    font-size: 100%;
+  }
+
+  .home h3 {
+      text-align: center;
   }
 }

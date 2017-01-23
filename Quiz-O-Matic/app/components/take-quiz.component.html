@@ -13,7 +13,7 @@
 
         <div *ngIf="takeQuiz && currentQuiz !== null">
             <div class="col-sm-6 col-xs-12">
-                <h3>{{ currentQuiz.name }}</h3>
+                <h2>{{ currentQuiz.name }}</h2>
             </div>
             <div class="col-sm-6 col-xs-12">
                 <a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>
@@ -26,11 +26,14 @@
                 <!-- Quiz Form -->
                 <form (ngSubmit)="submitQuiz($event); quizForm.reset()" #quizForm="ngForm" class="quizForm" *ngIf="!hideForm">
                     <div class="question-row" *ngFor="let question of currentQuestions">
-                        <h4>{{ question.title }}</h4>
+                        <h3>{{ question.title }}</h3>
                         <ul class="question-options">
                             <li *ngFor="let answer of question.answers;">
-                                <div class="radio">
+                                <div class="radio"
+                                    [class.activeOption]="activeOption[question.id] == answer.identifier" 
+                                            (click)="activeOption[question.id] = answer.identifier">
                                     <label>
+                                        <img src="//placehold.it/400x200" alt="{{ answer.identifier }}" />                                                                            
                                         <input type="radio" 
                                                name="response_{{ question.id }}" 
                                                value="{{ answer.identifier }}"                                         
@@ -51,11 +54,12 @@
             </div>
 
             <!-- Results Section -->
-            <div *ngIf="showResult && quizResult != null" class="col-xs-12">
-                <h4>Results</h4>
+            <div *ngIf="showResult && quizResult != null" class="col-xs-12 results">
+                <a href="#" class="right" (click)="toggleResetForm($event)">Take Again</a>
+                <h3>Results</h3>
+                <img src="//placehold.it/450x250" alt="result" />
                 <p>{{ quizResult }}</p>
                 <p>Learn more about civic professionals at XXXX.</p>
-                <p class="center"><a href="#" (click)="toggleResetForm($event)">Take Again</a></p>
             </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->

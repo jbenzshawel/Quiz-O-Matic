@@ -30,14 +30,13 @@ export class QuizEngine {
         let failCount: number = 0;
         if (this.quiz != null && this.quiz.attributes != null) {
            let answerAttribute = this.quiz.attributes.attributeName;
-           let questions = Object.keys(this.responses);
            let responseKeys = Object.keys(this.responses);
            // loop over responses
            for (let i = 0; i < responseKeys.length; i++) {
               let questionNumber = responseKeys[i];
               let questionAns = this.responses[questionNumber];
               let ansKeys = Object.keys(this.answers);
-              console.log(questionNumber + " : " + questionAns);
+              
               // determine which option response falls into     
               for (var j = 0; j < ansKeys.length; j++) {
                  if (this.answers[j].questionId.toString() === questionNumber &&
