@@ -86,6 +86,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
            this.showResult = false;         
            this.hideForm = false;
        }
+       this.model.response = {};
+       this.activeOption = {};       
        $(".activeOption").removeClass("activeOption");                     
    }
 
