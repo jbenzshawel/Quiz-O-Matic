@@ -5,6 +5,10 @@ jspm_packages
 npm-debug.*
 link-checker-results.txt
 aot
+dist
+main-dev.js
+main-prod.js
+main.js
 app/**/*.js
 *.js.map
 e2e/**/*.js
