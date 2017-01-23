@@ -7,7 +7,7 @@ link-checker-results.txt
 aot
 dist
 main-dev.js
-man-prod.js
+main-prod.js
 app/**/*.js
 *.js.map
 e2e/**/*.js
