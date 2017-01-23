@@ -4,25 +4,24 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../app/app.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('@angular/core/src/linker/view_type');
-var import6 = require('@angular/core/src/change_detection/constants');
-var import7 = require('@angular/core/src/linker/component_factory');
-var import8 = require('@angular/core/src/linker/view_container');
-var import9 = require('../node_modules/@angular/router/src/directives/router_outlet.ngfactory');
-var import10 = require('@angular/router/src/router_outlet_map');
-var import11 = require('@angular/core/src/linker/component_factory_resolver');
-var import12 = require('@angular/router/src/directives/router_outlet');
-var Wrapper_AppComponent = (function () {
+import * as import0 from '../../app/app.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '@angular/core/src/linker/view_type';
+import * as import6 from '@angular/core/src/change_detection/constants';
+import * as import7 from '@angular/core/src/linker/component_factory';
+import * as import8 from '@angular/core/src/linker/view_container';
+import * as import9 from '../node_modules/@angular/router/src/directives/router_outlet.ngfactory';
+import * as import10 from '@angular/router/src/router_outlet_map';
+import * as import11 from '@angular/core/src/linker/component_factory_resolver';
+import * as import12 from '@angular/router/src/directives/router_outlet';
+export var Wrapper_AppComponent = (function () {
     function Wrapper_AppComponent() {
         this._changed = false;
         this.context = new import0.AppComponent();
@@ -47,7 +46,6 @@ var Wrapper_AppComponent = (function () {
     };
     return Wrapper_AppComponent;
 }());
-exports.Wrapper_AppComponent = Wrapper_AppComponent;
 var renderType_AppComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_AppComponent_Host0 = (function (_super) {
     __extends(View_AppComponent_Host0, _super);
@@ -80,10 +78,10 @@ var View_AppComponent_Host0 = (function (_super) {
     };
     return View_AppComponent_Host0;
 }(import1.AppView));
-exports.AppComponentNgFactory = new import7.ComponentFactory('quiz-o-matic', View_AppComponent_Host0, import0.AppComponent);
+export var AppComponentNgFactory = new import7.ComponentFactory('quiz-o-matic', View_AppComponent_Host0, import0.AppComponent);
 var styles_AppComponent = [];
 var renderType_AppComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_AppComponent, {});
-var View_AppComponent0 = (function (_super) {
+export var View_AppComponent0 = (function (_super) {
     __extends(View_AppComponent0, _super);
     function View_AppComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_AppComponent0, renderType_AppComponent, import5.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import6.ChangeDetectorStatus.CheckAlways);
@@ -112,5 +110,4 @@ var View_AppComponent0 = (function (_super) {
     };
     return View_AppComponent0;
 }(import1.AppView));
-exports.View_AppComponent0 = View_AppComponent0;
 //# sourceMappingURL=app.component.ngfactory.js.map

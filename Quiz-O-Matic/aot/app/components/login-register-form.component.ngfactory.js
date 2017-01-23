@@ -4,45 +4,44 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/login-register-form.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/authentication.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('@angular/router/src/router');
-var import11 = require('../../node_modules/@angular/forms/src/directives/ng_form.ngfactory');
-var import12 = require('../../node_modules/@angular/forms/src/directives/ng_control_status.ngfactory');
-var import13 = require('../../node_modules/@angular/forms/src/directives/default_value_accessor.ngfactory');
-var import14 = require('../../node_modules/@angular/forms/src/directives/validators.ngfactory');
-var import15 = require('../../node_modules/@angular/forms/src/directives/ng_model.ngfactory');
-var import16 = require('@angular/material/button/button');
-var import17 = require('../../node_modules/@angular/material/button/button.ngfactory');
-var import18 = require('@angular/core/src/linker/view_container');
-var import19 = require('@angular/core/src/linker/element_ref');
-var import20 = require('@angular/forms/src/directives/default_value_accessor');
-var import21 = require('@angular/forms/src/directives/validators');
-var import22 = require('@angular/forms/src/validators');
-var import23 = require('@angular/forms/src/directives/control_value_accessor');
-var import24 = require('@angular/forms/src/directives/ng_model');
-var import25 = require('@angular/forms/src/directives/ng_control');
-var import26 = require('@angular/forms/src/directives/ng_control_status');
-var import27 = require('@angular/forms/src/directives/ng_form');
-var import28 = require('@angular/forms/src/directives/control_container');
-var import29 = require('@angular/core/src/change_detection/change_detection_util');
-var import30 = require('../../node_modules/@angular/common/src/directives/ng_if.ngfactory');
-var import31 = require('@angular/core/src/linker/template_ref');
-var import32 = require('@angular/common/src/directives/ng_if');
-var Wrapper_LoginRegisterFormComponent = (function () {
+import * as import0 from '../../../app/components/login-register-form.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/authentication.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '@angular/router/src/router';
+import * as import11 from '../../node_modules/@angular/forms/src/directives/ng_form.ngfactory';
+import * as import12 from '../../node_modules/@angular/forms/src/directives/ng_control_status.ngfactory';
+import * as import13 from '../../node_modules/@angular/forms/src/directives/default_value_accessor.ngfactory';
+import * as import14 from '../../node_modules/@angular/forms/src/directives/validators.ngfactory';
+import * as import15 from '../../node_modules/@angular/forms/src/directives/ng_model.ngfactory';
+import * as import16 from '@angular/material/button/button';
+import * as import17 from '../../node_modules/@angular/material/button/button.ngfactory';
+import * as import18 from '@angular/core/src/linker/view_container';
+import * as import19 from '@angular/core/src/linker/element_ref';
+import * as import20 from '@angular/forms/src/directives/default_value_accessor';
+import * as import21 from '@angular/forms/src/directives/validators';
+import * as import22 from '@angular/forms/src/validators';
+import * as import23 from '@angular/forms/src/directives/control_value_accessor';
+import * as import24 from '@angular/forms/src/directives/ng_model';
+import * as import25 from '@angular/forms/src/directives/ng_control';
+import * as import26 from '@angular/forms/src/directives/ng_control_status';
+import * as import27 from '@angular/forms/src/directives/ng_form';
+import * as import28 from '@angular/forms/src/directives/control_container';
+import * as import29 from '@angular/core/src/change_detection/change_detection_util';
+import * as import30 from '../../node_modules/@angular/common/src/directives/ng_if.ngfactory';
+import * as import31 from '@angular/core/src/linker/template_ref';
+import * as import32 from '@angular/common/src/directives/ng_if';
+export var Wrapper_LoginRegisterFormComponent = (function () {
     function Wrapper_LoginRegisterFormComponent(p0, p1, p2) {
         this._changed = false;
         this.context = new import0.LoginRegisterFormComponent(p0, p1, p2);
@@ -72,7 +71,6 @@ var Wrapper_LoginRegisterFormComponent = (function () {
     };
     return Wrapper_LoginRegisterFormComponent;
 }());
-exports.Wrapper_LoginRegisterFormComponent = Wrapper_LoginRegisterFormComponent;
 var renderType_LoginRegisterFormComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_LoginRegisterFormComponent_Host0 = (function (_super) {
     __extends(View_LoginRegisterFormComponent_Host0, _super);
@@ -109,7 +107,7 @@ var View_LoginRegisterFormComponent_Host0 = (function (_super) {
     };
     return View_LoginRegisterFormComponent_Host0;
 }(import1.AppView));
-exports.LoginRegisterFormComponentNgFactory = new import8.ComponentFactory('login-register-form', View_LoginRegisterFormComponent_Host0, import0.LoginRegisterFormComponent);
+export var LoginRegisterFormComponentNgFactory = new import8.ComponentFactory('login-register-form', View_LoginRegisterFormComponent_Host0, import0.LoginRegisterFormComponent);
 var styles_LoginRegisterFormComponent = [];
 var View_LoginRegisterFormComponent1 = (function (_super) {
     __extends(View_LoginRegisterFormComponent1, _super);
@@ -772,7 +770,7 @@ var View_LoginRegisterFormComponent2 = (function (_super) {
     return View_LoginRegisterFormComponent2;
 }(import1.AppView));
 var renderType_LoginRegisterFormComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_LoginRegisterFormComponent, {});
-var View_LoginRegisterFormComponent0 = (function (_super) {
+export var View_LoginRegisterFormComponent0 = (function (_super) {
     __extends(View_LoginRegisterFormComponent0, _super);
     function View_LoginRegisterFormComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_LoginRegisterFormComponent0, renderType_LoginRegisterFormComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -839,5 +837,4 @@ var View_LoginRegisterFormComponent0 = (function (_super) {
     };
     return View_LoginRegisterFormComponent0;
 }(import1.AppView));
-exports.View_LoginRegisterFormComponent0 = View_LoginRegisterFormComponent0;
 //# sourceMappingURL=login-register-form.component.ngfactory.js.map

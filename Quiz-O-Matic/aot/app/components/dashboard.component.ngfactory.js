@@ -4,37 +4,36 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/dashboard.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/authentication.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('../../../app/components/navigation.component');
-var import11 = require('./navigation.component.ngfactory');
-var import12 = require('@angular/core/src/linker/view_container');
-var import13 = require('../../node_modules/@angular/router/src/directives/router_outlet.ngfactory');
-var import14 = require('@angular/material/button/button');
-var import15 = require('../../node_modules/@angular/material/button/button.ngfactory');
-var import16 = require('@angular/core/src/change_detection/change_detection_util');
-var import17 = require('@angular/router/src/router');
-var import18 = require('@angular/router/src/router_outlet_map');
-var import19 = require('@angular/core/src/linker/component_factory_resolver');
-var import20 = require('@angular/core/src/linker/element_ref');
-var import21 = require('@angular/router/src/directives/router_outlet');
-var import22 = require('../../node_modules/@angular/common/src/directives/ng_if.ngfactory');
-var import23 = require('@angular/core/src/linker/template_ref');
-var import24 = require('@angular/common/src/directives/ng_if');
-var Wrapper_DashboardComponent = (function () {
+import * as import0 from '../../../app/components/dashboard.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/authentication.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '../../../app/components/navigation.component';
+import * as import11 from './navigation.component.ngfactory';
+import * as import12 from '@angular/core/src/linker/view_container';
+import * as import13 from '../../node_modules/@angular/router/src/directives/router_outlet.ngfactory';
+import * as import14 from '@angular/material/button/button';
+import * as import15 from '../../node_modules/@angular/material/button/button.ngfactory';
+import * as import16 from '@angular/core/src/change_detection/change_detection_util';
+import * as import17 from '@angular/router/src/router';
+import * as import18 from '@angular/router/src/router_outlet_map';
+import * as import19 from '@angular/core/src/linker/component_factory_resolver';
+import * as import20 from '@angular/core/src/linker/element_ref';
+import * as import21 from '@angular/router/src/directives/router_outlet';
+import * as import22 from '../../node_modules/@angular/common/src/directives/ng_if.ngfactory';
+import * as import23 from '@angular/core/src/linker/template_ref';
+import * as import24 from '@angular/common/src/directives/ng_if';
+export var Wrapper_DashboardComponent = (function () {
     function Wrapper_DashboardComponent(p0) {
         this._changed = false;
         this.context = new import0.DashboardComponent(p0);
@@ -59,7 +58,6 @@ var Wrapper_DashboardComponent = (function () {
     };
     return Wrapper_DashboardComponent;
 }());
-exports.Wrapper_DashboardComponent = Wrapper_DashboardComponent;
 var renderType_DashboardComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_DashboardComponent_Host0 = (function (_super) {
     __extends(View_DashboardComponent_Host0, _super);
@@ -96,7 +94,7 @@ var View_DashboardComponent_Host0 = (function (_super) {
     };
     return View_DashboardComponent_Host0;
 }(import1.AppView));
-exports.DashboardComponentNgFactory = new import8.ComponentFactory('ng-component', View_DashboardComponent_Host0, import0.DashboardComponent);
+export var DashboardComponentNgFactory = new import8.ComponentFactory('ng-component', View_DashboardComponent_Host0, import0.DashboardComponent);
 var styles_DashboardComponent = [];
 var View_DashboardComponent1 = (function (_super) {
     __extends(View_DashboardComponent1, _super);
@@ -310,7 +308,7 @@ var View_DashboardComponent1 = (function (_super) {
     return View_DashboardComponent1;
 }(import1.AppView));
 var renderType_DashboardComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_DashboardComponent, {});
-var View_DashboardComponent0 = (function (_super) {
+export var View_DashboardComponent0 = (function (_super) {
     __extends(View_DashboardComponent0, _super);
     function View_DashboardComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_DashboardComponent0, renderType_DashboardComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -354,5 +352,4 @@ var View_DashboardComponent0 = (function (_super) {
     };
     return View_DashboardComponent0;
 }(import1.AppView));
-exports.View_DashboardComponent0 = View_DashboardComponent0;
 //# sourceMappingURL=dashboard.component.ngfactory.js.map

@@ -4,28 +4,27 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/navigation.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/authentication.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('@angular/router/src/router');
-var import11 = require('../../node_modules/@angular/router/src/directives/router_link.ngfactory');
-var import12 = require('@angular/core/src/change_detection/change_detection_util');
-var import13 = require('@angular/router/src/router_state');
-var import14 = require('@angular/common/src/location/location_strategy');
-var import15 = require('@angular/router/src/directives/router_link');
-var Wrapper_NavigationComponent = (function () {
+import * as import0 from '../../../app/components/navigation.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/authentication.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '@angular/router/src/router';
+import * as import11 from '../../node_modules/@angular/router/src/directives/router_link.ngfactory';
+import * as import12 from '@angular/core/src/change_detection/change_detection_util';
+import * as import13 from '@angular/router/src/router_state';
+import * as import14 from '@angular/common/src/location/location_strategy';
+import * as import15 from '@angular/router/src/directives/router_link';
+export var Wrapper_NavigationComponent = (function () {
     function Wrapper_NavigationComponent(p0, p1) {
         this._changed = false;
         this.context = new import0.NavigationComponent(p0, p1);
@@ -55,7 +54,6 @@ var Wrapper_NavigationComponent = (function () {
     };
     return Wrapper_NavigationComponent;
 }());
-exports.Wrapper_NavigationComponent = Wrapper_NavigationComponent;
 var renderType_NavigationComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_NavigationComponent_Host0 = (function (_super) {
     __extends(View_NavigationComponent_Host0, _super);
@@ -92,10 +90,10 @@ var View_NavigationComponent_Host0 = (function (_super) {
     };
     return View_NavigationComponent_Host0;
 }(import1.AppView));
-exports.NavigationComponentNgFactory = new import8.ComponentFactory('app-navigation', View_NavigationComponent_Host0, import0.NavigationComponent);
+export var NavigationComponentNgFactory = new import8.ComponentFactory('app-navigation', View_NavigationComponent_Host0, import0.NavigationComponent);
 var styles_NavigationComponent = [];
 var renderType_NavigationComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_NavigationComponent, {});
-var View_NavigationComponent0 = (function (_super) {
+export var View_NavigationComponent0 = (function (_super) {
     __extends(View_NavigationComponent0, _super);
     function View_NavigationComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_NavigationComponent0, renderType_NavigationComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -234,5 +232,4 @@ var View_NavigationComponent0 = (function (_super) {
     };
     return View_NavigationComponent0;
 }(import1.AppView));
-exports.View_NavigationComponent0 = View_NavigationComponent0;
 //# sourceMappingURL=navigation.component.ngfactory.js.map

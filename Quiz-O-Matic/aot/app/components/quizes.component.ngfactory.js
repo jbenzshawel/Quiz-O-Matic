@@ -4,34 +4,33 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/quizes.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/authentication.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('../../../app/components/navigation.component');
-var import11 = require('./navigation.component.ngfactory');
-var import12 = require('@angular/core/src/linker/view_container');
-var import13 = require('../../node_modules/@angular/router/src/directives/router_outlet.ngfactory');
-var import14 = require('@angular/core/src/change_detection/change_detection_util');
-var import15 = require('@angular/router/src/router');
-var import16 = require('@angular/router/src/router_outlet_map');
-var import17 = require('@angular/core/src/linker/component_factory_resolver');
-var import18 = require('@angular/router/src/directives/router_outlet');
-var import19 = require('../../node_modules/@angular/common/src/directives/ng_if.ngfactory');
-var import20 = require('@angular/core/src/linker/template_ref');
-var import21 = require('@angular/common/src/directives/ng_if');
-var Wrapper_QuizesComponent = (function () {
+import * as import0 from '../../../app/components/quizes.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/authentication.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '../../../app/components/navigation.component';
+import * as import11 from './navigation.component.ngfactory';
+import * as import12 from '@angular/core/src/linker/view_container';
+import * as import13 from '../../node_modules/@angular/router/src/directives/router_outlet.ngfactory';
+import * as import14 from '@angular/core/src/change_detection/change_detection_util';
+import * as import15 from '@angular/router/src/router';
+import * as import16 from '@angular/router/src/router_outlet_map';
+import * as import17 from '@angular/core/src/linker/component_factory_resolver';
+import * as import18 from '@angular/router/src/directives/router_outlet';
+import * as import19 from '../../node_modules/@angular/common/src/directives/ng_if.ngfactory';
+import * as import20 from '@angular/core/src/linker/template_ref';
+import * as import21 from '@angular/common/src/directives/ng_if';
+export var Wrapper_QuizesComponent = (function () {
     function Wrapper_QuizesComponent(p0) {
         this._changed = false;
         this.context = new import0.QuizesComponent(p0);
@@ -56,7 +55,6 @@ var Wrapper_QuizesComponent = (function () {
     };
     return Wrapper_QuizesComponent;
 }());
-exports.Wrapper_QuizesComponent = Wrapper_QuizesComponent;
 var renderType_QuizesComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_QuizesComponent_Host0 = (function (_super) {
     __extends(View_QuizesComponent_Host0, _super);
@@ -93,7 +91,7 @@ var View_QuizesComponent_Host0 = (function (_super) {
     };
     return View_QuizesComponent_Host0;
 }(import1.AppView));
-exports.QuizesComponentNgFactory = new import8.ComponentFactory('ng-component', View_QuizesComponent_Host0, import0.QuizesComponent);
+export var QuizesComponentNgFactory = new import8.ComponentFactory('ng-component', View_QuizesComponent_Host0, import0.QuizesComponent);
 var styles_QuizesComponent = [];
 var View_QuizesComponent1 = (function (_super) {
     __extends(View_QuizesComponent1, _super);
@@ -194,7 +192,7 @@ var View_QuizesComponent1 = (function (_super) {
     return View_QuizesComponent1;
 }(import1.AppView));
 var renderType_QuizesComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_QuizesComponent, {});
-var View_QuizesComponent0 = (function (_super) {
+export var View_QuizesComponent0 = (function (_super) {
     __extends(View_QuizesComponent0, _super);
     function View_QuizesComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_QuizesComponent0, renderType_QuizesComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -238,5 +236,4 @@ var View_QuizesComponent0 = (function (_super) {
     };
     return View_QuizesComponent0;
 }(import1.AppView));
-exports.View_QuizesComponent0 = View_QuizesComponent0;
 //# sourceMappingURL=quizes.component.ngfactory.js.map

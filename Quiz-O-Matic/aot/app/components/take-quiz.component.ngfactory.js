@@ -4,51 +4,50 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/take-quiz.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/data.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('@angular/router/src/router_state');
-var import11 = require('../../node_modules/@angular/router/src/directives/router_link.ngfactory');
-var import12 = require('@angular/core/src/linker/view_container');
-var import13 = require('@angular/core/src/change_detection/change_detection_util');
-var import14 = require('@angular/router/src/router');
-var import15 = require('@angular/common/src/location/location_strategy');
-var import16 = require('@angular/router/src/directives/router_link');
-var import17 = require('../../node_modules/@angular/common/src/directives/ng_for.ngfactory');
-var import18 = require('@angular/core/src/linker/template_ref');
-var import19 = require('@angular/core/src/change_detection/differs/iterable_differs');
-var import20 = require('@angular/common/src/directives/ng_for');
-var import21 = require('../../node_modules/@angular/forms/src/directives/default_value_accessor.ngfactory');
-var import22 = require('../../node_modules/@angular/forms/src/directives/radio_control_value_accessor.ngfactory');
-var import23 = require('../../node_modules/@angular/forms/src/directives/ng_model.ngfactory');
-var import24 = require('../../node_modules/@angular/forms/src/directives/ng_control_status.ngfactory');
-var import25 = require('@angular/core/src/linker/element_ref');
-var import26 = require('@angular/forms/src/directives/radio_control_value_accessor');
-var import27 = require('@angular/forms/src/directives/default_value_accessor');
-var import28 = require('@angular/forms/src/directives/control_value_accessor');
-var import29 = require('@angular/forms/src/directives/ng_model');
-var import30 = require('@angular/forms/src/directives/ng_control');
-var import31 = require('@angular/forms/src/directives/ng_control_status');
-var import32 = require('../../node_modules/@angular/forms/src/directives/ng_form.ngfactory');
-var import33 = require('@angular/material/button/button');
-var import34 = require('../../node_modules/@angular/material/button/button.ngfactory');
-var import35 = require('@angular/forms/src/directives/ng_form');
-var import36 = require('@angular/forms/src/directives/control_container');
-var import37 = require('../../node_modules/@angular/common/src/directives/ng_if.ngfactory');
-var import38 = require('@angular/common/src/directives/ng_if');
-var Wrapper_TakeQuizComponent = (function () {
+import * as import0 from '../../../app/components/take-quiz.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/data.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '@angular/router/src/router_state';
+import * as import11 from '../../node_modules/@angular/router/src/directives/router_link.ngfactory';
+import * as import12 from '@angular/core/src/linker/view_container';
+import * as import13 from '@angular/core/src/change_detection/change_detection_util';
+import * as import14 from '@angular/router/src/router';
+import * as import15 from '@angular/common/src/location/location_strategy';
+import * as import16 from '@angular/router/src/directives/router_link';
+import * as import17 from '../../node_modules/@angular/common/src/directives/ng_for.ngfactory';
+import * as import18 from '@angular/core/src/linker/template_ref';
+import * as import19 from '@angular/core/src/change_detection/differs/iterable_differs';
+import * as import20 from '@angular/common/src/directives/ng_for';
+import * as import21 from '../../node_modules/@angular/forms/src/directives/default_value_accessor.ngfactory';
+import * as import22 from '../../node_modules/@angular/forms/src/directives/radio_control_value_accessor.ngfactory';
+import * as import23 from '../../node_modules/@angular/forms/src/directives/ng_model.ngfactory';
+import * as import24 from '../../node_modules/@angular/forms/src/directives/ng_control_status.ngfactory';
+import * as import25 from '@angular/core/src/linker/element_ref';
+import * as import26 from '@angular/forms/src/directives/radio_control_value_accessor';
+import * as import27 from '@angular/forms/src/directives/default_value_accessor';
+import * as import28 from '@angular/forms/src/directives/control_value_accessor';
+import * as import29 from '@angular/forms/src/directives/ng_model';
+import * as import30 from '@angular/forms/src/directives/ng_control';
+import * as import31 from '@angular/forms/src/directives/ng_control_status';
+import * as import32 from '../../node_modules/@angular/forms/src/directives/ng_form.ngfactory';
+import * as import33 from '@angular/material/button/button';
+import * as import34 from '../../node_modules/@angular/material/button/button.ngfactory';
+import * as import35 from '@angular/forms/src/directives/ng_form';
+import * as import36 from '@angular/forms/src/directives/control_container';
+import * as import37 from '../../node_modules/@angular/common/src/directives/ng_if.ngfactory';
+import * as import38 from '@angular/common/src/directives/ng_if';
+export var Wrapper_TakeQuizComponent = (function () {
     function Wrapper_TakeQuizComponent(p0, p1) {
         this._changed = false;
         this.context = new import0.TakeQuizComponent(p0, p1);
@@ -79,7 +78,6 @@ var Wrapper_TakeQuizComponent = (function () {
     };
     return Wrapper_TakeQuizComponent;
 }());
-exports.Wrapper_TakeQuizComponent = Wrapper_TakeQuizComponent;
 var renderType_TakeQuizComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_TakeQuizComponent_Host0 = (function (_super) {
     __extends(View_TakeQuizComponent_Host0, _super);
@@ -117,7 +115,7 @@ var View_TakeQuizComponent_Host0 = (function (_super) {
     };
     return View_TakeQuizComponent_Host0;
 }(import1.AppView));
-exports.TakeQuizComponentNgFactory = new import8.ComponentFactory('ng-component', View_TakeQuizComponent_Host0, import0.TakeQuizComponent);
+export var TakeQuizComponentNgFactory = new import8.ComponentFactory('ng-component', View_TakeQuizComponent_Host0, import0.TakeQuizComponent);
 var styles_TakeQuizComponent = [];
 var View_TakeQuizComponent2 = (function (_super) {
     __extends(View_TakeQuizComponent2, _super);
@@ -871,7 +869,7 @@ var View_TakeQuizComponent3 = (function (_super) {
     return View_TakeQuizComponent3;
 }(import1.AppView));
 var renderType_TakeQuizComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_TakeQuizComponent, {});
-var View_TakeQuizComponent0 = (function (_super) {
+export var View_TakeQuizComponent0 = (function (_super) {
     __extends(View_TakeQuizComponent0, _super);
     function View_TakeQuizComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_TakeQuizComponent0, renderType_TakeQuizComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -946,5 +944,4 @@ var View_TakeQuizComponent0 = (function (_super) {
     };
     return View_TakeQuizComponent0;
 }(import1.AppView));
-exports.View_TakeQuizComponent0 = View_TakeQuizComponent0;
 //# sourceMappingURL=take-quiz.component.ngfactory.js.map

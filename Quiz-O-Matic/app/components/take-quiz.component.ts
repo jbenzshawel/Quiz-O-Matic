@@ -71,7 +71,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this.currentAnswers = null;
       this.currentQuiz = null;
       this.activeOption = {};      
-      $(".activeOption").removeClass("activeOption");            
+      $(".activeOption").removeClass("activeOption");         
    }
 
    // toggles take-quiz view depending on id property / url param
@@ -86,6 +86,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
            this.showResult = false;         
            this.hideForm = false;
        }
+       $(".activeOption").removeClass("activeOption");                     
    }
 
    public onResponse(event: Event): void {

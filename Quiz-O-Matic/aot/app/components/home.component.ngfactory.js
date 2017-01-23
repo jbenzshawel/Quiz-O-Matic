@@ -4,40 +4,39 @@
  * @suppress {suspiciousCode,uselessCode,missingProperties}
  */
 /* tslint:disable */
-"use strict";
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-var import0 = require('../../../app/components/home.component');
-var import1 = require('@angular/core/src/linker/view');
-var import3 = require('@angular/core/src/linker/view_utils');
-var import4 = require('@angular/core/src/metadata/view');
-var import5 = require('../../../app/services/authentication.service');
-var import6 = require('@angular/core/src/linker/view_type');
-var import7 = require('@angular/core/src/change_detection/constants');
-var import8 = require('@angular/core/src/linker/component_factory');
-var import9 = require('@angular/http/src/http');
-var import10 = require('@angular/router/src/router');
-var import11 = require('@angular/material/button/button');
-var import12 = require('../../node_modules/@angular/material/button/button.ngfactory');
-var import13 = require('../../node_modules/@angular/router/src/directives/router_link.ngfactory');
-var import14 = require('../../../app/components/login-register-form.component');
-var import15 = require('./login-register-form.component.ngfactory');
-var import16 = require('@angular/core/src/linker/view_container');
-var import17 = require('@angular/core/src/linker/element_ref');
-var import18 = require('@angular/router/src/router_state');
-var import19 = require('@angular/router/src/directives/router_link');
-var import20 = require('@angular/core/src/linker/query_list');
-var import21 = require('../../node_modules/@angular/common/src/directives/ng_if.ngfactory');
-var import22 = require('../../node_modules/@angular/router/src/directives/router_outlet.ngfactory');
-var import23 = require('@angular/core/src/linker/template_ref');
-var import24 = require('@angular/router/src/router_outlet_map');
-var import25 = require('@angular/core/src/linker/component_factory_resolver');
-var import26 = require('@angular/common/src/directives/ng_if');
-var import27 = require('@angular/router/src/directives/router_outlet');
-var Wrapper_HomeComponent = (function () {
+import * as import0 from '../../../app/components/home.component';
+import * as import1 from '@angular/core/src/linker/view';
+import * as import3 from '@angular/core/src/linker/view_utils';
+import * as import4 from '@angular/core/src/metadata/view';
+import * as import5 from '../../../app/services/authentication.service';
+import * as import6 from '@angular/core/src/linker/view_type';
+import * as import7 from '@angular/core/src/change_detection/constants';
+import * as import8 from '@angular/core/src/linker/component_factory';
+import * as import9 from '@angular/http/src/http';
+import * as import10 from '@angular/router/src/router';
+import * as import11 from '@angular/material/button/button';
+import * as import12 from '../../node_modules/@angular/material/button/button.ngfactory';
+import * as import13 from '../../node_modules/@angular/router/src/directives/router_link.ngfactory';
+import * as import14 from '../../../app/components/login-register-form.component';
+import * as import15 from './login-register-form.component.ngfactory';
+import * as import16 from '@angular/core/src/linker/view_container';
+import * as import17 from '@angular/core/src/linker/element_ref';
+import * as import18 from '@angular/router/src/router_state';
+import * as import19 from '@angular/router/src/directives/router_link';
+import * as import20 from '@angular/core/src/linker/query_list';
+import * as import21 from '../../node_modules/@angular/common/src/directives/ng_if.ngfactory';
+import * as import22 from '../../node_modules/@angular/router/src/directives/router_outlet.ngfactory';
+import * as import23 from '@angular/core/src/linker/template_ref';
+import * as import24 from '@angular/router/src/router_outlet_map';
+import * as import25 from '@angular/core/src/linker/component_factory_resolver';
+import * as import26 from '@angular/common/src/directives/ng_if';
+import * as import27 from '@angular/router/src/directives/router_outlet';
+export var Wrapper_HomeComponent = (function () {
     function Wrapper_HomeComponent(p0, p1, p2) {
         this._changed = false;
         this.context = new import0.HomeComponent(p0, p1, p2);
@@ -62,7 +61,6 @@ var Wrapper_HomeComponent = (function () {
     };
     return Wrapper_HomeComponent;
 }());
-exports.Wrapper_HomeComponent = Wrapper_HomeComponent;
 var renderType_HomeComponent_Host = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, [], {});
 var View_HomeComponent_Host0 = (function (_super) {
     __extends(View_HomeComponent_Host0, _super);
@@ -99,7 +97,7 @@ var View_HomeComponent_Host0 = (function (_super) {
     };
     return View_HomeComponent_Host0;
 }(import1.AppView));
-exports.HomeComponentNgFactory = new import8.ComponentFactory('quiz-o-matic', View_HomeComponent_Host0, import0.HomeComponent);
+export var HomeComponentNgFactory = new import8.ComponentFactory('quiz-o-matic', View_HomeComponent_Host0, import0.HomeComponent);
 var styles_HomeComponent = [];
 var View_HomeComponent1 = (function (_super) {
     __extends(View_HomeComponent1, _super);
@@ -259,7 +257,7 @@ var View_HomeComponent1 = (function (_super) {
     return View_HomeComponent1;
 }(import1.AppView));
 var renderType_HomeComponent = import3.createRenderComponentType('', 0, import4.ViewEncapsulation.None, styles_HomeComponent, {});
-var View_HomeComponent0 = (function (_super) {
+export var View_HomeComponent0 = (function (_super) {
     __extends(View_HomeComponent0, _super);
     function View_HomeComponent0(viewUtils, parentView, parentIndex, parentElement) {
         _super.call(this, View_HomeComponent0, renderType_HomeComponent, import6.ViewType.COMPONENT, viewUtils, parentView, parentIndex, parentElement, import7.ChangeDetectorStatus.CheckAlways);
@@ -321,5 +319,4 @@ var View_HomeComponent0 = (function (_super) {
     };
     return View_HomeComponent0;
 }(import1.AppView));
-exports.View_HomeComponent0 = View_HomeComponent0;
 //# sourceMappingURL=home.component.ngfactory.js.map
