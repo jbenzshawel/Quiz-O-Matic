@@ -18,14 +18,14 @@
 	"identifier": "C",
 	"attributes": null,
 	"questionId": 11,
-	"image": "/img/quizes-static/static_quiz1_q3_a.jpg"	
+	"image": "/img/quizes-static/static_quiz1_q1_a3.jpg"	
 }, {
 	"id": 16,
 	"content": "Mostly ate pizza and took naps",
 	"identifier": "D",
 	"attributes": null,
 	"questionId": 11,
-	"image": "//placehold.it/400x200"		
+	"image": "//placehold.it/400x250"		
 }, {
 	"id": 17,
 	"content": "Draw on past experiences that have helped me learn to work in teams",
@@ -53,7 +53,7 @@
 	"identifier": "D",
 	"attributes": null,
 	"questionId": 12,
-	"image": "//placehold.it/400x200"	
+	"image": "//placehold.it/400x250"	
 }, {
 	"id": 21,
 	"content": "Research it and determine the best way to get involved",
@@ -81,7 +81,7 @@
 	"identifier": "D",
 	"attributes": null,
 	"questionId": 13,
-	"image": "//placehold.it/400x200"	
+	"image": "//placehold.it/400x250"	
 }, {
 	"id": 25,
 	"content": "Apply the knowledge and skills I have from past experiences",
@@ -110,7 +110,7 @@
 	"identifier": "D",
 	"attributes": null,
 	"questionId": 14,
-	"image": "//placehold.it/400x200"	
+	"image": "//placehold.it/400x250"	
 }, {
 	"id": 29,
 	"content": "Draw on past experiences that have helped develop my communications skills",
@@ -138,5 +138,5 @@
 	"identifier": "D",
 	"attributes": null,
 	"questionId": 15,
-	"image": "/img/quizes-static/static_quiz1_q4_a1.jpg"	
+	"image": "//placehold.it/400x250"	
 }]

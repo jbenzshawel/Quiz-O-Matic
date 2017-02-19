@@ -1,7 +1,7 @@
 // @angular
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map'
 // models
 import { Quiz } from './../models/quiz.model';
@@ -11,20 +11,15 @@ import { Default } from './../classes/default';
 // data service interface 
 import { IDataService } from './../interfaces/i-data-service';
 
-// import static files 
-var quiz1: Quiz                = require('/static/static-quiz1.json');
-var quiz1Questions: Question[] = require('/static/static-quiz1-questions.json');
-var quiz1Answers: Answer[]     = require('/static/static-quiz1-answers.json');
-var quiz1Score: Answer[]       = require('/static/static-quiz1-score.json');
-
 @Injectable()
 export class DataServiceStatic implements IDataService {
 
+   
     private _default: Default;
 
     private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
-    private _baseUrl: string = "//localhost:5000/api";
+    private _baseUrl: string = "/app/static/";
 
     constructor(private http: Http) {
         this._default = new Default();
@@ -36,26 +31,104 @@ export class DataServiceStatic implements IDataService {
     // ToDo: add pagination 
     // gets a list of quizes from the database
     public getQuizes():Observable<Quiz[]> {
-        let quizList: Quiz[] = [ quiz1 ];
-        
-        return Observable.of(quizList).map(q => q);
+        let quizList: Quiz[] = [];
+        let apiEndpoint: string = this._baseUrl.concat("static-quiz1.json");
+
+        return this.http.get(apiEndpoint)
+        .map((response: Response) => {
+            let data = response.json();
+            if (data != null && typeof (data) === "object" && data.length > 0) {
+                data.forEach((quiz: any) => {
+                    quizList.push(new Quiz (quiz.id, quiz.name, quiz.description, this._getAttribute(quiz.attributes),
+                        quiz.type, quiz.typeId, quiz.Date, quiz.Updated));
+                });
+            }
+
+            return quizList;
+        });
     }
 
     public getQuiz(quizId: string): Observable<Quiz> {
-        let quiz: Quiz = quiz1;
-        
-        return Observable.of(quiz).map(quiz => quiz);
+        let quiz: Quiz = null;
+        let apiEndpoint: string = null
+
+        if (this._default.isGuid(quizId)) {
+            apiEndpoint = this._baseUrl.concat("static-quiz1.json");
+
+            return this.http.get(apiEndpoint)
+                .map((response: Response) => {
+                    let data = response.json()[0];
+                    if (data != null) {
+                        quiz = new Quiz (data.id, data.name, data.description, this._getAttribute(data.attributes),
+                            data.type, data.typeId, data.Date, data.Updated);
+                    }
+
+                    return quiz;
+                });
+        }
     }
 
     public getQuestions(quizId: string): Observable<Question[]> {
+        let questionList: Question[] = [];
+        let apiEndpoint: string = null;
+
+        if (this._default.isGuid(quizId)) {
+            apiEndpoint = this._baseUrl.concat("static-quiz1-questions.json");
+
+            return this.http.get(apiEndpoint)
+                .map((response: Response) => {
+                    let data = response.json();
+                    if (data != null)
+                        data.forEach((question: Question) => {
+                            questionList.push(new Question(question.id, question.title, question.attributes, question.quizId))
+                        })
+
+                    return questionList;
+                });
+        }
         
-        return Observable.of(quiz1Questions).map(questions => questions);
+        return null;
     }
 
     public getAnswers(quizId: string,  includeActive: boolean = false): Observable<Answer[]> {
-        if (includeActive) {
-            return Observable.of(quiz1Score).map(score => score);
+        let questionAnswer: Answer[] =  [];
+        let apiEndpoint: string = null;
+
+        if (this._default.isGuid(quizId)) {
+            apiEndpoint = this._baseUrl.concat("static-quiz1-answers.json");
+
+            // to obfruscate only add attribute flag if we need it 
+            if (includeActive) {
+                apiEndpoint = this._baseUrl.concat("static-quiz1-score.json");
+            }
+
+            return this.http.get(apiEndpoint)
+                .map((response: Response) => {
+                    let data: Answer[] = response.json();
+                    
+                    if (data != null) {
+                        data.forEach(answer => {
+                            questionAnswer.push(answer)
+                        });
+                    }
+
+                    return questionAnswer;
+                });
         }
-        return Observable.of(quiz1Answers).map(ans => ans);
+
+        return null;
+    }
+
+    private _getAttribute(attString:string): Object {
+        let attObj: Object = null
+        if (attString == null || attString == undefined) {
+            return attObj;
+        }
+        try {
+            attObj = attString.length > 0 ? JSON.parse(attString) : null;
+        } catch (e) {
+            console.log(e);
+        }
+        return attObj;
     }
 }

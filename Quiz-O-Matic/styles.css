@@ -3,6 +3,8 @@
  * Author: Addison B. 
  */ 
 
+#__bs_notify__  { display:none !important }
+
  /* fonts */
  p, a, strong, ul, li, ol, div, label {
    font-family: 'Roboto', sans-serif;
@@ -221,6 +223,11 @@ nav {
 .activeOption {
   border: 1px solid rgb(16,108,200);
   border-radius: 15px;
+}
+
+.question-row img {
+  max-width: 400px;
+  /*max-height: 300px;*/
 }
 
 .results img {

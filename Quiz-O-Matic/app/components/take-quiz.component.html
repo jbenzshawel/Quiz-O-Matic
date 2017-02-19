@@ -33,7 +33,7 @@
                                     [class.activeOption]="activeOption[question.id] == answer.identifier" 
                                             (click)="activeOption[question.id] = answer.identifier">
                                     <label>
-                                        <img src="//placehold.it/400x200" alt="{{ answer.identifier }}" />                                                                            
+                                        <img src="{{ answer.image }}" alt="{{ answer.identifier }}" />                                                                            
                                         <input type="radio" 
                                                name="response_{{ question.id }}" 
                                                value="{{ answer.identifier }}"                                         

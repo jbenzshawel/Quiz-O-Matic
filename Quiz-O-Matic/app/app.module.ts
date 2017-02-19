@@ -1,24 +1,27 @@
 // @angular
-import { NgModule }              from '@angular/core';
-import { BrowserModule }         from '@angular/platform-browser';
-import { FormsModule }           from '@angular/forms';
-import { HttpModule }            from '@angular/http';
-import { MaterialModule } from '@angular/material';
-import { RouterModule, Routes } from '@angular/router';
+import { NgModule }                     from '@angular/core';
+import { BrowserModule }                from '@angular/platform-browser';
+import { FormsModule }                  from '@angular/forms';
+import { HttpModule }                   from '@angular/http';
+import { MaterialModule }               from '@angular/material';
+import { RouterModule, Routes }         from '@angular/router';
 // components
-import { AppComponent }          from './app.component';
-import { HomeComponent }         from './components/home.component';
-import { LoginRegisterFormComponent }    from './components/login-register-form.component';
-import { DashboardComponent } from './components/dashboard.component';
-import { NavigationComponent } from './components/navigation.component';
-import { QuizesComponent } from './components/quizes.component';
-import { TakeQuizComponent } from './components/take-quiz.component';
+import { AppComponent }                 from './app.component';
+import { HomeComponent }                from './components/home.component';
+import { LoginRegisterFormComponent }   from './components/login-register-form.component';
+import { DashboardComponent }           from './components/dashboard.component';
+import { NavigationComponent }          from './components/navigation.component';
+import { QuizesComponent }              from './components/quizes.component';
+import { TakeQuizComponent }            from './components/take-quiz.component';
 // services 
-import { AuthenticationService } from './services/authentication.service'; 
-import { DataService } from './services/data.service'; 
+import { AuthenticationService }        from './services/authentication.service'; 
+import { DataService }                  from './services/data.service'; 
+import { DataServiceStatic }            from './services/data.service.static';
 // guards and modules
-import { AuthGuard }             from './app.authguard';
-import { AppRoutingModule } from './app-routing.module';
+import { AuthGuard }                    from './app.authguard';
+import { AppRoutingModule }             from './app-routing.module';
+// interfaces
+import { IDataService }                 from './interfaces/i-data-service';
 
 import 'hammerjs';
 
@@ -42,7 +45,7 @@ import 'hammerjs';
     providers: [
         AuthGuard,
         AuthenticationService,
-        DataService
+        DataServiceStatic
     ],
     bootstrap: [AppComponent]
 })

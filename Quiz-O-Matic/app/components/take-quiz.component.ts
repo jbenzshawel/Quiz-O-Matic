@@ -6,7 +6,7 @@ import { Quiz } from './../models/quiz.model';
 import { Question } from './../models/question.model';
 import { Answer, QuestionAnswer } from './../models/answer.model'
 // services and helpers
-import { DataService } from './../services/data.service';
+import { DataServiceStatic } from './../services/data.service.static';
 import { Default } from './../classes/default';
 import { QuizEngine } from './../classes/quiz.engine';
 
@@ -17,7 +17,7 @@ declare var window: any;
 @Component({
   moduleId: module.id,
    providers: [
-    DataService
+    DataServiceStatic
   ],
   templateUrl: 'take-quiz.component.html'
 })
@@ -60,7 +60,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    private _default: Default; 
 
-   constructor(private _dataService: DataService, private _activatedRoute: ActivatedRoute) {}
+   constructor(private _dataService: DataServiceStatic, private _activatedRoute: ActivatedRoute) {}
 
    ngOnInit() {
       this.model = {
