@@ -30,8 +30,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    public validForm: boolean = false;
 
    public id: string = null;
-   // default to list view
-   public listQuizes: boolean = true;
+   
+   public listQuizes: boolean = true; // default to list view
 
    public quizList: Quiz[] = null;
 

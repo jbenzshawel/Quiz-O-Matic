@@ -9,9 +9,10 @@ import { Question } from './../models/question.model';
 import { Answer, QuestionAnswer } from './../models/answer.model';
 import { Default } from './../classes/default';
 
+import { IDataService } from './../interfaces/i-data-service';
 
 @Injectable()
-export class DataService {
+export class DataService implements IDataService {
 
     private _default: Default;
 
