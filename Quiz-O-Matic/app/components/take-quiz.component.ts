@@ -10,7 +10,9 @@ import { DataService } from './../services/data.service';
 import { Default } from './../classes/default';
 import { QuizEngine } from './../classes/quiz.engine';
 
+// declare globals for ts compiler 
 declare var $: any;
+declare var window: any;
 
 @Component({
   moduleId: module.id,
@@ -20,6 +22,9 @@ declare var $: any;
   templateUrl: 'take-quiz.component.html'
 })
 export class TakeQuizComponent implements OnInit, OnDestroy  {
+   /////////////////////////////////////////////////////////////
+   /// Public Properties
+   
    public model: any;
 
    public validForm: boolean = false;
@@ -48,6 +53,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public activeOption: any = {};
 
+   /////////////////////////////////////////////////////////////
+   /// Private Properties
+   
    private _sub: any;
 
    private _default: Default; 
@@ -74,6 +82,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       $(".activeOption").removeClass("activeOption");         
    }
 
+   /////////////////////////////////////////////////////////////
+   /// Public Methods 
+
    // toggles take-quiz view depending on id property / url param
    public toggleDisplay(): void {
        if (this.id === "list") {
@@ -86,6 +97,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
            this.showResult = false;         
            this.hideForm = false;
        }
+       this._default.clearHash();
        this.model.response = {};
        this.activeOption = {};       
        $(".activeOption").removeClass("activeOption");                     
@@ -96,14 +108,20 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    }
 
    public submitQuiz(event: Event): void {
-       event.preventDefault();
-       if (this._validateSelectOptions()) {
-          let quizEngine = new QuizEngine(this.currentQuiz, this.currentAnswers, 
-                this.currentQuestions, this.model.response);
-          this.quizResult = quizEngine.scoreTwoOption();
-          this.showResult = true;
-          this.hideForm= true;
-       }
+      event.preventDefault();
+      window.location.hash = "score";
+      if (this._validateSelectOptions()) {
+         // copy values of responses into a new obj (to pass to quiz engine)
+         let responseCopy = JSON.stringify(this.model.response);
+         this._dataService.getAnswers(this.id, true)
+            .subscribe(answers => {
+               let parsedResponse: any = JSON.parse(responseCopy);
+               let quizEngine = new QuizEngine(this.currentQuiz, answers, this.currentQuestions, parsedResponse);
+               this.quizResult = quizEngine.scoreTwoOption();
+               this.showResult = true;
+               this.hideForm= true;
+         });
+       } // end if valid select options 
    }
 
    public toggleResetForm(event: Event): void {
@@ -111,9 +129,13 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        this.toggleDisplay();
    }
 
-    // handle route parameters (either show quiz details or list quizes depending)
-    // on what is passed for :id in route take-quiz/:id
+   /////////////////////////////////////////////////////////////
+   /// Private Methods 
+   
+   // handle route parameters (either show quiz details or list quizes depending)
+   // on what is passed for :id in route take-quiz/:id
    private _handleRoute(): void {  
+     this._default.clearHash();
       this._sub = this._activatedRoute.params.subscribe(params => {
          let idParam: string = params["id"];
          this.id = idParam;         

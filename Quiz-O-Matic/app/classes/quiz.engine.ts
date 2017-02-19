@@ -18,6 +18,9 @@ export class QuizEngine {
         this.responses = responses;
     }
 
+    // ToDo: update scoreTwoOption to call api to get answer option attributes
+    // and do not return answer attributes until quiz is submitted (to prevent people
+    // from trying to fiddle / "hack" the quiz)
     public scoreTwoOption(): string {
         let result: string;
         let that = this;                 

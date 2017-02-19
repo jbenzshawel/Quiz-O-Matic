@@ -15,6 +15,7 @@ const appRoutes: Routes = [
     { path: 'app',   component: AppComponent },
     { path: 'home', component: HomeComponent },    
     { path: 'take-quiz/:id', component: TakeQuizComponent },
+    //{ path: 'take-quiz/:id/score', component: TakeQuizComponent },    
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
     { path: 'quizes', component: QuizesComponent, canActivate: [AuthGuard]},
     { path: '', redirectTo: '/home', pathMatch: 'full' },

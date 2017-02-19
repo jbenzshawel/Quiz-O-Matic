@@ -88,12 +88,17 @@ export class DataService {
         return null;
     }
 
-    public getAnswers(quizId: string): Observable<Answer[]> {
+    public getAnswers(quizId: string,  includeActive: boolean = false): Observable<Answer[]> {
         let questionAnswer: Answer[] =  [];
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/answers/list/").concat(quizId);
+
+            // to obfruscate only add attribute flag if we need it 
+            if (includeActive) {
+                apiEndpoint = apiEndpoint.concat("/true");    
+            }
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
