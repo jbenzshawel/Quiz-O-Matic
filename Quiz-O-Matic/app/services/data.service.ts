@@ -17,6 +17,8 @@ export class DataService {
 
     private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
+    private _baseUrl: string = "//localhost:5000/api";
+
     constructor(private http: Http) {
         this._default = new Default();
     }
@@ -28,7 +30,7 @@ export class DataService {
     // gets a list of quizes from the database
     public getQuizes():Observable<Quiz[]> {
         let quizList: Quiz[] = [];
-        let apiEndpoint: string = "//localhost:5000/api/quizes/list";
+        let apiEndpoint: string = this._baseUrl.concat("/quizes/list");
 
         return this.http.get(apiEndpoint)
         .map((response: Response) => {
@@ -49,7 +51,7 @@ export class DataService {
         let apiEndpoint: string = null
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = "//localhost:5000/api/quizes/" + quizId;
+            apiEndpoint = this._baseUrl.concat("/quizes/").concat(quizId);
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
@@ -69,7 +71,7 @@ export class DataService {
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = "//localhost:5000/api/questions/list/" + quizId;
+            apiEndpoint = this._baseUrl.concat("/questions/list/").concat(quizId);
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
@@ -86,12 +88,17 @@ export class DataService {
         return null;
     }
 
-    public getAnswers(quizId: string): Observable<Answer[]> {
+    public getAnswers(quizId: string,  includeActive: boolean = false): Observable<Answer[]> {
         let questionAnswer: Answer[] =  [];
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = "//localhost:5000/api/answers/list/" + quizId;
+            apiEndpoint = this._baseUrl.concat("/answers/list/").concat(quizId);
+
+            // to obfruscate only add attribute flag if we need it 
+            if (includeActive) {
+                apiEndpoint = apiEndpoint.concat("/true");    
+            }
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {

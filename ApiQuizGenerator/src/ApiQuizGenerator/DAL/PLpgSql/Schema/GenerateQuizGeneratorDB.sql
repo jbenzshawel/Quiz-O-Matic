@@ -102,7 +102,7 @@ CREATE TABLE public.answers
     content text COLLATE pg_catalog."default" NOT NULL,
     identifier text COLLATE pg_catalog."default",
     attributes text COLLATE pg_catalog."default",
-    image bytea,
+    image text COLLATE pg_catalog."default",
     CONSTRAINT "Answers_pkey" PRIMARY KEY (answer_id),
     CONSTRAINT "AnswerQuestionFK" FOREIGN KEY (question_id)
         REFERENCES public.questions (question_id) MATCH SIMPLE

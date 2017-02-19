@@ -25,7 +25,24 @@ export class Default {
             }
             return true;
     }
+
+    shallowCopy(obj:any): any{
+        let copy = Object.create(obj);
+        for (let prop of obj) {
+            if (obj.hasOwnProperty(prop)) {
+                copy[prop] = obj[prop];
+            }
+        }
+        return copy;
+    }
     
+    clearHash(): void {
+        let currentHash = window.location.hash;
+        if (typeof (currentHash) === "string" && currentHash.length > 0) {
+            window.location.hash = "";
+        }
+    }
+
     addError (selector: string, message: string) : void {
         $(selector).addClass("has-error");
         let $nextElem:any = $(selector).next();

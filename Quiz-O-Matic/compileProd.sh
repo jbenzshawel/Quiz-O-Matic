@@ -6,7 +6,7 @@ if ls main-prod.ts* 1> /dev/null 2>&1; then
     cp main-prod.ts main.ts
 fi
 
-if ls tsconfig-aot/json* 1> /dev/null 2>&1; then
+if ls tsconfig-aot.json* 1> /dev/null 2>&1; then
     cp tsconfig-aot.json tsconfig.json
 fi
 
