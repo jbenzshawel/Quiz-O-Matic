@@ -1,24 +1,25 @@
 // @angular
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
+import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map'
 // models
 import { Quiz } from './../models/quiz.model';
 import { Question } from './../models/question.model';
 import { Answer, QuestionAnswer } from './../models/answer.model';
 import { Default } from './../classes/default';
-
+// data service interface 
 import { IDataService } from './../interfaces/i-data-service';
 
 @Injectable()
-export class DataService implements IDataService {
+export class DataServiceStatic implements IDataService {
 
+   
     private _default: Default;
 
     private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
-    private _baseUrl: string = "//localhost:5000/api";
+    private _baseUrl: string = "/app/static/";
 
     constructor(private http: Http) {
         this._default = new Default();
@@ -31,7 +32,7 @@ export class DataService implements IDataService {
     // gets a list of quizes from the database
     public getQuizes():Observable<Quiz[]> {
         let quizList: Quiz[] = [];
-        let apiEndpoint: string = this._baseUrl.concat("/quizes/list");
+        let apiEndpoint: string = this._baseUrl.concat("static-quiz1.json");
 
         return this.http.get(apiEndpoint)
         .map((response: Response) => {
@@ -52,11 +53,11 @@ export class DataService implements IDataService {
         let apiEndpoint: string = null
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = this._baseUrl.concat("/quizes/").concat(quizId);
+            apiEndpoint = this._baseUrl.concat("static-quiz1.json");
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
-                    let data = response.json();
+                    let data = response.json()[0];
                     if (data != null) {
                         quiz = new Quiz (data.id, data.name, data.description, this._getAttribute(data.attributes),
                             data.type, data.typeId, data.Date, data.Updated);
@@ -72,7 +73,7 @@ export class DataService implements IDataService {
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = this._baseUrl.concat("/questions/list/").concat(quizId);
+            apiEndpoint = this._baseUrl.concat("static-quiz1-questions.json");
 
             return this.http.get(apiEndpoint)
                 .map((response: Response) => {
@@ -94,11 +95,11 @@ export class DataService implements IDataService {
         let apiEndpoint: string = null;
 
         if (this._default.isGuid(quizId)) {
-            apiEndpoint = this._baseUrl.concat("/answers/list/").concat(quizId);
+            apiEndpoint = this._baseUrl.concat("static-quiz1-answers.json");
 
             // to obfruscate only add attribute flag if we need it 
             if (includeActive) {
-                apiEndpoint = apiEndpoint.concat("/true");    
+                apiEndpoint = this._baseUrl.concat("static-quiz1-score.json");
             }
 
             return this.http.get(apiEndpoint)
