@@ -174,8 +174,15 @@ nav {
   margin-top:-10px
 }
 
+/* home */
 .home .section {
-  margin-top: 16px;
+  margin-top: 16px;  
+  margin-bottom: 12px;
+}
+
+/* Take Quiz Section */
+.list-quizes h3 {
+  margin-top: 20px
 }
 
 .list-quizes ul {
@@ -235,9 +242,9 @@ nav {
   display: block;
 }
 
-/* home */
-.home .section {
-  margin-bottom: 12px;
+/* Modals */
+#no-response-modal {
+  margin: 125px auto;
 }
 
 /* media queries */

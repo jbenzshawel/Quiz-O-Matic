@@ -1,10 +1,10 @@
 [{
 	"id": "31c1afda-9fa6-4952-ae7c-41c485cb1241",
-	"name": "Are you a \"civic professional?\"",
-	"description": "\"Civic Professionals\" are people with the skills and capacity for both career success and meaningful contributions to community needs. Take our quiz to see if you make the grade!",
+	"name": "Are you a \"civic minded professional?\"",
+	"description": "\"Civic minded professionals\" are people with the skills and capacity for both career success and meaningful contributions to community needs. Take our quiz to see if you make the grade!",
 	"typeId": 1,
 	"type": "BuzzFeed",
 	"created": "2017-01-21T20:42:29",
 	"updated": null,
-	"attributes": "{  \"pass\" : \"You’re a civic professional! Thanks to your experiences serving your community in different capacities, you have the abilities to communicate with others across difference, etc. etc. etc.. Civic professionals are valued by employers, serve as community leaders, and report higher levels of satisfaction with their lives.\", \"fail\" : \"Based on your answers, it sounds like you don’t have much community engagement experiences. That’s okay - there’s still time to change that! You can get involved in your community by volunteering, voting, and many other activities.\", \"attributeName\" : \"civicProfessional\" }"
+	"attributes": "{  \"pass\" : \"You’re a civic minded professional! Thanks to your experiences serving your community in different capacities, you have the abilities to communicate with others across difference, etc. etc. etc.. civic minded professionals are valued by employers, serve as community leaders, and report higher levels of satisfaction with their lives.\", \"fail\" : \"Based on your answers, it sounds like you don’t have much community engagement experiences. That’s okay - there’s still time to change that! You can get involved in your community by volunteering, voting, and many other activities.\", \"attributeName\" : \"civicProfessional\" }"
 }]

@@ -24,13 +24,13 @@ declare var window: any;
 export class TakeQuizComponent implements OnInit, OnDestroy  {
    /////////////////////////////////////////////////////////////
    /// Public Properties
-   
+
    public model: any;
 
    public validForm: boolean = false;
 
    public id: string = null;
-   
+
    public listQuizes: boolean = true; // default to list view
 
    public quizList: Quiz[] = null;
@@ -53,9 +53,13 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public activeOption: any = {};
 
+   public totalNumberQuestions: number;
+
+   public currentQuestionNumber: number;
+
    /////////////////////////////////////////////////////////////
    /// Private Properties
-   
+
    private _sub: any;
 
    private _default: Default; 
@@ -70,7 +74,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this._default = new Default();
       this._handleRoute();
       this.activeOption = {};
-      $(".activeOption").removeClass("activeOption");      
+      this.currentQuestionNumber = 1;
+      $(".activeOption").removeClass("activeOption");
    }
 
    ngOnDestroy() {
@@ -78,8 +83,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this.currentQuestions = null;
       this.currentAnswers = null;
       this.currentQuiz = null;
-      this.activeOption = {};      
-      $(".activeOption").removeClass("activeOption");         
+      this.activeOption = {};
+      this.model.responses = {};
+      $(".activeOption").removeClass("activeOption");
    }
 
    /////////////////////////////////////////////////////////////
@@ -94,17 +100,17 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        } else {
            this.listQuizes = false;
            this.takeQuiz = true;
-           this.showResult = false;         
+           this.showResult = false;
            this.hideForm = false;
        }
        this._default.clearHash();
        this.model.response = {};
-       this.activeOption = {};       
-       $(".activeOption").removeClass("activeOption");                     
+       this.activeOption = {}; 
+       $(".activeOption").removeClass("activeOption"); 
    }
 
    public onResponse(event: Event): void {
-       this._validateSelectOptions();       
+       this._validateSelectOptions();
    }
 
    public submitQuiz(event: Event): void {
@@ -129,6 +135,15 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        this.toggleDisplay();
    }
 
+   public showNextQuestion():void {
+       let numberResponses:number = Object.keys(this.model.response).length;
+       if (numberResponses === this.currentQuestionNumber) {
+          this.currentQuestionNumber += 1;
+           window.scrollTo(0, 0);
+       } else {
+           $("#no-response-modal").modal("show");
+       }
+   }
    /////////////////////////////////////////////////////////////
    /// Private Methods 
    
@@ -138,13 +153,13 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
      this._default.clearHash();
       this._sub = this._activatedRoute.params.subscribe(params => {
          let idParam: string = params["id"];
-         this.id = idParam;         
+         this.id = idParam;
          if (this._default.isGuid(idParam)) {
             this.model.id = this.id;
             this._getQuiz(this.id);
          } else if (idParam.toLowerCase() === "list") {
-            this._getQuizData();    
-            this._clearCurrentQuiz();                          
+            this._getQuizData();
+            this._clearCurrentQuiz();
          }
       }); // end subscribe to activatedRoute params
    }
@@ -191,8 +206,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
               that.currentQuiz = quiz;
               if (that.currentQuiz != null)
                 that._getQuestions();
-            
-             that.toggleDisplay();            
+
+             that.toggleDisplay();
           })
    }
 
@@ -208,8 +223,10 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
           this._dataService.getQuestions(quizId)
              .subscribe(questions => {
                that.currentQuestions = questions;
-               if (that.currentQuestions != null)
-                  that._getAnswers();               
+               that.totalNumberQuestions = questions.length;
+               if (that.currentQuestions != null) {
+                  that._getAnswers();
+               }
            });
        } // end if quizId != null
    }
