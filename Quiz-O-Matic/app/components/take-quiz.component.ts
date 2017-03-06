@@ -43,6 +43,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public quizResult: string = null;
 
+   public quizResultHeading: string = null;
+
    public isValidForm: boolean = false;
 
    public takeQuiz: boolean = false;
@@ -63,6 +65,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    private _sub: any;
 
    private _default: Default; 
+
+   ////////////////////////////////////////////////////////////
+   /// Constructor and ngOnInit / ngOnDestroy
 
    constructor(private _dataService: DataServiceStatic, private _activatedRoute: ActivatedRoute) {}
 
@@ -110,6 +115,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    }
 
    public onResponse(event: Event): void {
+       event.preventDefault();
        this._validateSelectOptions();
    }
 
@@ -124,8 +130,10 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                let parsedResponse: any = JSON.parse(responseCopy);
                let quizEngine = new QuizEngine(this.currentQuiz, answers, this.currentQuestions, parsedResponse);
                this.quizResult = quizEngine.scoreTwoOption();
+               this.quizResultHeading = "Results: " + this.currentQuiz.name;
                this.showResult = true;
                this.hideForm= true;
+               
          });
        } // end if valid select options 
    }
@@ -144,6 +152,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
            $("#no-response-modal").modal("show");
        }
    }
+
    /////////////////////////////////////////////////////////////
    /// Private Methods 
    
