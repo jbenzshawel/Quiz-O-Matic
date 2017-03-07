@@ -59,6 +59,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public currentQuestionNumber: number;
 
+   public resultImageSource: string = "//placehold.it/450X250";
+
    /////////////////////////////////////////////////////////////
    /// Private Properties
 
@@ -115,7 +117,6 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    }
 
    public onResponse(event: Event): void {
-       event.preventDefault();
        this._validateSelectOptions();
    }
 
@@ -130,10 +131,10 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                let parsedResponse: any = JSON.parse(responseCopy);
                let quizEngine = new QuizEngine(this.currentQuiz, answers, this.currentQuestions, parsedResponse);
                this.quizResult = quizEngine.scoreTwoOption();
+               this.resultImageSource = quizEngine.status ? this.currentQuiz.images.pass : this.currentQuiz.images.fail;
                this.quizResultHeading = "Results: " + this.currentQuiz.name;
                this.showResult = true;
                this.hideForm= true;
-               
          });
        } // end if valid select options 
    }

@@ -11,6 +11,8 @@ export class QuizEngine {
 
     public responses: any;
 
+    public status: boolean;
+
     constructor(quiz: Quiz, answers: Answer[], questions: Question[], responses: any) {
         this.quiz = quiz;
         this.answers = answers;
@@ -57,8 +59,10 @@ export class QuizEngine {
           if (passCount + failCount === responseKeys.length) {
               if (passCount > failCount) {
                   result = this.quiz.attributes.pass;
+                  this.status = true;
               } else {
                   result = this.quiz.attributes.fail;
+                  this.status = false;
               }
           }
         } // end if this.quiz != null

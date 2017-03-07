@@ -39,8 +39,8 @@ export class DataServiceStatic implements IDataService {
             let data = response.json();
             if (data != null && typeof (data) === "object" && data.length > 0) {
                 data.forEach((quiz: any) => {
-                    quizList.push(new Quiz (quiz.id, quiz.name, quiz.description, this._getAttribute(quiz.attributes),
-                        quiz.type, quiz.typeId, quiz.Date, quiz.Updated));
+                    quizList.push(new Quiz (quiz.id, quiz.name, quiz.description, this._getAttribute(quiz.attributes), 
+                        this._getAttribute(quiz.images), quiz.type, quiz.typeId, quiz.Date, quiz.Updated));
                 });
             }
 
@@ -60,7 +60,7 @@ export class DataServiceStatic implements IDataService {
                     let data = response.json()[0];
                     if (data != null) {
                         quiz = new Quiz (data.id, data.name, data.description, this._getAttribute(data.attributes),
-                            data.type, data.typeId, data.Date, data.Updated);
+                            this._getAttribute(data.images), data.type, data.typeId, data.Date, data.Updated);
                     }
 
                     return quiz;

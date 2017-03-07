@@ -61,8 +61,9 @@
             <!-- Results Section -->
             <div *ngIf="showResult && quizResult != null" class="col-xs-12 results">
                 <h2>{{ quizResultHeading }}</h2>
-                <a href="/take-quiz/{{ id }}" class="right">Take Again</a>                
-                <img src="//placehold.it/450x250" alt="result" />
+                <a href="/take-quiz/{{ id }}" class="right">Take Again</a>  
+                <br/>              
+                <img src="{{ resultImageSource }}" alt="result" />
                 <p>{{ quizResult }}</p>
                 <p>Learn more about civic professionals at XXXX.</p>
             </div> <!-- end showResults -->
