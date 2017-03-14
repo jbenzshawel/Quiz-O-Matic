@@ -61,11 +61,9 @@
             <!-- Results Section -->
             <div *ngIf="showResult && quizResult != null" class="col-xs-12 results">
                 <h2>{{ quizResultHeading }}</h2>
-                <a href="/take-quiz/{{ id }}" class="right">Take Again</a>  
-                <br/>              
+                <p>{{ quizResult }}</p>       
                 <img src="{{ resultImageSource }}" alt="result" />
-                <p>{{ quizResult }}</p>
-                <p>Learn more about civic professionals at XXXX.</p>
+                <p>Learn more about civic professionals at XXXX. <a href="/take-quiz/{{ id }}">Take Again</a>   </p>
             </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->
