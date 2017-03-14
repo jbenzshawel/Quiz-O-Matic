@@ -176,8 +176,7 @@ nav {
 
 /* home */
 .home .section {
-  margin-top: 16px;  
-  margin-bottom: 12px;
+  margin-top: 16px;
 }
 
 /* Take Quiz Section */
@@ -217,10 +216,15 @@ nav {
 .question-options img {
   margin: 10px auto;
   display: block;
+  max-width: 400px;
 }
 
 .question-options .radio {
     padding: 20px;
+}
+
+.question-options input[type="radio"] {
+    display:none;
 }
 
 .quizForm {
@@ -248,7 +252,12 @@ nav {
 }
 
 /* media queries */
+/* col-xs-12 */
 @media (max-width: 768px) {
+  .col-xs-12 {
+    padding: 0 8px;
+  }
+
   .container {
     max-width: 100%
   }
@@ -284,4 +293,24 @@ nav {
   .home h3 {
       text-align: center;
   }
+  .question-options .radio {
+    padding: 10px;
+  }
+
+  .question-options .radio label {
+    padding-left:0
+  }
+
+  .question-options input[type="radio"] {
+    display:none;
+  }
+
+  .question-options img, .results img {
+    max-width: 250px;
+  }
+
+  .question-options li {
+    margin: 0 0 10px 0;
+  }
+
 }
