@@ -8,6 +8,8 @@ export class Quiz {
 
     public attributes: any;
 
+    public images: any;
+
     public type: string;
 
     public typeId: string;
@@ -16,12 +18,13 @@ export class Quiz {
 
     public updated: Date;
 
-    constructor(id: string, name:string, description: string, attributes: any, type: string, typeId: string, created: Date, updated: Date = null)
+    constructor(id: string, name:string, description: string, attributes: any, images: any, type: string, typeId: string, created: Date, updated: Date = null)
     {
         this.id = id;
         this.name = name;
         this.description = description;
         this.attributes = attributes;
+        this.images = images;
         this.type = type;
         this.typeId = typeId;
         this.created = created;
