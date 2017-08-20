@@ -12,20 +12,21 @@
         </div><!-- end if listQuizes -->
 
         <div *ngIf="takeQuiz && currentQuiz !== null">
-            <div class="col-sm-6 col-xs-12">
-                <h2>{{ currentQuiz.name }}</h2>
+            <div class="col-sm-7 col-xs-12">
+                <h2 *ngIf="!showResult">{{ currentQuiz.name }}</h2>
             </div>
-            <div class="col-sm-6 col-xs-12">
-                <a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>
+            <div class="col-sm-5 col-xs-12">
+                <!--<a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>-->
+                <a class="right" href="/take-quiz/list">Back to Quiz List</a>                
             </div>
             <!-- Quiz Desription -->
-            <div class="col-xs-12">
+            <div class="col-xs-12" *ngIf="!showResult">
                 <p>{{ currentQuiz.description }}</p>
             </div>
             <div class="col-sm-10 col-sm-offset-1 col-xs-12" *ngIf="currentAnswers != null">
                 <!-- Quiz Form -->
                 <form (ngSubmit)="submitQuiz($event); quizForm.reset()" #quizForm="ngForm" class="quizForm" *ngIf="!hideForm">
-                    <div class="question-row" *ngFor="let question of currentQuestions">
+                    <div class="question-row" *ngFor="let question of currentQuestions; let i = index;" id="question-{{i + 1}}" [hidden]="currentQuestionNumber != (i + 1)">
                         <h3>{{ question.title }}</h3>
                         <ul class="question-options">
                             <li *ngFor="let answer of question.answers;">
@@ -33,7 +34,7 @@
                                     [class.activeOption]="activeOption[question.id] == answer.identifier" 
                                             (click)="activeOption[question.id] = answer.identifier">
                                     <label>
-                                        <img src="//placehold.it/400x200" alt="{{ answer.identifier }}" />                                                                            
+                                        <img src="{{ answer.image }}" alt="{{ answer.identifier }}" />                                                                            
                                         <input type="radio" 
                                                name="response_{{ question.id }}" 
                                                value="{{ answer.identifier }}"                                         
@@ -47,20 +48,40 @@
                         </ul>
                     </div> <!--/.question-row-->
                     <button type="submit" md-raised-button class="quizButton center" id="submitQuiz" 
-                        [disabled]="!isValidForm" >
+                        *ngIf="currentQuestionNumber === totalNumberQuestions">
                         Submit
+                    </button> 
+                     <button type="button" md-raised-button class="quizButton center" id="nextquestion" 
+                         *ngIf="currentQuestionNumber < totalNumberQuestions" (click)="showNextQuestion()">
+                        Next Question
                     </button> 
                 </form> <!-- end #quizForm -->
             </div>
 
             <!-- Results Section -->
             <div *ngIf="showResult && quizResult != null" class="col-xs-12 results">
-                <a href="#" class="right" (click)="toggleResetForm($event)">Take Again</a>
-                <h3>Results</h3>
-                <img src="//placehold.it/450x250" alt="result" />
-                <p>{{ quizResult }}</p>
-                <p>Learn more about civic professionals at XXXX.</p>
+                <h2>{{ quizResultHeading }}</h2>
+                <p>{{ quizResult }}</p>       
+                <img src="{{ resultImageSource }}" alt="result" />
+                <p>Learn more about civic professionals at XXXX. <a href="/take-quiz/{{ id }}">Take Again</a>   </p>
             </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->
 </div>
+
+<div id="no-response-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Wait a minute...</h4>
+      </div>
+      <div class="modal-body">
+        <p>Please select a response.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
