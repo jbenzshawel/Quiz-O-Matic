@@ -1,0 +1,14 @@
+<div class="row main">
+    <div class="col-xs-12">
+        <div *ngIf="quizList !== null" class="list-quizes">
+            <a class="right" [routerLink]="['/home']">Home</a>            
+            <h3>List Quizes</h3>
+            <ul>
+                <li *ngFor="let quiz of quizList">
+                    <a [routerLink]="['/take-quiz', quiz.id]">{{ quiz.name }}</a>
+                    <p>{{ quiz.description }}</p>
+                </li>
+            </ul>
+        </div><!-- end if listQuizes -->
+    </div><!--/.col-xs-12-->
+</div><!--/.row.main-->

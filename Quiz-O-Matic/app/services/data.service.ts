@@ -50,11 +50,12 @@ export class DataService implements IDataService {
     public getQuiz(quizId: string): Observable<Quiz> {
         let quiz: Quiz = null;
         let apiEndpoint: string = null
+        let options: RequestOptions = new RequestOptions({ headers : this._headers });
 
         if (this._default.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/quizes/").concat(quizId);
 
-            return this.http.get(apiEndpoint)
+            return this.http.get(apiEndpoint, options)
                 .map((response: Response) => {
                     let data = response.json();
                     if (data != null) {
@@ -70,22 +71,24 @@ export class DataService implements IDataService {
     public getQuestions(quizId: string): Observable<Question[]> {
         let questionList: Question[] = [];
         let apiEndpoint: string = null;
+        let options: RequestOptions = new RequestOptions({ headers : this._headers });
 
         if (this._default.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/questions/list/").concat(quizId);
 
-            return this.http.get(apiEndpoint)
+            return this.http.get(apiEndpoint, options)
                 .map((response: Response) => {
                     let data = response.json();
-                    if (data != null)
+                    if (data != null) {
                         data.forEach((question: Question) => {
                             questionList.push(new Question(question.id, question.title, question.attributes, question.quizId))
-                        })
+                        });
+                    }
 
                     return questionList;
                 });
         }
-        
+
         return null;
     }
 

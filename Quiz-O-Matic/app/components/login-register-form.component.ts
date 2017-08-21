@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 import { AuthenticationService } from './../services/authentication.service';
 import { Default } from './../classes/default';
@@ -133,8 +133,8 @@ export class LoginRegisterFormComponent implements OnInit {
                    }
                } else {
                    // login failed
-                   this.default.addError("#username", "Username or Password are incorrect");
-                   this.default.addError("#password", "Username or Password are incorrect");
+                   this.default.addError(this.usernameSel, "Username or Password are incorrect");
+                   this.default.addError(this.passwordSel, "Username or Password are incorrect");
                }
            });
      } // end if isValid 
@@ -212,23 +212,22 @@ export class LoginRegisterFormComponent implements OnInit {
      return isValid;
    }
  
-   
    // checks username to see if it is unique
    checkUsername(username: string): Observable<boolean> {
       let that = this;        
       let apiEndpoint: string = '//localhost:5000/api/account/UsernameExists/' + username;    
        
       return this.http.get(apiEndpoint)
-                .map((response: Response) => {
-                   let data = response.json();
-                   if (data != null && data.hasOwnProperty("usernameExists")) {
-                      if (data.usernameExists) {
-                         that.default.addError(that.regEmailSel, "Username already exists");
-                      }
-                   }
- 
-                   return data.usernameExists;
-               });
+        .map((response: Response) => {
+            let data = response.json();
+            if (data != null && data.hasOwnProperty("usernameExists")) {
+              if (data.usernameExists) {
+                  that.default.addError(that.regEmailSel, "Username already exists");
+              }
+            }
+
+            return data.usernameExists;
+        });
      } 
  
  }

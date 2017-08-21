@@ -1,7 +1,7 @@
 export class Quiz {
-
+    
     public id: string;
-
+    
     public name: string;
 
     public description: string;
@@ -31,3 +31,4 @@ export class Quiz {
         this.updated = updated;
     }
 }
+    

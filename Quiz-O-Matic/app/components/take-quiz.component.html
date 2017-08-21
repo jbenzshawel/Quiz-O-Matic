@@ -1,23 +1,11 @@
 <div class="row main">
     <div class="col-xs-12">
-        <div *ngIf="listQuizes && quizList !== null" class="list-quizes">
-            <a class="right" [routerLink]="['/home']">Home</a>            
-            <h3>List Quizes</h3>
-            <ul>
-                <li *ngFor="let quiz of quizList">
-                    <a [routerLink]="['/take-quiz', quiz.id]">{{ quiz.name }}</a>
-                    <p>{{ quiz.description }}</p>
-                </li>
-            </ul>
-        </div><!-- end if listQuizes -->
-
-        <div *ngIf="takeQuiz && currentQuiz !== null">
+        <div *ngIf="currentQuiz !== null">
             <div class="col-sm-7 col-xs-12">
                 <h2 *ngIf="!showResult">{{ currentQuiz.name }}</h2>
             </div>
             <div class="col-sm-5 col-xs-12">
-                <!--<a class="right" [routerLink]="['/take-quiz', 'list']">Back to Quiz List</a>-->
-                <a class="right" href="/take-quiz/list">Back to Quiz List</a>                
+                <a class="right" [routerLink]="['/quiz/list']">Back to Quiz List</a>
             </div>
             <!-- Quiz Desription -->
             <div class="col-xs-12" *ngIf="!showResult">
@@ -63,11 +51,10 @@
                 <h2>{{ quizResultHeading }}</h2>
                 <p>{{ quizResult }}</p>       
                 <img src="{{ resultImageSource }}" alt="result" />
-                <p>Learn more about civic professionals at XXXX. <a href="/take-quiz/{{ id }}">Take Again</a>   </p>
             </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->
-</div>
+</div><!--/.row.main-->
 
 <div id="no-response-modal" class="modal fade" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">

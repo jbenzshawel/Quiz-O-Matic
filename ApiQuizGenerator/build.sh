@@ -1,6 +1,5 @@
 set -ev
-dotnet restore
-dotnet build ./ApiQuizGenerator/src/ApiQuizGenerator/project.json
-dotnet build ./ApiQuizGenerator/test/ApiQuizGenerator.Tests/project.json
+dotnet restore ./ApiQuizGenerator/src/ApiQuizGenerator/ApiQuizGenerator.csproj
+dotnet build ./ApiQuizGenerator/src/ApiQuizGenerator/ApiQuizGenerator.csproj
 #dotnet test ./ApiQuizGenerator/test/ApiQuizGenerator.Tests/project.json
 
