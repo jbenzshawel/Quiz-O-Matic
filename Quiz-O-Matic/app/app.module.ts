@@ -1,4 +1,3 @@
-// @angular
 import { NgModule }                   from '@angular/core';
 import { BrowserModule }              from '@angular/platform-browser';
 import { FormsModule }                from '@angular/forms';
@@ -20,6 +19,7 @@ import { DataService }                from './services/data.service';
 // guards and modules
 import { AuthGuard }                  from './app.authguard';
 import { AppRoutingModule }           from './app-routing.module';
+
 
 import 'hammerjs';
 

@@ -3,6 +3,8 @@
  * Author: Addison B. 
  */ 
 
+#__bs_notify__  { display:none !important }
+
  /* fonts */
  p, a, strong, ul, li, ol, div, label {
    font-family: 'Roboto', sans-serif;
@@ -172,8 +174,14 @@ nav {
   margin-top:-10px
 }
 
+/* home */
 .home .section {
   margin-top: 16px;
+}
+
+/* Take Quiz Section */
+.list-quizes h3 {
+  margin-top: 20px
 }
 
 .list-quizes ul {
@@ -208,10 +216,15 @@ nav {
 .question-options img {
   margin: 10px auto;
   display: block;
+  max-width: 400px;
 }
 
 .question-options .radio {
     padding: 20px;
+}
+
+.question-options input[type="radio"] {
+    display:none;
 }
 
 .quizForm {
@@ -223,18 +236,28 @@ nav {
   border-radius: 15px;
 }
 
+.question-row img {
+  max-width: 400px;
+  /*max-height: 300px;*/
+}
+
 .results img {
   margin: 15px auto;
   display: block;
 }
 
-/* home */
-.home .section {
-  margin-bottom: 12px;
+/* Modals */
+#no-response-modal {
+  margin: 125px auto;
 }
 
 /* media queries */
+/* col-xs-12 */
 @media (max-width: 768px) {
+  .col-xs-12 {
+    padding: 0 8px;
+  }
+
   .container {
     max-width: 100%
   }
@@ -270,4 +293,24 @@ nav {
   .home h3 {
       text-align: center;
   }
+  .question-options .radio {
+    padding: 10px;
+  }
+
+  .question-options .radio label {
+    padding-left:0
+  }
+
+  .question-options input[type="radio"] {
+    display:none;
+  }
+
+  .question-options img, .results img {
+    max-width: 250px;
+  }
+
+  .question-options li {
+    margin: 0 0 10px 0;
+  }
+
 }
