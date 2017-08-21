@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using ApiQuizGenerator.Models;
 using ApiQuizGenerator.Models.AccountViewModels;
 using ApiQuizGenerator.Services;
 using ApiQuizGenerator.AppClasses;
-using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace ApiQuizGenerator.Controllers
 {

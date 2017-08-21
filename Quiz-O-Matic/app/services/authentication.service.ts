@@ -3,7 +3,7 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Default } from './../classes/default';
 
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 // ToDo: Refactor to use local storage instead of session storage or just be cookie based?
 // auth service modified from http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial 
@@ -18,12 +18,12 @@ export class AuthenticationService {
     public isNotAllowed: boolean;
 
     public requiresTwoFactor: boolean;
-    
+
     // key used for auth cookie
-    private _authKey: string = ".AspNetCore.Identity.Application"; 
+    private _authKey: string = ".AspNetCore.Identity.Application";
 
     // number of days until cookie expires 
-    private _cookieLength: number = 5;
+    private _cookieLength: number = 1;
 
     private _default: Default;
 
@@ -40,10 +40,10 @@ export class AuthenticationService {
     private getUserSession(): any {
         let currentUser = sessionStorage.getItem("currentUser");
         let userObject = currentUser != null ? JSON.parse(currentUser) : null;
-        
+
         return userObject;
     }
-    
+
     // submits login request and completes front end post authenticatin
     public login(username: string, password: string): Observable<boolean> {
         let options = new RequestOptions({ headers: this._headers });

@@ -1,14 +1,14 @@
 // @angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute }               from '@angular/router';
 // models
-import { Quiz } from './../models/quiz.model';
-import { Question } from './../models/question.model';
-import { Answer, QuestionAnswer } from './../models/answer.model'
+import { Quiz }                         from './../models/quiz.model';
+import { Question }                     from './../models/question.model';
+import { Answer, QuestionAnswer }       from './../models/answer.model'
 // services and helpers
-import { DataService } from './../services/data.service';
-import { Default } from './../classes/default';
-import { QuizEngine } from './../classes/quiz.engine';
+import { DataService }                  from './../services/data.service';
+import { Default }                      from './../classes/default';
+import { QuizEngine }                   from './../classes/quiz.engine';
 
 // declare globals for ts compiler 
 declare var $: any;
@@ -24,16 +24,12 @@ declare var window: any;
 export class TakeQuizComponent implements OnInit, OnDestroy  {
    /////////////////////////////////////////////////////////////
    /// Public Properties
-   
+
    public model: any;
 
    public validForm: boolean = false;
 
    public id: string = null;
-   // default to list view
-   public listQuizes: boolean = true;
-
-   public quizList: Quiz[] = null;
 
    public currentQuiz: Quiz = null;
 
@@ -42,6 +38,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    public currentAnswers: Answer[] = null;
 
    public quizResult: string = null;
+
+   public quizResultHeading: string = null;
 
    public isValidForm: boolean = false;
 
@@ -53,12 +51,21 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public activeOption: any = {};
 
+   public totalNumberQuestions: number;
+
+   public currentQuestionNumber: number;
+
+   public resultImageSource: string = "//placehold.it/450X250";
+
    /////////////////////////////////////////////////////////////
    /// Private Properties
-   
+
    private _sub: any;
 
    private _default: Default; 
+
+   ////////////////////////////////////////////////////////////
+   /// Constructor and ngOnInit / ngOnDestroy
 
    constructor(private _dataService: DataService, private _activatedRoute: ActivatedRoute) {}
 
@@ -70,7 +77,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this._default = new Default();
       this._handleRoute();
       this.activeOption = {};
-      $(".activeOption").removeClass("activeOption");      
+      this.currentQuestionNumber = 1;
+      $(".activeOption").removeClass("activeOption");
    }
 
    ngOnDestroy() {
@@ -78,8 +86,9 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
       this.currentQuestions = null;
       this.currentAnswers = null;
       this.currentQuiz = null;
-      this.activeOption = {};      
-      $(".activeOption").removeClass("activeOption");         
+      this.activeOption = {};
+      this.model.responses = {};
+      $(".activeOption").removeClass("activeOption");
    }
 
    /////////////////////////////////////////////////////////////
@@ -87,24 +96,15 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    // toggles take-quiz view depending on id property / url param
    public toggleDisplay(): void {
-       if (this.id === "list") {
-           this.listQuizes = true;
-           this.takeQuiz = false;
-           this.showResult = false;
-       } else {
-           this.listQuizes = false;
-           this.takeQuiz = true;
-           this.showResult = false;         
-           this.hideForm = false;
-       }
+       this.showResult = false;
        this._default.clearHash();
        this.model.response = {};
-       this.activeOption = {};       
-       $(".activeOption").removeClass("activeOption");                     
+       this.activeOption = {}; 
+       $(".activeOption").removeClass("activeOption"); 
    }
 
    public onResponse(event: Event): void {
-       this._validateSelectOptions();       
+       this._validateSelectOptions();
    }
 
    public submitQuiz(event: Event): void {
@@ -118,6 +118,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                let parsedResponse: any = JSON.parse(responseCopy);
                let quizEngine = new QuizEngine(this.currentQuiz, answers, this.currentQuestions, parsedResponse);
                this.quizResult = quizEngine.scoreTwoOption();
+               this.resultImageSource = quizEngine.status ? this.currentQuiz.images.pass : this.currentQuiz.images.fail;
+               this.quizResultHeading = "Results: " + this.currentQuiz.name;
                this.showResult = true;
                this.hideForm= true;
          });
@@ -129,6 +131,16 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        this.toggleDisplay();
    }
 
+   public showNextQuestion():void {
+       let numberResponses:number = Object.keys(this.model.response).length;
+       if (numberResponses === this.currentQuestionNumber) {
+          this.currentQuestionNumber += 1;
+           window.scrollTo(0, 0);
+       } else {
+           $("#no-response-modal").modal("show");
+       }
+   }
+
    /////////////////////////////////////////////////////////////
    /// Private Methods 
    
@@ -138,14 +150,11 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
      this._default.clearHash();
       this._sub = this._activatedRoute.params.subscribe(params => {
          let idParam: string = params["id"];
-         this.id = idParam;         
+         this.id = idParam;
          if (this._default.isGuid(idParam)) {
             this.model.id = this.id;
             this._getQuiz(this.id);
-         } else if (idParam.toLowerCase() === "list") {
-            this._getQuizData();    
-            this._clearCurrentQuiz();                          
-         }
+         } 
       }); // end subscribe to activatedRoute params
    }
 
@@ -167,39 +176,23 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        return this.isValidForm;
    }
 
-   // sets public properties quizList, currentQuiz, and currentAnswers  
-   // with quiz data from the quiz-o-matic api
-   private _getQuizData(): void {
-      let that = this;
-
-      this._dataService.getQuizes()
-         .subscribe(quizes => {
-             that.quizList = quizes;
-             that.toggleDisplay();
-         }); // end subscribe callback
-   }
-
    private _getQuiz(quizId:string = null): void {
-       let that = this;
-
         if (quizId === null && this.id != null) {
            quizId = this.id;
-       }
+        }
 
        this._dataService.getQuiz(this.id)
           .subscribe(quiz => {
-              that.currentQuiz = quiz;
-              if (that.currentQuiz != null)
-                that._getQuestions();
-            
-             that.toggleDisplay();            
+              this.currentQuiz = quiz;
+              if (this.currentQuiz != null)
+                this._getQuestions();
+
+             this.toggleDisplay();
           })
    }
 
    // sets currentQuestions property
    private _getQuestions(quizId: string = null) : void {
-       let that = this;
-
        if (quizId === null && this.id != null) {
            quizId = this.id;
        }
@@ -207,9 +200,11 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        if (quizId != null) {
           this._dataService.getQuestions(quizId)
              .subscribe(questions => {
-               that.currentQuestions = questions;
-               if (that.currentQuestions != null)
-                  that._getAnswers();               
+               this.currentQuestions = questions;
+               this.totalNumberQuestions = questions.length;
+               if (this.currentQuestions != null) {
+                  this._getAnswers();
+               }
            });
        } // end if quizId != null
    }
@@ -218,7 +213,6 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    // note: dependent on currentQuiz and currentQuestions already 
    // being set with data from api.
    private _getAnswers(quizId: string = null) : void {
-       let that = this;
        if (quizId === null && this.id != null) {
            quizId = this.id;
        }
@@ -226,13 +220,13 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
        if (quizId != null) {
           this._dataService.getAnswers(quizId)
              .subscribe(answers => {
-                 that.currentAnswers = answers;
-                 if (that.currentQuiz != null && that.currentQuestions != null) {
+                 this.currentAnswers = answers;
+                 if (this.currentQuiz != null && this.currentQuestions != null) {
                      // loop over each question and set its answers property
-                     that.currentQuestions.forEach((question, index) => {
-                         for (var i = 0; i < that.currentAnswers.length; i++) {
-                             if (question.id == that.currentAnswers[i].questionId) {
-                                that.currentQuestions[index].answers.push(that.currentAnswers[i]);
+                     this.currentQuestions.forEach((question, index) => {
+                         for (var i = 0; i < this.currentAnswers.length; i++) {
+                             if (question.id == this.currentAnswers[i].questionId) {
+                                this.currentQuestions[index].answers.push(this.currentAnswers[i]);
                              }
                          } // end for each answer
                     }); // end for each question
