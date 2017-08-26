@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Default } from './../classes/default';
+import { Common } from './../classes/common';
 
 import 'rxjs/add/operator/map';
 
@@ -25,7 +25,7 @@ export class AuthenticationService {
     // number of days until cookie expires 
     private _cookieLength: number = 1;
 
-    private _default: Default;
+    private _common: Common;
 
     private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
@@ -33,7 +33,7 @@ export class AuthenticationService {
         // set token if saved in session storage
         let currentUser = JSON.parse(sessionStorage.getItem('currentUser'));
         this.token = currentUser && currentUser.token;
-        this._default = new Default();
+        this._common = new Common();
     }
 
     // returns user object (username and token) from session storage

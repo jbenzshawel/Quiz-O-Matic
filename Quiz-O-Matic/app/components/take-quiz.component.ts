@@ -1,13 +1,15 @@
 // @angular
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute }               from '@angular/router';
+import { ActivatedRoute, Router }               from '@angular/router';
 // models
 import { Quiz }                         from './../models/quiz.model';
 import { Question }                     from './../models/question.model';
-import { Answer, QuestionAnswer }       from './../models/answer.model'
+import { Answer, QuestionAnswer }       from './../models/answer.model';
+import { QuizResult }                   from './../models/quiz.result.model';
+
 // services and helpers
 import { DataService }                  from './../services/data.service';
-import { Default }                      from './../classes/default';
+import { Common }                      from './../classes/common';
 import { QuizEngine }                   from './../classes/quiz.engine';
 
 // declare globals for ts compiler 
@@ -37,7 +39,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public currentAnswers: Answer[] = null;
 
-   public quizResult: string = null;
+   public quizResult: QuizResult = null;
 
    public quizResultHeading: string = null;
 
@@ -62,19 +64,19 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    private _sub: any;
 
-   private _default: Default; 
+   private _common: Common; 
 
    ////////////////////////////////////////////////////////////
    /// Constructor and ngOnInit / ngOnDestroy
 
-   constructor(private _dataService: DataService, private _activatedRoute: ActivatedRoute) {}
+   constructor(private _dataService: DataService, private _activatedRoute: ActivatedRoute, private _router: Router) {}
 
    ngOnInit() {
       this.model = {
         quizId: this.id,
         response: {}
       };
-      this._default = new Default();
+      this._common = new Common();
       this._handleRoute();
       this.activeOption = {};
       this.currentQuestionNumber = 1;
@@ -97,7 +99,7 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    // toggles take-quiz view depending on id property / url param
    public toggleDisplay(): void {
        this.showResult = false;
-       this._default.clearHash();
+       this._common.clearHash();
        this.model.response = {};
        this.activeOption = {}; 
        $(".activeOption").removeClass("activeOption"); 
@@ -109,19 +111,24 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
 
    public submitQuiz(event: Event): void {
       event.preventDefault();
-      window.location.hash = "score";
       if (this._validateSelectOptions()) {
          // copy values of responses into a new obj (to pass to quiz engine)
          let responseCopy = JSON.stringify(this.model.response);
          this._dataService.getAnswers(this.id, true)
             .subscribe(answers => {
-               let parsedResponse: any = JSON.parse(responseCopy);
+               let parsedResponse: any = this._common.parseJsonObject(responseCopy);
                let quizEngine = new QuizEngine(this.currentQuiz, answers, this.currentQuestions, parsedResponse);
-               this.quizResult = quizEngine.scoreTwoOption();
-               this.resultImageSource = quizEngine.status ? this.currentQuiz.images.pass : this.currentQuiz.images.fail;
-               this.quizResultHeading = "Results: " + this.currentQuiz.name;
-               this.showResult = true;
-               this.hideForm= true;
+              
+               this.quizResult = new QuizResult();
+               this.quizResult.content = quizEngine.scoreTwoOption();
+               //this.quizResult.imagePath = quizEngine.status ? this.currentQuiz.images.pass : this.currentQuiz.images.fail;
+               this.quizResult.imagePath = this.resultImageSource;
+               this.quizResult.title = "Results: ".concat(this.currentQuiz.name);
+
+               window.sessionStorage.setItem(
+                this.quizResult.storageKey.concat(this.id), 
+                JSON.stringify(this.quizResult));
+               window.location.href = "/quiz-result/".concat(this.id);
          });
        } // end if valid select options 
    }
@@ -147,11 +154,11 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
    // handle route parameters (either show quiz details or list quizes depending)
    // on what is passed for :id in route take-quiz/:id
    private _handleRoute(): void {  
-     this._default.clearHash();
+     this._common.clearHash();
       this._sub = this._activatedRoute.params.subscribe(params => {
          let idParam: string = params["id"];
          this.id = idParam;
-         if (this._default.isGuid(idParam)) {
+         if (this._common.isGuid(idParam)) {
             this.model.id = this.id;
             this._getQuiz(this.id);
          } 

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { AuthenticationService } from './../services/authentication.service';
-import { Default } from './../classes/default';
+import { Common } from './../classes/common';
 
 declare var $:any;
 
@@ -20,7 +20,6 @@ declare var $:any;
 })
 export class LoginRegisterFormComponent implements OnInit {
    public model: any = {};
-   public default: Default;
   
    public showLogin:boolean = true;
    public showRegister:boolean = false;
@@ -28,6 +27,8 @@ export class LoginRegisterFormComponent implements OnInit {
    public passwordRequirements:boolean = false;
    public passwordReqText:string = "Password must be 8 characters, contain one upper case letter, and one special character";
  
+   private _common: Common;
+   
    // selectors for input form fields 
    usernameSel: string = "#username";
    passwordSel:string = "#password";
@@ -39,7 +40,7 @@ export class LoginRegisterFormComponent implements OnInit {
                 private router: Router, private http: Http) { }
  
    ngOnInit() {
-      this.default = new Default();
+      this._common = new Common();
       this.model = {};
    }
  
@@ -58,7 +59,7 @@ export class LoginRegisterFormComponent implements OnInit {
       this.model.regEmail = "";
       this.model.regPassword= "";
       this.model.regConfirmPassword = "";
-      this.default.clearErrors();    
+      this._common.clearErrors();    
       // toggle display
       this.showLogin = false;
       this.showRegister = true;
@@ -86,7 +87,7 @@ export class LoginRegisterFormComponent implements OnInit {
       // reset form
       this.model.username = "";
       this.model.password= "";
-      this.default.clearErrors();
+      this._common.clearErrors();
       // toggle display
       this.showLogin = true;
       this.showRegister = false;
@@ -94,12 +95,12 @@ export class LoginRegisterFormComponent implements OnInit {
       let that = this;
       $("body").on("blur", this.usernameSel, function() {
          if (that.model.username != undefined && that.model.username.trim().length > 0)
-            that.default.removeError(this.usernameSel);
+            that._common.removeError(this.usernameSel);
       });
   
       $("body").on("blur", this.passwordSel, function() {
          if (that.model.password != undefined && that.model.password.trim().length > 0)
-            that.default.removeError(this.passwordSel);
+            that._common.removeError(this.passwordSel);
      });
    }
    
@@ -107,19 +108,19 @@ export class LoginRegisterFormComponent implements OnInit {
    loginUser(event: Event): void {
       if (event != null)
          event.preventDefault();
-      this.default.clearErrors();
+      this._common.clearErrors();
       let isValid = true;
-      let returnUrl = this.default.getQueryStringParam("returnUrl");
+      let returnUrl = this._common.getQueryStringParam("returnUrl");
       if (returnUrl != null) {
          returnUrl = decodeURIComponent(returnUrl);
       }
       if (this.model.username.trim().length === 0) {
          isValid = false;
-         this.default.addError(this.usernameSel, "The Username field is required");
+         this._common.addError(this.usernameSel, "The Username field is required");
       }
       if (this.model.password.trim().length === 0) {
          isValid = false;
-         this.default.addError(this.passwordSel, "The Password field is required");
+         this._common.addError(this.passwordSel, "The Password field is required");
       }
       if (isValid) {
          this.authenticationService.login(this.model.username, this.model.password)
@@ -133,8 +134,8 @@ export class LoginRegisterFormComponent implements OnInit {
                    }
                } else {
                    // login failed
-                   this.default.addError(this.usernameSel, "Username or Password are incorrect");
-                   this.default.addError(this.passwordSel, "Username or Password are incorrect");
+                   this._common.addError(this.usernameSel, "Username or Password are incorrect");
+                   this._common.addError(this.passwordSel, "Username or Password are incorrect");
                }
            });
      } // end if isValid 
@@ -146,7 +147,7 @@ export class LoginRegisterFormComponent implements OnInit {
       if (event != null)
          event.preventDefault();
    
-      this.default.clearErrors();    
+      this._common.clearErrors();    
       // validate fields before creating user
       if (this.validateRegEmail() && this.validateRegPassword() && this.validateRegConfirmPassword()) {
          // set login model params since they will be needed to login the user after creating them
@@ -164,9 +165,9 @@ export class LoginRegisterFormComponent implements OnInit {
    
    // validates and adds error of the registration password field
    validateRegPassword(): boolean {
-      this.default.removeError(this.regPasswordSel);  
+      this._common.removeError(this.regPasswordSel);  
 
-      let isValid: boolean = this.default.validatePassword(this.model.regPassword, this.regPasswordSel);
+      let isValid: boolean = this._common.validatePassword(this.model.regPassword, this.regPasswordSel);
       if (!isValid) {
          this.passwordRequirements = true;
       } else {
@@ -177,13 +178,13 @@ export class LoginRegisterFormComponent implements OnInit {
  
    // validates and adds error of the registration confirm password field   
    validateRegConfirmPassword(): boolean {
-      this.default.removeError(this.regConfirmPasswordSel);
+      this._common.removeError(this.regConfirmPasswordSel);
 
       let isValid: boolean = this.model.regPassword === this.model.regConfirmPassword;
       if (!isValid) {
-         this.default.addError(this.regConfirmPasswordSel, "Password and Confirm Password do not match")
+         this._common.addError(this.regConfirmPasswordSel, "Password and Confirm Password do not match")
       } else {  
-         this.default.removeError(this.regConfirmPasswordSel);
+         this._common.removeError(this.regConfirmPasswordSel);
       }
      
      return isValid;
@@ -192,13 +193,13 @@ export class LoginRegisterFormComponent implements OnInit {
    // validates registration email field is a valid email address and the 
    // username is not already in use (note username = email)
    validateRegEmail(): any {
-      this.default.removeError(this.regEmailSel)
+      this._common.removeError(this.regEmailSel)
       
-      let isValid: boolean = this.default.validateEmail(this.model.regEmail);
+      let isValid: boolean = this._common.validateEmail(this.model.regEmail);
       if (isValid) {
-         this.default.removeError(this.regEmailSel);
+         this._common.removeError(this.regEmailSel);
       } else {
-         this.default.addError(this.regEmailSel, "Invalid email address");
+         this._common.addError(this.regEmailSel, "Invalid email address");
       }
      
       if (isValid) {
@@ -222,7 +223,7 @@ export class LoginRegisterFormComponent implements OnInit {
             let data = response.json();
             if (data != null && data.hasOwnProperty("usernameExists")) {
               if (data.usernameExists) {
-                  that.default.addError(that.regEmailSel, "Username already exists");
+                  that._common.addError(that.regEmailSel, "Username already exists");
               }
             }
 
@@ -231,3 +232,4 @@ export class LoginRegisterFormComponent implements OnInit {
      } 
  
  }
+ 

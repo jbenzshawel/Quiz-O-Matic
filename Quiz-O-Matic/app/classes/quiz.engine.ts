@@ -1,6 +1,6 @@
-import { Quiz } from './../models/quiz.model';
-import { Answer } from './../models/answer.model';
-import { Question } from './../models/question.model';
+import { Quiz }       from './../models/quiz.model';
+import { Answer }     from './../models/answer.model';
+import { Question }   from './../models/question.model';
 
 export class QuizEngine {
     public quiz: Quiz; 
