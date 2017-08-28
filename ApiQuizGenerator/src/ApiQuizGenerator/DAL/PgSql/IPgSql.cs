@@ -63,7 +63,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="sqlParam"></param>
         /// <returns></returns>
         Task<T> GetObject<T>(string pgFunction, NpgsqlParameter sqlParam) 
-            where T : class;
+            where T : class, new();
         
         /// <summary>
         /// Gets a single row from the database and casts to class T
@@ -72,7 +72,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="paramz">optional list of params</param>
         /// <returns></returns>
         Task<T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
-            where T : class;
+            where T : class, new();
 
         /// <summary>
         /// Retrieves a list of objects of type T from the database 
@@ -82,7 +82,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
         Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
-            where T : class;
+            where T : class, new();
 
         /// <summary>
         /// Retrieves a list of objects of type T from the database 
@@ -92,7 +92,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
         Task<List<T>> GetDataList<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
-        where T : class;
+        where T : class, new();
 
         #endregion
     }

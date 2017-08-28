@@ -99,7 +99,10 @@ namespace ApiQuizGenerator.DAL
                             typeof(Response), new PgSqlFunction 
                             {
                                 Name =  "get_response_by_id",
-                                Parameters = new NpgsqlParameter[] { PgSql.NpgParam(NpgsqlDbType.Integer, "p_response_id") }
+                                Parameters = new NpgsqlParameter[] 
+                                { 
+                                    PgSql.NpgParam(NpgsqlDbType.Integer, "p_response_id")
+                                }
                             } 
                         }                
                     };
@@ -171,7 +174,8 @@ namespace ApiQuizGenerator.DAL
                                     PgSql.NpgParam(NpgsqlDbType.Integer, "p_response_id"),
                                     PgSql.NpgParam(NpgsqlDbType.Uuid, "p_quiz_id"),
                                     PgSql.NpgParam(NpgsqlDbType.Integer, "p_question_id"),    
-                                    PgSql.NpgParam(NpgsqlDbType.Text, "p_value")
+                                    PgSql.NpgParam(NpgsqlDbType.Text, "p_value"),
+                                    PgSql.NpgParam(NpgsqlDbType.Uuid, "p_user_id")                                    
                                 }
                             }
                         }

@@ -128,7 +128,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="sqlParam"></param>
         /// <returns></returns>
         public virtual async Task<T> GetObject<T>(string pgFunction, NpgsqlParameter sqlParam)
-            where T: class
+            where T: class, new()
         {
             T obj = null;
 
@@ -150,7 +150,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="paramz">optional list of params</param>
         /// <returns></returns>
         public virtual async Task<T> GetDataRow<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
-            where T : class
+            where T : class, new()
         {
             T obj = null; 
 
@@ -171,7 +171,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="pgSqlFunction"></param>
         /// <returns></returns>
         public virtual async Task<List<T>> GetDataList<T>(PgSqlFunction pgSqlFunction)
-            where T : class
+            where T : class, new()
         {
             return await GetDataList<T>(pgSqlFunction.Name, pgSqlFunction.Parameters.ToListOrNull(removeNulls: false));
         }
@@ -183,7 +183,7 @@ namespace ApiQuizGenerator.DAL
         /// <param name="paramz">optional params</param>
         /// <returns></returns>
         public virtual async Task<List<T>> GetDataList<T>(string pgFunction, List<NpgsqlParameter> paramz = null) 
-            where T : class
+            where T : class, new()
         {
             // list of generics for return
             List<T> allObjects = new List<T>(); 

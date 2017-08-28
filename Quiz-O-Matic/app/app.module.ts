@@ -13,6 +13,7 @@ import { NavigationComponent }        from './components/navigation.component';
 import { QuizesComponent }            from './components/quizes.component';
 import { QuizListComponent }          from './components/quiz-list.component';
 import { TakeQuizComponent }          from './components/take-quiz.component';
+import { QuizResultComponent }        from './components/quiz-result.component';
 // services 
 import { AuthenticationService }      from './services/authentication.service';
 import { DataService }                from './services/data.service';
@@ -39,6 +40,7 @@ import 'hammerjs';
         QuizesComponent,
         QuizListComponent,
         TakeQuizComponent,
+        QuizResultComponent,
         LoginRegisterFormComponent
     ],
     providers: [

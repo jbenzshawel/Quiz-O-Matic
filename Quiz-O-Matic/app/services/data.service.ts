@@ -7,21 +7,21 @@ import 'rxjs/add/operator/map'
 import { Quiz } from './../models/quiz.model';
 import { Question } from './../models/question.model';
 import { Answer, QuestionAnswer } from './../models/answer.model';
-import { Default } from './../classes/default';
+import { Common } from './../classes/common';
 
 import { IDataService } from './../interfaces/i-data-service';
 
 @Injectable()
 export class DataService implements IDataService {
 
-    private _default: Default;
+    private _common: Common;
 
     private _headers: Headers = new Headers({ 'Content-Type': 'application/json' });
 
     private _baseUrl: string = "//localhost:5000/api";
 
     constructor(private http: Http) {
-        this._default = new Default();
+        this._common = new Common();
     }
 
     ///////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ export class DataService implements IDataService {
         let apiEndpoint: string = null
         let options: RequestOptions = new RequestOptions({ headers : this._headers });
 
-        if (this._default.isGuid(quizId)) {
+        if (this._common.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/quizes/").concat(quizId);
 
             return this.http.get(apiEndpoint, options)
@@ -73,7 +73,7 @@ export class DataService implements IDataService {
         let apiEndpoint: string = null;
         let options: RequestOptions = new RequestOptions({ headers : this._headers });
 
-        if (this._default.isGuid(quizId)) {
+        if (this._common.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/questions/list/").concat(quizId);
 
             return this.http.get(apiEndpoint, options)
@@ -96,7 +96,7 @@ export class DataService implements IDataService {
         let questionAnswer: Answer[] =  [];
         let apiEndpoint: string = null;
 
-        if (this._default.isGuid(quizId)) {
+        if (this._common.isGuid(quizId)) {
             apiEndpoint = this._baseUrl.concat("/answers/list/").concat(quizId);
 
             // to obfruscate only add attribute flag if we need it 

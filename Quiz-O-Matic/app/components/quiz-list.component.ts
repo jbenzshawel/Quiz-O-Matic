@@ -4,7 +4,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Quiz }                         from './../models/quiz.model';
 // services and helpers
 import { DataService }                  from './../services/data.service';
-import { Default }                      from './../classes/default';
 
 @Component({
   moduleId: module.id,
@@ -21,24 +20,17 @@ export class QuizListComponent implements OnInit, OnDestroy  {
 
    public quizList: Quiz[] = null;
 
-   /////////////////////////////////////////////////////////////
-   /// Private Properties
-
-   private _default: Default; 
-
    ////////////////////////////////////////////////////////////
    /// Constructor and ngOnInit / ngOnDestroy
 
    constructor(private _dataService: DataService) {}
 
    ngOnInit() {
-      this._default = new Default();
       this._getQuizData();
    }
 
    ngOnDestroy() {
      this.quizList = null;
-     this._default = null;
    }
 
    // sets public properties quizList, currentQuiz, and currentAnswers  

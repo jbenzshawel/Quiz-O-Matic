@@ -1,13 +1,13 @@
-import { ErrorMessages } from './ErrorMessages';
+import { ErrorMessages } from './error.messages';
 
 declare var $:any; // "mock" jquery
 
-export class Default {
+export class Common {
     
-    public ErrorMessages: ErrorMessages;
+    public errorMessages: ErrorMessages;
     
     constructor() {
-        this.ErrorMessages = new ErrorMessages(); 
+        this.errorMessages = new ErrorMessages(); 
     }
     // @param email = email to validate
     // @return bool
@@ -35,7 +35,32 @@ export class Default {
         }
         return copy;
     }
+
+    parseJsonObject(objString:string): any {
+        let resultObj:any = null;
+        
+        try {
+            resultObj = JSON.parse(objString);
+        } catch (ex) {
+            console.log(ex);
+        }
+
+        return resultObj;
+    }
     
+    hasProperties(obj:any, propertyNames:Array<string>): boolean {
+        let validObj = true;
+        if (typeof(obj) === "object" && obj != null) {
+            propertyNames.some(name => {
+                validObj = obj.hasOwnProperty(name);
+                return !validObj;
+            });
+        } else {
+            validObj = false;
+        }
+        return validObj;
+    }
+
     clearHash(): void {
         let currentHash = window.location.hash;
         if (typeof (currentHash) === "string" && currentHash.length > 0) {

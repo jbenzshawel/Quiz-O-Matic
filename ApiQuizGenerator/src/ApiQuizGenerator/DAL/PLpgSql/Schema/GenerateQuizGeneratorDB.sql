@@ -128,11 +128,8 @@ CREATE TABLE public.responses
     question_id integer NOT NULL,
     value text COLLATE pg_catalog."default" NOT NULL,
     created timestamp with time zone NOT NULL,
+    user_id text COLLATE pg_catalog."default",
     CONSTRAINT responses_pkey PRIMARY KEY (response_id),
-    -- CONSTRAINT fk_response_question_id FOREIGN KEY (response_id)
-    --     REFERENCES public.questions (question_id) MATCH SIMPLE
-    --     ON UPDATE CASCADE
-    --     ON DELETE CASCADE,
     CONSTRAINT fk_response_quiz_id FOREIGN KEY (quiz_id)
         REFERENCES public.quizes (quiz_id) MATCH SIMPLE
         ON UPDATE CASCADE
@@ -145,3 +142,4 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.responses
     OWNER to postgres;
+    

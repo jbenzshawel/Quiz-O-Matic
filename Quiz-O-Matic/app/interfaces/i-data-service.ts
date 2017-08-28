@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { Quiz } from './../models/quiz.model';
 import { Question } from './../models/question.model';
 import { Answer, QuestionAnswer } from './../models/answer.model';
-import { Default } from './../classes/default';
 
 
 export interface IDataService {

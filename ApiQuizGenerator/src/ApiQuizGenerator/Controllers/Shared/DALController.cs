@@ -2,47 +2,46 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using ApiQuizGenerator.DAL;
-using ApiQuizGenerator.Models;
 using ApiQuizGenerator.AppClasses;
-using ApiQuizGenerator.Controllers.Shared;
 
-namespace ApiQuizGenerator.Controllers
+namespace ApiQuizGenerator.Controllers.Shared
 {
-    [Route("api/[controller]/")]
-    public class QuestionsController : BaseController
+    public class DALController<T> : BaseController where T : class, new()
     {
-        public QuestionsController(IDataService _dataService, ITokenProvider _tokenProvider) :
+        private IRepository<T> _Repository { get; set; }
+        
+
+        public DALController(IDataService _dataService, ITokenProvider _tokenProvider) :
             base(_dataService, _tokenProvider)
         {
             _DataService = _dataService;
             _TokenProvider = _tokenProvider;
+            _Repository = new Repository<T>();
         }
-
-        // GET api/questions/list
+        
         [HttpGet("[action]/{id}")]
-        public async Task<List<Question>> List(Guid id) 
+        public virtual async Task<List<T>> List(Guid? id) 
         {
-            return await _DataService.Questions.All(id.ToString()); 
+            return await this._Repository.All(id.ToString());
         }
 
-        // GET api/questions/{id}
         [HttpGet("{id}")]
-        public async Task<Question> Get(int id)
+        public virtual async Task<T> Get(string id)
         {
-            Question question = await _DataService.Questions.Get(id.ToString());
+            T modelObj = await this._Repository.Get(id);
 
-            if (question == null) 
+            if (modelObj == null) 
             {
                 Response.StatusCode = 404; // not found
             }
 
-            return question;
+            return modelObj;
         }
 
-        // POST api/questions/post
-        [HttpPost]        
-        public async Task Post([FromBody]Question questionModel)
+        [HttpPost]
+        public virtual async Task Post([FromBody]T modelObj)
         {
             if (!ModelState.IsValid)
             {   
@@ -50,16 +49,15 @@ namespace ApiQuizGenerator.Controllers
                 return;
             }
 
-            bool saveStatus = await _DataService.Questions.Save(questionModel);    
+            bool saveStatus = await this._Repository.Save(modelObj);    
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error
             }
         }
 
-        // PUT api/questions/put/{id}
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody]Question questionModel)
+        public virtual async Task Put(int id, [FromBody]T modelObj)
         {
             if (!ModelState.IsValid)
             {   
@@ -68,12 +66,12 @@ namespace ApiQuizGenerator.Controllers
             }
 
             // make sure object exists before trying to update it
-            Question questionSearch = await _DataService.Questions.Get(id.ToString());
-            if (questionSearch != null)
+            T searchResult = await this._Repository.Get(id.ToString());
+            if (searchResult != null)
             {
-                questionModel.Id = id;
+                //modelObj.Id = id;
 
-                bool saveStatus = await _DataService.Questions.Save(questionModel);    
+                bool saveStatus = await _Repository.Save(modelObj);    
                 if (!saveStatus) 
                 {
                     Response.StatusCode = 500; // internal server error
@@ -85,19 +83,18 @@ namespace ApiQuizGenerator.Controllers
             }
         }
 
-        // DELETE api/question/{id}
         [HttpDelete("{id}")]
-        public async Task Delete(int id)
+        public virtual async Task Delete(int id)
         {   
-            Question question = await _DataService.Questions.Get(id.ToString());
+            T modelObj = await _Repository.Get(id.ToString());
 
-            if (question == null) 
+            if (modelObj == null) 
             {
                 Response.StatusCode = 404; // not found
                 return;
             }
 
-            bool saveStatus = await _DataService.Questions.Delete(id.ToString());
+            bool saveStatus = await _Repository.Delete(id.ToString());
             if (!saveStatus) 
             {
                 Response.StatusCode = 500; // internal server error

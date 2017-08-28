@@ -45,13 +45,6 @@
                     </button> 
                 </form> <!-- end #quizForm -->
             </div>
-
-            <!-- Results Section -->
-            <div *ngIf="showResult && quizResult != null" class="col-xs-12 results">
-                <h2>{{ quizResultHeading }}</h2>
-                <p>{{ quizResult }}</p>       
-                <img src="{{ resultImageSource }}" alt="result" />
-            </div> <!-- end showResults -->
         </div><!-- end if takeQuiz -->
     </div><!--/.col-xs-12-->
 </div><!--/.row.main-->
