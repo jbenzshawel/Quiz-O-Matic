@@ -125,10 +125,8 @@ export class TakeQuizComponent implements OnInit, OnDestroy  {
                this.quizResult.imagePath = this.resultImageSource;
                this.quizResult.title = "Results: ".concat(this.currentQuiz.name);
 
-               window.sessionStorage.setItem(
-                this.quizResult.storageKey.concat(this.id), 
-                JSON.stringify(this.quizResult));
-               window.location.href = "/quiz-result/".concat(this.id);
+               window.sessionStorage.setItem(this.quizResult.storageKey.concat(this.id), JSON.stringify(this.quizResult));
+               this._router.navigateByUrl("/quiz-result/".concat(this.id));
          });
        } // end if valid select options 
    }

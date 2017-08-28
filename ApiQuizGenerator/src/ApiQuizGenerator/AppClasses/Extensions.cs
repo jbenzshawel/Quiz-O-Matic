@@ -65,87 +65,72 @@ namespace ApiQuizGenerator.AppClasses
         }
         
         /// <summary>
-        /// Casts a DbDataReader object to a Quiz, QuizType, Question, Answer, or Response object Model
+        /// Casts a DbDataReader object to T
+        /// Note: Properties in object T must have custom ColumnName attribute with corresponding column name
         /// </summary>
         /// <param name="@this">reader object</param>
-        public static T ToModel<T>(this DbDataReader @this) where T : class
+        public static T ToModel<T>(this DbDataReader @this) where T : class, new()
         {
-            T objectCast = null;
+            T objectCast = new T();
 
             // return early if no data 
             if (!@this.HasRows || @this.FieldCount == 0)
                 return objectCast;
 
-            // ToDo: use GetColumnSchema for generic mapping
-            // map NpgsqlDataReader to Quiz type
-            if (typeof (T) == typeof (Quiz) && objectCast == null) 
+            Type objectCastType = objectCast.GetType();
+            IEnumerable<PropertyInfo> objProperties = objectCastType.GetTypeInfo().DeclaredProperties;
+
+            foreach(var propInfo in objProperties) 
             {
-                var quiz = new Quiz 
+                // get column name attribute from property                    
+                ColumnName columnNameAttr = propInfo.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
+                string columnName = columnNameAttr !=null ? columnNameAttr.AttributeValue : null;
+
+                if (@this[columnName] != DBNull.Value) 
                 {
-                    Id = Guid.Parse(@this["quiz_id"].ToString()),
-                    Name = @this["name"].ToString(),
-                    Description = @this["description"].ToString(),
-                    Type = @this["type"] != DBNull.Value ? @this["type"].ToString() : null,
-                    TypeId = @this["type_id"] != DBNull.Value ? Int32.Parse(@this["type_id"].ToString()) : 0,
-                    Created = @this["created"] != DBNull.Value ? DateTime.Parse(@this["created"].ToString()) : DateTime.MinValue,
-                    Updated = @this["updated"] != DBNull.Value ? (DateTime?)DateTime.Parse(@this["updated"].ToString()) : null,              
-                    Attributes = @this["attributes"] != DBNull.Value ? @this["attributes"].ToString() : string.Empty
-                };
-
-                objectCast = quiz as T;
-            }
-
-            if (typeof (T) == typeof (Question) && objectCast == null)
-            {
-                var question = new Question
-                {
-                    Id = Int32.Parse(@this["question_id"].ToString()),
-                    Title = @this["title"].ToString(),
-                    Attributes = @this["attributes"].ToString(),
-                    QuizId = Guid.Parse(@this["quiz_id"].ToString())
-                };
-
-                objectCast = question as T;
-            }
-
-            if (typeof (T) == typeof (Answer) && objectCast == null)
-            {
-                var answer = new Answer
-                {
-                    Id = Int32.Parse(@this["answer_id"].ToString()),
-                    Content = @this["content"].ToString(),
-                    Identifier = @this["identifier"].ToString(),
-                    Attributes = @this["attributes"].ToString(),
-                    QuestionId = Int32.Parse(@this["question_id"].ToString())
-                };
-                
-                objectCast = answer as T;   
-            }
-
-            if (typeof (T) == typeof (Response) && objectCast == null)
-            {
-                var response = new Response
-                {
-                    Id = Int32.Parse(@this["response_id"].ToString()),
-                    QuizId = Guid.Parse(@this["quiz_id"].ToString()),
-                    QuestionId = Int32.Parse(@this["question_id"].ToString()),
-                    Value = @this["value"].ToString(),
-                    Created = DateTime.Parse(@this["created"].ToString())
-                };
-                
-                objectCast = response as T;   
-            }
-
-            if (typeof (T) == typeof (QuizType) && objectCast == null)
-            {
-                var response = new QuizType
-                {
-                    Id = Int32.Parse(@this["type_id"].ToString()),
-                    Type = @this["type"].ToString()
-                };
-                
-                objectCast = response as T;   
-            }
+                    string propName = propInfo.Name;
+                    
+                    Type propType = propInfo.PropertyType;
+                    if (propType == typeof(Guid) || propType == typeof (Guid?)) 
+                    {
+                        Guid parsedValue;
+                        if (Guid.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                        {
+                            if (propType == typeof(Guid)) 
+                                propInfo.SetValue(objectCast, parsedValue, null);
+                            else 
+                                propInfo.SetValue(objectCast, (Guid?)parsedValue, null);
+                        }
+                    }
+                    else if (propType == typeof (int) || propType == typeof (int?)) 
+                    {
+                        int parsedValue; 
+                        if (int.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                        {
+                            if (propType == typeof (int))
+                                propInfo.SetValue(objectCast, parsedValue, null);
+                            else 
+                                propInfo.SetValue(objectCast, (int?)parsedValue, null);
+                        }
+                    } 
+                    else if (propType == typeof (DateTime) || propType == typeof (DateTime?)) 
+                    {
+                        DateTime parsedValue;
+                        if (DateTime.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                        {
+                            if (propType == typeof (DateTime)) 
+                                propInfo.SetValue(objectCast, parsedValue, null);
+                            else
+                                propInfo.SetValue(objectCast, (DateTime?)parsedValue, null);
+                        }
+                    } 
+                    else if (propType == typeof (string)) 
+                    {
+                        propInfo.SetValue(objectCast, @this[columnName].ToString(), null);
+                    }
+                    
+                } // end if @this[columnName] != DBNull.Value
+            } // end foreach var propInfo in objProperties
 
             return objectCast;
         }

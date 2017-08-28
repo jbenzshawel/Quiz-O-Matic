@@ -55,6 +55,8 @@ export class Common {
                 validObj = obj.hasOwnProperty(name);
                 return !validObj;
             });
+        } else {
+            validObj = false;
         }
         return validObj;
     }

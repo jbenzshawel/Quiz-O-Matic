@@ -17,6 +17,9 @@ namespace ApiQuizGenerator.Models
         [ColumnName("question_id")]
         public int QuestionId { get; set; }
 
+        [ColumnName("user_id")]
+        public Guid? UserId { get; set; }
+
         [Required]
         [ColumnName("value")]
         public string Value { get; set; }

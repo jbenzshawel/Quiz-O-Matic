@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using ApiQuizGenerator.DAL;
+using ApiQuizGenerator.AppClasses;
 
-namespace ApiQuizGenerator.AppClasses
+namespace ApiQuizGenerator.Controllers.Shared
 {
     public class BaseController : Controller
     {

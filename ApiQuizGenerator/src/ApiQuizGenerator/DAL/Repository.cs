@@ -26,7 +26,7 @@ namespace ApiQuizGenerator.DAL
     /// Repository for Listing, Getting, Saving, or Deleting an object in a PostgreSql DB
     /// </summary>
     public class Repository<T> : IRepository<T> 
-        where T : class
+        where T : class, new()
     {
         private IPgSql _PgSql { get; set; }
 
