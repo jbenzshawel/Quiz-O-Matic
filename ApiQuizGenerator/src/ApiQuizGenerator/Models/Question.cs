@@ -6,7 +6,7 @@ namespace ApiQuizGenerator.Models
 {
     public class Question
     {           
-        [ColumnName("quiz_id")]
+        [ColumnName("question_id")]
         public int Id { get; set; }
 
         [Required]
