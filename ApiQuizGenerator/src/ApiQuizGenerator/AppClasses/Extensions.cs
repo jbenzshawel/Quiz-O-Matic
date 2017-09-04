@@ -65,8 +65,11 @@ namespace ApiQuizGenerator.AppClasses
         }
         
         /// <summary>
-        /// Casts a DbDataReader object to T
-        /// Note: Properties in object T must have custom ColumnName attribute with corresponding column name
+        /// Maps DbDataReader object from PostgreSql database to Model of type T
+        /// Note: Properties in Model object T must have custom ColumnName attribute with corresponding 
+        /// column name
+        /// ToDo: Extend this method to only require the ColumnName attribute for mapping if the column 
+        /// name is different than the model property (besides case)
         /// </summary>
         /// <param name="@this">reader object</param>
         public static T ToModel<T>(this DbDataReader @this) where T : class, new()
@@ -77,61 +80,79 @@ namespace ApiQuizGenerator.AppClasses
             if (!@this.HasRows || @this.FieldCount == 0)
                 return objectCast;
 
-            Type objectCastType = objectCast.GetType();
-            IEnumerable<PropertyInfo> objProperties = objectCastType.GetTypeInfo().DeclaredProperties;
-
-            foreach(var propInfo in objProperties) 
+            try 
             {
-                // get column name attribute from property                    
-                ColumnName columnNameAttr = propInfo.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
-                string columnName = columnNameAttr !=null ? columnNameAttr.AttributeValue : null;
+                Type objectCastType = objectCast.GetType();
+                IEnumerable<PropertyInfo> objProperties = objectCastType.GetTypeInfo().DeclaredProperties;
 
-                if (@this[columnName] != DBNull.Value) 
+                foreach(var propInfo in objProperties) 
                 {
-                    string propName = propInfo.Name;
-                    
-                    Type propType = propInfo.PropertyType;
-                    if (propType == typeof(Guid) || propType == typeof (Guid?)) 
-                    {
-                        Guid parsedValue;
-                        if (Guid.TryParse(@this[columnName].ToString(), out parsedValue)) 
-                        {
-                            if (propType == typeof(Guid)) 
-                                propInfo.SetValue(objectCast, parsedValue, null);
-                            else 
-                                propInfo.SetValue(objectCast, (Guid?)parsedValue, null);
-                        }
-                    }
-                    else if (propType == typeof (int) || propType == typeof (int?)) 
-                    {
-                        int parsedValue; 
-                        if (int.TryParse(@this[columnName].ToString(), out parsedValue)) 
-                        {
-                            if (propType == typeof (int))
-                                propInfo.SetValue(objectCast, parsedValue, null);
-                            else 
-                                propInfo.SetValue(objectCast, (int?)parsedValue, null);
-                        }
-                    } 
-                    else if (propType == typeof (DateTime) || propType == typeof (DateTime?)) 
-                    {
-                        DateTime parsedValue;
-                        if (DateTime.TryParse(@this[columnName].ToString(), out parsedValue)) 
-                        {
-                            if (propType == typeof (DateTime)) 
-                                propInfo.SetValue(objectCast, parsedValue, null);
-                            else
-                                propInfo.SetValue(objectCast, (DateTime?)parsedValue, null);
-                        }
-                    } 
-                    else if (propType == typeof (string)) 
-                    {
-                        propInfo.SetValue(objectCast, @this[columnName].ToString(), null);
-                    }
-                    
-                } // end if @this[columnName] != DBNull.Value
-            } // end foreach var propInfo in objProperties
+                    // get column name attribute from property                    
+                    ColumnName columnNameAttr = propInfo.GetCustomAttribute(typeof(ColumnName), false) as ColumnName;
+                    string columnName = columnNameAttr !=null ? columnNameAttr.AttributeValue : null;
 
+                    if (@this[columnName] != DBNull.Value) 
+                    {
+                        string propName = propInfo.Name;
+                        
+                        Type propType = propInfo.PropertyType;
+                        if (propType == typeof(Guid) || propType == typeof (Guid?)) 
+                        {
+                            Guid parsedValue;
+                            if (Guid.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                            {
+                                if (propType == typeof(Guid)) 
+                                    propInfo.SetValue(objectCast, parsedValue, null);
+                                else 
+                                    propInfo.SetValue(objectCast, (Guid?)parsedValue, null);
+                            }
+                        }
+                        else if (propType == typeof (int) || propType == typeof (int?)) 
+                        {
+                            int parsedValue; 
+                            if (int.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                            {
+                                if (propType == typeof (int))
+                                    propInfo.SetValue(objectCast, parsedValue, null);
+                                else 
+                                    propInfo.SetValue(objectCast, (int?)parsedValue, null);
+                            }
+                        } 
+                        else if (propType == typeof (DateTime) || propType == typeof (DateTime?)) 
+                        {
+                            DateTime parsedValue;
+                            if (DateTime.TryParse(@this[columnName].ToString(), out parsedValue)) 
+                            {
+                                if (propType == typeof (DateTime)) 
+                                    propInfo.SetValue(objectCast, parsedValue, null);
+                                else
+                                    propInfo.SetValue(objectCast, (DateTime?)parsedValue, null);
+                            }
+                        }
+                        else if (propType == typeof (bool) || propType == typeof (bool?)) 
+                        {
+                            bool parsedValue;
+                            if (bool.TryParse(@this[columnName].ToString(), out parsedValue)) {
+                                if (propType == typeof (bool))
+                                    propInfo.SetValue(objectCast, parsedValue, null);
+                                else 
+                                    propInfo.SetValue(objectCast, (bool?)parsedValue, null);
+                            }
+                        } 
+                        else if (propType == typeof (string)) 
+                        {
+                            propInfo.SetValue(objectCast, @this[columnName].ToString(), null);
+                        }
+                        
+                    } // end if @this[columnName] != DBNull.Value
+                } // end foreach var propInfo in objProperties
+            }
+            catch (Exception ex) 
+            {
+                // ToDo: Hook up logger here
+                objectCast = new T();
+            }
+            
             return objectCast;
         }
 
@@ -187,11 +208,6 @@ namespace ApiQuizGenerator.AppClasses
                     }
                 }
             }
-        }
-
-        public static T GetObject<T>() where T : new()
-        {
-            return new T();
         }
     }
 }
