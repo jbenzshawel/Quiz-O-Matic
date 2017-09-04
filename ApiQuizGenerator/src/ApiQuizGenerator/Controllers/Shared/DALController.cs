@@ -12,7 +12,6 @@ namespace ApiQuizGenerator.Controllers.Shared
     {
         private IRepository<T> _Repository { get; set; }
         
-
         public DALController(IDataService _dataService, ITokenProvider _tokenProvider) :
             base(_dataService, _tokenProvider)
         {
